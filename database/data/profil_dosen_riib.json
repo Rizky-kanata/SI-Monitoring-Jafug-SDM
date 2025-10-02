@@ -1,0 +1,396 @@
+[
+  {
+    "kode_dosen": "DEZ",
+    "nama_dosen": "Desita Nur Rachmaniar",
+    "prodi": "S1 Teknik Logistik",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "LSCE"    
+  },
+  {
+    "kode_dosen": "GRA",
+    "nama_dosen": "Granita Hajar",
+    "prodi": "S1 Teknik Logistik",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "LSCE"  
+  },
+  {
+    "kode_dosen": "NSX",
+    "nama_dosen": "Nisa Isrofi",
+    "prodi": "S1 Teknik Logistik",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "LSCE"    
+  },
+  {
+    "kode_dosen": "EOQ",
+    "nama_dosen": "Rahaditya Dimas Prihadianto",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "LSCE"
+    
+    
+  },
+  {
+    "kode_dosen": "CEO",
+    "nama_dosen": "Silvi Istiqomah",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "LSCE"
+    
+    
+  },
+  {
+    "kode_dosen": "BSG",
+    "nama_dosen": "Bambang Agus Sumantri",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "DAQ",
+    "nama_dosen": "Darlin Aulia",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "DBB",
+    "nama_dosen": "Dominggo Bayu Baskara",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "HGM",
+    "nama_dosen": "Hussein Gibreel Musa Salih",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "KNY",
+    "nama_dosen": "Krisnayanti Aditasari",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "AGM",
+    "nama_dosen": "N. Azizia Gia Mutiarasari",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "SSQ",
+    "nama_dosen": "Sekar Widyasari Putri",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MERB"
+    
+    
+  },
+  {
+    "kode_dosen": "AWX",
+    "nama_dosen": "Agoes Windarto",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "AQH",
+    "nama_dosen": "Alifiansyah Arrizqy Hidayat",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "AFC",
+    "nama_dosen": "Anfazul Faridatul Azizah",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "AXA",
+    "nama_dosen": "Anita Hakim Nasution",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "HDN",
+    "nama_dosen": "Annisa Ramadhan",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "KUZ",
+    "nama_dosen": "Aris Kusumawati",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "AYV",
+    "nama_dosen": "Ayu Endah Wahyuni",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "CNO",
+    "nama_dosen": "Caesareano Lafado Yesa",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "LHA",
+    "nama_dosen": "Muhammad Ilham Alhari",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "NOE",
+    "nama_dosen": "Noerma Pudji Istyanto",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "IKI",
+    "nama_dosen": "Raulia Riski",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "ZQA",
+    "nama_dosen": "Rizqa Amelia Zunaidi",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "TRL",
+    "nama_dosen": "Tita Ayu Rospricilia",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "WYR",
+    "nama_dosen": "Wachda Yuniar Rochmah",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "WEK",
+    "nama_dosen": "Wahyu Eka Kiswardani",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "MSB"
+    
+    
+  },
+  {
+    "kode_dosen": "EXE",
+    "nama_dosen": "Abduh Sayid Albana",
+    "prodi": "S1 Teknik Logistik",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "ZAC",
+    "nama_dosen": "Achmad Muzakki",
+    "prodi": "S1 Rekayasa Perangkat Lunak",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "EYE",
+    "nama_dosen": "Erly Ekayanti Rosyida",
+    "prodi": "S1 Teknik Logistik",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "MAE",
+    "nama_dosen": "Hawwin Mardhiana",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "NZR",
+    "nama_dosen": "Mochamad Nizar Palefi Ma'ady",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "PAM",
+    "nama_dosen": "Paramaditya Arismawati",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "RTL",
+    "nama_dosen": "Rokhmatul Insani",
+    "prodi": "S1 Sistem Informasi",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "TTK",
+    "nama_dosen": "Titus Kristanto",
+    "prodi": "S1 Bisnis Digital",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "WAY",
+    "nama_dosen": "Wahyu Andy Prastyabudi",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "QBI"
+    
+    
+  },
+  {
+    "kode_dosen": "AUX",
+    "nama_dosen": "Aufar Fikri Dimyati",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "NJFA",
+    "sub_kelompok_keahlian": "SME"
+    
+    
+  },
+  {
+    "kode_dosen": "BIA",
+    "nama_dosen": "Benazir Imam Arif Muttaqin",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "SME"
+    
+    
+  },
+  {
+    "kode_dosen": "HKC",
+    "nama_dosen": "Huki Chandra",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "AA",
+    "sub_kelompok_keahlian": "SME"
+    
+    
+  },
+  {
+    "kode_dosen": "MUF",
+    "nama_dosen": "Ilma Mufidah",
+    "prodi": "S1 Teknik Industri",
+    "kelompok_keahlian": "RIIB",
+    "jabatan_fungsional": "L",
+    "sub_kelompok_keahlian": "SME"
+    
+    
+  }
+]
