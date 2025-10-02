@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class DosenController extends Controller
 {
-    public function testapi()
-    {
-        $dosens = Dosen::all();
-        return response()->json($dosens, 200);
-    }
     public function index()
     {
         $dosens = Dosen::all();
