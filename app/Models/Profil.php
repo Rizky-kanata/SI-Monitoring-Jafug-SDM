@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dosen extends Model
+class Profil extends Model
 {
-    protected $table = 'dosens';
+    protected $table = 'profils';
     protected $fillable = [
         'kode_dosen',
         'nama_dosen',
         'prodi',
         'kelompok_keahlian',
-        'jabatan_fungsional',
         'sub_kelompok_keahlian',
+        'nip',
+        'nidn',
     ];
 }
