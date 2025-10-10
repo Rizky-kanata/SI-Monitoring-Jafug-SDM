@@ -13,7 +13,7 @@ class DosenSeeder extends Seeder
      */
     public function run(): void
     {
-        $json = file_get_contents(base_path('\database\data\profil_dosen_riib.json'));
+        $json = file_get_contents(base_path('\database\data\dosen_riib.json'));
         $data = json_decode($json, true);
 
         foreach ($data as $item) {

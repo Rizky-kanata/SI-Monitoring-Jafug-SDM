@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'profil_dosen_riib'),
+    'name' => env('APP_NAME', 'dosen_riib'),
 
     /*
     |--------------------------------------------------------------------------
