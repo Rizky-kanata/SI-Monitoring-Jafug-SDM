@@ -5,9 +5,8 @@
     "prodi": "S1 Teknik Logistik",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "LSCE",
-    "nip": 25930030,
-    "nidn": "0707029303",
-    "jabatan_fungsional": "AA"
+    "nip": "25930030",
+    "nidn": "0707029303"
   },
   {
     "kode_dosen": "GRA",
@@ -15,9 +14,8 @@
     "prodi": "S1 Teknik Logistik",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "LSCE",
-    "nip": 24950003,
-    "nidn": "0723079501",
-    "jabatan_fungsional": "AA"
+    "nip": "24950003",
+    "nidn": "0723079501"
   },
   {
     "kode_dosen": "NSX",
@@ -25,9 +23,8 @@
     "prodi": "S1 Teknik Logistik",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "LSCE",
-    "nip": 25930031,
-    "nidn": "0712059303",
-    "jabatan_fungsional": "AA"
+    "nip": "25930031",
+    "nidn": "0712059303"
   },
   {
     "kode_dosen": "EOQ",
@@ -35,9 +32,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "LSCE",
-    "nip": 20920036,
-    "nidn": "0725059202",
-    "jabatan_fungsional": "AA"
+    "nip": "20920036",
+    "nidn": "0725059202"
   },
   {
     "kode_dosen": "CEO",
@@ -45,9 +41,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "LSCE",
-    "nip": 22960010,
-    "nidn": "0523119601",
-    "jabatan_fungsional": "AA"
+    "nip": "22960010",
+    "nidn": "0523119601"
   },
   {
     "kode_dosen": "BSG",
@@ -55,9 +50,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 24800005,
-    "nidn": "0730088001",
-    "jabatan_fungsional": "L"
+    "nip": "24800005",
+    "nidn": "0730088001"
   },
   {
     "kode_dosen": "DAQ",
@@ -65,9 +59,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 22920004,
-    "nidn": "0309069201",
-    "jabatan_fungsional": "AA"
+    "nip": "22920004",
+    "nidn": "0309069201"
   },
   {
     "kode_dosen": "DBB",
@@ -75,9 +68,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 19900005,
-    "nidn": "0722069004",
-    "jabatan_fungsional": "AA"
+    "nip": "19900005",
+    "nidn": "0722069004"
   },
   {
     "kode_dosen": "HGM",
@@ -85,9 +77,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 25900003,
-    "nidn": "#N/A",
-    "jabatan_fungsional": "NJFA"
+    "nip": "25900003",
+    "nidn": "#N/A"
   },
   {
     "kode_dosen": "KNY",
@@ -95,9 +86,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 23990019,
-    "nidn": "0704069901",
-    "jabatan_fungsional": "NJFA"
+    "nip": "23990019",
+    "nidn": "0704069901"
   },
   {
     "kode_dosen": "AGM",
@@ -105,9 +95,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 24970010,
-    "nidn": "#N/A",
-    "jabatan_fungsional": "NJFA"
+    "nip": "24970010",
+    "nidn": "#N/A"
   },
   {
     "kode_dosen": "SSQ",
@@ -115,9 +104,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MERB",
-    "nip": 24930005,
-    "nidn": "0704029302",
-    "jabatan_fungsional": "AA"
+    "nip": "24930005",
+    "nidn": "0704029302"
   },
   {
     "kode_dosen": "AWX",
@@ -125,9 +113,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 15720039,
-    "nidn": "08961580023",
-    "jabatan_fungsional": "NJFA"
+    "nip": "15720039",
+    "nidn": "08961580023"
   },
   {
     "kode_dosen": "AQH",
@@ -135,9 +122,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 22960061,
-    "nidn": "0729059601",
-    "jabatan_fungsional": "NJFA"
+    "nip": "22960061",
+    "nidn": "0729059601"
   },
   {
     "kode_dosen": "AFC",
@@ -145,9 +131,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 19900002,
-    "nidn": "0715039004",
-    "jabatan_fungsional": "AA"
+    "nip": "19900002",
+    "nidn": "0715039004"
   },
   {
     "kode_dosen": "AXA",
@@ -155,9 +140,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 22900033,
-    "nidn": "0714019002",
-    "jabatan_fungsional": "NJFA"
+    "nip": "22900033",
+    "nidn": "0714019002"
   },
   {
     "kode_dosen": "HDN",
@@ -165,9 +149,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 25950003,
-    "nidn": "#N/A",
-    "jabatan_fungsional": "NJFA"
+    "nip": "25950003",
+    "nidn": "#N/A"
   },
   {
     "kode_dosen": "KUZ",
@@ -175,9 +158,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 21890010,
-    "nidn": "0720088905",
-    "jabatan_fungsional": "NJFA"
+    "nip": "21890010",
+    "nidn": "0720088905"
   },
   {
     "kode_dosen": "AYV",
@@ -185,9 +167,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 23880010,
-    "nidn": "0401078801",
-    "jabatan_fungsional": "L"
+    "nip": "23880010",
+    "nidn": "0401078801"
   },
   {
     "kode_dosen": "CNO",
@@ -195,9 +176,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 15890076,
-    "nidn": "0708128901",
-    "jabatan_fungsional": "AA"
+    "nip": "15890076",
+    "nidn": "0708128901"
   },
   {
     "kode_dosen": "LHA",
@@ -205,9 +185,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 23990020,
-    "nidn": "0722079901",
-    "jabatan_fungsional": "NJFA"
+    "nip": "23990020",
+    "nidn": "0722079901"
   },
   {
     "kode_dosen": "NOE",
@@ -215,9 +194,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 19900003,
-    "nidn": "0725059004",
-    "jabatan_fungsional": "L"
+    "nip": "19900003",
+    "nidn": "0725059004"
   },
   {
     "kode_dosen": "IKI",
@@ -225,9 +203,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 22940003,
-    "nidn": "0719109401",
-    "jabatan_fungsional": "AA"
+    "nip": "22940003",
+    "nidn": "0719109401"
   },
   {
     "kode_dosen": "ZQA",
@@ -235,9 +212,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 20930036,
-    "nidn": "0711069301",
-    "jabatan_fungsional": "L"
+    "nip": "20930036",
+    "nidn": "0711069301"
   },
   {
     "kode_dosen": "TRL",
@@ -245,9 +221,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 22980046,
-    "nidn": "0702049801",
-    "jabatan_fungsional": "NJFA"
+    "nip": "22980046",
+    "nidn": "0702049801"
   },
   {
     "kode_dosen": "WYR",
@@ -255,9 +230,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 22970043,
-    "nidn": "0701069701",
-    "jabatan_fungsional": "AA"
+    "nip": "22970043",
+    "nidn": "0701069701"
   },
   {
     "kode_dosen": "WEK",
@@ -265,9 +239,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "MSB",
-    "nip": 25010008,
-    "nidn": "#N/A",
-    "jabatan_fungsional": "NJFA"
+    "nip": "25010008",
+    "nidn": "#N/A"
   },
   {
     "kode_dosen": "EXE",
@@ -275,9 +248,8 @@
     "prodi": "S1 Teknik Logistik",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 19900001,
-    "nidn": "0702039003",
-    "jabatan_fungsional": "L"
+    "nip": "19900001",
+    "nidn": "0702039003"
   },
   {
     "kode_dosen": "ZAC",
@@ -285,9 +257,8 @@
     "prodi": "S1 Rekayasa Perangkat Lunak",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 23850011,
-    "nidn": "0728058503",
-    "jabatan_fungsional": "AA"
+    "nip": "23850011",
+    "nidn": "0728058503"
   },
   {
     "kode_dosen": "EYE",
@@ -295,9 +266,8 @@
     "prodi": "S1 Teknik Logistik",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 25820001,
-    "nidn": "0702038201",
-    "jabatan_fungsional": "L"
+    "nip": "25820001",
+    "nidn": "0702038201"
   },
   {
     "kode_dosen": "MAE",
@@ -305,9 +275,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 20920039,
-    "nidn": "0724089201",
-    "jabatan_fungsional": "AA"
+    "nip": "20920039",
+    "nidn": "0724089201"
   },
   {
     "kode_dosen": "NZR",
@@ -315,9 +284,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 21910012,
-    "nidn": "0708119103",
-    "jabatan_fungsional": "AA"
+    "nip": "21910012",
+    "nidn": "0708119103"
   },
   {
     "kode_dosen": "PAM",
@@ -325,9 +293,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 22950019,
-    "nidn": "0706019502",
-    "jabatan_fungsional": "NJFA"
+    "nip": "22950019",
+    "nidn": "0706019502"
   },
   {
     "kode_dosen": "RTL",
@@ -335,9 +302,8 @@
     "prodi": "S1 Sistem Informasi",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 23890011,
-    "nidn": "0704068902",
-    "jabatan_fungsional": "AA"
+    "nip": "23890011",
+    "nidn": "0704068902"
   },
   {
     "kode_dosen": "TTK",
@@ -345,9 +311,8 @@
     "prodi": "S1 Bisnis Digital",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 20860014,
-    "nidn": "0710028604",
-    "jabatan_fungsional": "L"
+    "nip": "20860014",
+    "nidn": "0710028604"
   },
   {
     "kode_dosen": "WAY",
@@ -355,9 +320,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "QBI",
-    "nip": 19870002,
-    "nidn": "0702048705",
-    "jabatan_fungsional": "L"
+    "nip": "19870002",
+    "nidn": "0702048705"
   },
   {
     "kode_dosen": "AUX",
@@ -365,9 +329,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "SME",
-    "nip": 23970026,
-    "nidn": "0718099702",
-    "jabatan_fungsional": "NJFA"
+    "nip": "23970026",
+    "nidn": "0718099702"
   },
   {
     "kode_dosen": "BIA",
@@ -375,9 +338,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "SME",
-    "nip": 20930043,
-    "nidn": "0703119301",
-    "jabatan_fungsional": "L"
+    "nip": "20930043",
+    "nidn": "0703119301"
   },
   {
     "kode_dosen": "HKC",
@@ -385,9 +347,8 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "SME",
-    "nip": 22970044,
-    "nidn": "0719079702",
-    "jabatan_fungsional": "AA"
+    "nip": "22970044",
+    "nidn": "0719079702"
   },
   {
     "kode_dosen": "MUF",
@@ -395,8 +356,7 @@
     "prodi": "S1 Teknik Industri",
     "kelompok_keahlian": "RIIB",
     "sub_kelompok_keahlian": "SME",
-    "nip": 15890066,
-    "nidn": "0424098901",
-    "jabatan_fungsional": "L"
+    "nip": "15890066",
+    "nidn": "0424098901"
   }
 ]

@@ -22,11 +22,20 @@ class ProfilSeeder extends Seeder
                 'prodi' => $item['prodi'],
                 'kelompok_keahlian' => $item['kelompok_keahlian'],
                 'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
-                'nip' => $item['nip'] ?? null,
-                'nidn' => $item['nidn'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
+                'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
             ]);
         }
+    }
+
+    private function normalizeIdentifier(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        if ($value === '' || $value === '#N/A') {
+            return null;
+        }
+
+        return $value;
     }
 }
