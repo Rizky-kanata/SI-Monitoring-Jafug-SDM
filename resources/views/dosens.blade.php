@@ -596,11 +596,11 @@
         });
     });
 
-    const initialModal = {!! json_encode($openModal ?? null) !!};
-    const initialEditingProfil = {!! json_encode($editingProfil ?? null) !!};
-    const hasErrors = {!! json_encode($errors->any()) !!};
-    const wasUpdate = {!! json_encode(old('_method') === 'PUT') !!};
-    const oldProfilId = {!! json_encode(old('profil_id')) !!};
+    const initialModal = @json($openModal ?? null);
+    const initialEditingProfil = @json($editingProfil ?? null);
+    const hasErrors = @json($errors->any());
+    const wasUpdate = @json(old('_method') === 'PUT');
+    const oldProfilId = @json(old('profil_id'));
 
     if (initialModal === 'create') {
         const modal = document.getElementById('create-modal');
@@ -648,13 +648,13 @@
             if (targetId) {
                 form.action = template.replace('__ID__', targetId);
             }
-            form.querySelector('#edit-kode_dosen').value = {!! json_encode(old('kode_dosen') ?? '') !!};
-            form.querySelector('#edit-nama_dosen').value = {!! json_encode(old('nama_dosen') ?? '') !!};
-            form.querySelector('#edit-prodi').value = {!! json_encode(old('prodi') ?? '') !!};
-            form.querySelector('#edit-kelompok_keahlian').value = {!! json_encode(old('kelompok_keahlian') ?? '') !!};
-            form.querySelector('#edit-sub_kelompok_keahlian').value = {!! json_encode(old('sub_kelompok_keahlian') ?? '') !!};
-            form.querySelector('#edit-nip').value = {!! json_encode(old('nip') ?? '') !!};
-            form.querySelector('#edit-nidn').value = {!! json_encode(old('nidn') ?? '') !!};
+            form.querySelector('#edit-kode_dosen').value = @json(old('kode_dosen') ?? '');
+            form.querySelector('#edit-nama_dosen').value = @json(old('nama_dosen') ?? '');
+            form.querySelector('#edit-prodi').value = @json(old('prodi') ?? '');
+            form.querySelector('#edit-kelompok_keahlian').value = @json(old('kelompok_keahlian') ?? '');
+            form.querySelector('#edit-sub_kelompok_keahlian').value = @json(old('sub_kelompok_keahlian') ?? '');
+            form.querySelector('#edit-nip').value = @json(old('nip') ?? '');
+            form.querySelector('#edit-nidn').value = @json(old('nidn') ?? '');
             const idField = form.querySelector('#edit-profil_id');
             if (idField && targetId) {
                 idField.value = targetId;
