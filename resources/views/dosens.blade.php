@@ -328,7 +328,7 @@
         </div>
         <nav class="nav-links">
             <a href="{{ route('profils.index') }}" class="active">Profil Dosen</a>
-            <a href="#">Manajemen Prodi</a>
+            <a href="#">Manajemen Kepangkatan</a>
             <a href="#">Laporan Akademik</a>
             <a href="#">Pengaturan Sistem</a>
         </nav>
