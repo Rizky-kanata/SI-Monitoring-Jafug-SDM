@@ -323,8 +323,8 @@
 <div class="dashboard">
     <aside class="sidebar">
         <div>
-            <h1>Admin Fakultas</h1>
-            <p style="color: rgba(241,245,249,0.75); margin-top: 0.35rem;">Kelola profil dosen dengan mudah.</p>
+            <h1>Admin Dosen Kelompok Keahlian RIIB</h1>
+            <p style="color: rgba(241,245,249,0.75); margin-top: 0.35rem;">Pengelolaan profil dosen kelompok keahlian RIIB.</p>
         </div>
         <nav class="nav-links">
             <a href="{{ route('profils.index') }}" class="active">Data Profil Dosen</a>
@@ -339,8 +339,8 @@
         <div class="card">
             <div class="header">
                 <div>
-                    <h2 class="title">Profil Dosen</h2>
-                    <p class="subtitle">Pantau dan kelola informasi profil dosen dalam satu tempat.</p>
+                    <h2 class="title">Profil Dosen Kelompok Keahlian RIIB</h2>
+                    <p class="subtitle">Daftar pantau dan pengelolaan informasi profil dosen kelompok keahlian RIIB.</p>
                 </div>
                 <button type="button" class="button" data-modal-target="create-modal">
                     + Tambah Profil

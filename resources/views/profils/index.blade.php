@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Dosen</title>
+    <title>Profil Dosen Kelompok Keahlian RIIB</title>
 </head>
 <body>
-    <h1>Daftar Profil Dosen</h1>
+    <h1>Daftar Profil Dosen Kelompok Keahlian RIIB</h1>
     <table border="1" cellpadding="8">
         <thead>
             <tr>
