@@ -323,7 +323,7 @@
 <div class="dashboard">
     <aside class="sidebar">
         <div>
-            <h1>Admin Dosen Kelompok Keahlian RIIB</h1>
+            <h1>Admin Dosen KK RIIB</h1>
             <p style="color: rgba(241,245,249,0.75); margin-top: 0.35rem;">Pengelolaan profil dosen kelompok keahlian RIIB.</p>
         </div>
         <nav class="nav-links">
