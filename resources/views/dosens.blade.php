@@ -327,10 +327,12 @@
             <p style="color: rgba(241,245,249,0.75); margin-top: 0.35rem;">Kelola profil dosen dengan mudah.</p>
         </div>
         <nav class="nav-links">
-            <a href="{{ route('profils.index') }}" class="active">Profil Dosen</a>
-            <a href="#">Manajemen Kepangkatan</a>
-            <a href="#">Laporan Akademik</a>
-            <a href="#">Pengaturan Sistem</a>
+            <a href="{{ route('profils.index') }}" class="active">Data Profil Dosen</a>
+            <a href="#">Data Kepangkatan</a>
+            <a href="#">Data Linieritas</a>
+            <a href="#">Data Matrix</a>
+            <a href="#">Data Pengajaran & Muatan Riset</a>
+            <a href="#">Data Materi Kegiatan & Dokumen SK</a>
         </nav>
     </aside>
     <main class="content">
