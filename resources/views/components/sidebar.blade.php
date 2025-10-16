@@ -3,7 +3,7 @@
 ])
 
 <div {{ $attributes->class('flex h-full flex-col gap-10 px-6 py-8 text-white lg:px-8') }}>
-    <div class="flex items-start gap-4">
+    <div class="flex flex-col items-start gap-4">
         <img src="{{ asset('images/TelU Sby-1.png') }}" alt="Telkom University Surabaya" class="h-12 w-auto">
         <div class="space-y-1">
             <h1 class="text-lg font-semibold leading-tight">Admin Dosen KK RIIB</h1>
