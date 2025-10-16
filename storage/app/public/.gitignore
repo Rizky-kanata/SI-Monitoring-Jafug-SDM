@@ -1,2 +1,4 @@
 *
 !.gitignore
+!profil-fotos/
+!profil-fotos/**
