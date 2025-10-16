@@ -132,7 +132,8 @@
     "sub_kelompok_keahlian": "MSB",
     "nip": 15720039,
     "nidn": "08961580023",
-    "jabatan_fungsional": "NJFA"
+    "jabatan_fungsional": "NJFA",
+    "foto": "agoes-windarto.jpg"
   },
   {
     "kode_dosen": "AQH",
@@ -142,7 +143,8 @@
     "sub_kelompok_keahlian": "MSB",
     "nip": 22960061,
     "nidn": "0729059601",
-    "jabatan_fungsional": "NJFA"
+    "jabatan_fungsional": "NJFA",
+    "foto": "alifiansyah-arrizqy-hidayat.jpg"
   },
   {
     "kode_dosen": "AFC",
@@ -152,7 +154,8 @@
     "sub_kelompok_keahlian": "MSB",
     "nip": 19900002,
     "nidn": "0715039004",
-    "jabatan_fungsional": "AA"
+    "jabatan_fungsional": "AA",
+    "foto": "anfazul-faridatul-azizah.jpg"
   },
   {
     "kode_dosen": "AXA",
@@ -282,7 +285,8 @@
     "sub_kelompok_keahlian": "QBI",
     "nip": 19900001,
     "nidn": "0702039003",
-    "jabatan_fungsional": "L"
+    "jabatan_fungsional": "L",
+    "foto": "abduh-sayid-albana.jpg"
   },
   {
     "kode_dosen": "ZAC",
@@ -292,7 +296,8 @@
     "sub_kelompok_keahlian": "QBI",
     "nip": 23850011,
     "nidn": "0728058503",
-    "jabatan_fungsional": "AA"
+    "jabatan_fungsional": "AA",
+    "foto": "achmad-muzakki.jpg"
   },
   {
     "kode_dosen": "EYE",
