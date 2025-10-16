@@ -165,7 +165,7 @@ class KepangkatanController extends Controller
                 'string',
                 'max:255',
                 Rule::exists('profils', 'kode_dosen'),
-                Rule::unique('kepangkatan', 'kode_dosen')->ignore($ignoreId),
+                Rule::unique('kepangkatans', 'kode_dosen')->ignore($ignoreId),
             ],
             'jabatan_fungsional' => ['required', 'string', 'max:255'],
             'tanggal_tmt' => ['nullable', 'date'],
