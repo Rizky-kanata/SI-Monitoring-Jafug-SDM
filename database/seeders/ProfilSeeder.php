@@ -24,6 +24,7 @@ class ProfilSeeder extends Seeder
                 'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
                 'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
                 'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
+                'foto_path' => null,
             ]);
         }
     }
