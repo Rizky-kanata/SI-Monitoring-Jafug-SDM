@@ -5,7 +5,7 @@
 @section('sidebar')
     <x-sidebar :links="[
         ['label' => 'Data Profil Dosen', 'href' => route('profils.index'), 'active' => request()->routeIs('profils.*')],
-        ['label' => 'Data Kepangkatan', 'href' => '#'],
+        ['label' => 'Data Kepangkatan', 'href' => route('kepangkatan.index'), 'active' => request()->routeIs('kepangkatan.*')],
         ['label' => 'Data Linieritas', 'href' => '#'],
         ['label' => 'Data Matrix', 'href' => '#'],
         ['label' => 'Data Pengajaran & Muatan Riset', 'href' => '#'],
