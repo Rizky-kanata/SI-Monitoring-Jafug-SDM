@@ -10,8 +10,6 @@ class Kepangkatan extends Model
 {
     use HasFactory;
 
-    protected $table = 'kepangkatan';
-
     /**
      * The attributes that are mass assignable.
      *

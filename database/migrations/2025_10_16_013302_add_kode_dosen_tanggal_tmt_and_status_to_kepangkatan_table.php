@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('kepangkatan', function (Blueprint $table) {
+        Schema::table('kepangkatans', function (Blueprint $table) {
             $table->string('kode_dosen')->nullable()->after('nama_dosen');
             $table->date('tanggal_tmt')->nullable()->after('jabatan_fungsional');
             $table->enum('status_publikasi', [
@@ -31,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('kepangkatan', function (Blueprint $table) {
+        Schema::table('kepangkatans', function (Blueprint $table) {
             $table->dropUnique(['kode_dosen']);
             $table->dropColumn(['kode_dosen', 'tanggal_tmt', 'status_publikasi']);
         });
