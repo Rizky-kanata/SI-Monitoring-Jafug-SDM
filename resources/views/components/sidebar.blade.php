@@ -1,0 +1,34 @@
+@props([
+    'links' => [],
+])
+
+<div {{ $attributes->class('flex h-full flex-col gap-10 px-6 py-8 text-white lg:px-8') }}>
+    <div class="flex items-start gap-4">
+        <img src="{{ asset('images/TelU Sby-1.png') }}" alt="Telkom University Surabaya" class="h-12 w-auto">
+        <div class="space-y-1">
+            <h1 class="text-lg font-semibold leading-tight">Admin Dosen KK RIIB</h1>
+            <p class="text-sm text-slate-200/80">Pengelolaan profil dosen kelompok keahlian RIIB.</p>
+        </div>
+    </div>
+
+    <nav class="space-y-1">
+        @foreach ($links as $link)
+            @php
+                $isActive = $link['active'] ?? false;
+                $href = $link['href'] ?? '#';
+            @endphp
+            <a
+                href="{{ $href }}"
+                @class([
+                    'flex items-center rounded-2xl px-4 py-2 text-sm font-medium transition',
+                    'bg-white/10 text-white shadow-sm backdrop-blur hover:bg-white/15' => $isActive,
+                    'text-slate-200/80 hover:bg-white/10 hover:text-white' => ! $isActive,
+                ])
+            >
+                {{ $link['label'] ?? '' }}
+            </a>
+        @endforeach
+
+        {{ $slot }}
+    </nav>
+</div>
