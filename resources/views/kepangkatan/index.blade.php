@@ -97,54 +97,52 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 bg-white">
-                        @if ($kepangkatans->isEmpty())
+                        @forelse ($kepangkatans as $kepangkatan)
+                            @php
+                                $indicator = $statusIndicators[$kepangkatan->id] ?? null;
+                                $statusLabel = $statusMetadata[$kepangkatan->status_publikasi]['label'] ?? 'Status Tidak Dikenal';
+                            @endphp
+                            <tr class="transition hover:bg-slate-50/80">
+                                <td class="px-5 py-4 font-medium text-slate-700">{{ $kepangkatan->kode_dosen ?? '—' }}</td>
+                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->nama_dosen }}</td>
+                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
+                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->tanggal_tmt?->format('d/m/Y') ?? '—' }}</td>
+                                <td class="px-5 py-4 text-slate-600">{{ $statusLabel }}</td>
+                                <td class="px-5 py-4">
+                                    @if ($indicator)
+                                        <div class="space-y-1">
+                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $indicator['badge'] }}">
+                                                {{ $indicator['label'] }}
+                                            </span>
+                                            <p class="text-xs text-slate-500">{{ $indicator['description'] }}</p>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-slate-500">—</span>
+                                    @endif
+                                </td>
+                                <td class="px-5 py-4">
+                                    <div class="flex justify-end gap-2">
+                                        <a
+                                            href="{{ route('kepangkatan.edit', $kepangkatan) }}"
+                                            class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-200"
+                                        >
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $kepangkatan->nama_dosen }}?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
                             <tr>
                                 <td colspan="7" class="px-5 py-10 text-center text-sm text-slate-500">Belum ada data kepangkatan.</td>
                             </tr>
-                        @else
-                            @foreach ($kepangkatans as $kepangkatan)
-                                @php
-                                    $indicator = $statusIndicators[$kepangkatan->id] ?? null;
-                                    $statusLabel = $statusMetadata[$kepangkatan->status_publikasi]['label'] ?? 'Status Tidak Dikenal';
-                                @endphp
-                                <tr class="transition hover:bg-slate-50/80">
-                                    <td class="px-5 py-4 font-medium text-slate-700">{{ $kepangkatan->kode_dosen ?? '—' }}</td>
-                                    <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->nama_dosen }}</td>
-                                    <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
-                                    <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->tanggal_tmt?->format('d/m/Y') ?? '—' }}</td>
-                                    <td class="px-5 py-4 text-slate-600">{{ $statusLabel }}</td>
-                                    <td class="px-5 py-4">
-                                        @if ($indicator)
-                                            <div class="space-y-1">
-                                                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $indicator['badge'] }}">
-                                                    {{ $indicator['label'] }}
-                                                </span>
-                                                <p class="text-xs text-slate-500">{{ $indicator['description'] }}</p>
-                                            </div>
-                                        @else
-                                            <span class="text-xs text-slate-500">—</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-5 py-4">
-                                        <div class="flex justify-end gap-2">
-                                            <a
-                                                href="{{ route('kepangkatan.edit', $kepangkatan) }}"
-                                                class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1.5 text-xs font-semibold text-blue-700 transition hover:bg-blue-200"
-                                            >
-                                                Edit
-                                            </a>
-                                            <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $kepangkatan->nama_dosen }}?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">
-                                                    Hapus
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                        @endforelse
                     </tbody>
                 </table>
             </div>
