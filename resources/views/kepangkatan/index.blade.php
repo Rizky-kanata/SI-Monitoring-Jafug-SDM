@@ -97,7 +97,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 bg-white">
-                        @forelse ($kepangkatans as $kepangkatan)
+                        @if ($kepangkatans->count() > 0)
+                            @foreach ($kepangkatans as $kepangkatan)
                             @php
                                 $indicator = $statusIndicators[$kepangkatan->id] ?? null;
                                 $statusLabel = $statusMetadata[$kepangkatan->status_publikasi]['label'] ?? 'Status Tidak Dikenal';
@@ -138,11 +139,12 @@
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                            @endforeach
+                        @else
                             <tr>
                                 <td colspan="7" class="px-5 py-10 text-center text-sm text-slate-500">Belum ada data kepangkatan.</td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>
