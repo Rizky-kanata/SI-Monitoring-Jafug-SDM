@@ -140,6 +140,7 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @endif
                         @else
                             <tr>
                                 <td colspan="7" class="px-5 py-10 text-center text-sm text-slate-500">Belum ada data kepangkatan.</td>
