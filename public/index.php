@@ -1,4 +1,7 @@
 <?php
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80200) {
+    exit('This application requires PHP version 8.2 or higher. Please upgrade before continuing.');
+}
 
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
