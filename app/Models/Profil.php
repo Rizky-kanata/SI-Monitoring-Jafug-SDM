@@ -30,6 +30,14 @@ class Profil extends Model
 
     public function getFotoUrlAttribute(): ?string
     {
-        return $this->foto_path ? Storage::url($this->foto_path) : null;
+        if (!$this->foto_path) {
+            return null;
+        }
+
+        if (!Storage::disk('public')->exists($this->foto_path)) {
+            return null;
+        }
+
+        return Storage::disk('public')->url($this->foto_path);
     }
 }

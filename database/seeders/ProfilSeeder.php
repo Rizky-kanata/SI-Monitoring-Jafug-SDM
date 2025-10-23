@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Profil;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class ProfilSeeder extends Seeder
 {
@@ -24,9 +25,7 @@ class ProfilSeeder extends Seeder
                 'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
                 'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
                 'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
-                'foto_path' => isset($item['foto']) && $item['foto'] !== ''
-                    ? 'profil-fotos/' . ltrim($item['foto'], "/\\")
-                    : null,
+                'foto_path' => $this->resolveFotoPath($item['foto'] ?? null),
             ]);
         }
     }
@@ -40,5 +39,18 @@ class ProfilSeeder extends Seeder
         }
 
         return $value;
+    }
+
+    private function resolveFotoPath(?string $filename): ?string
+    {
+        $filename = trim((string) $filename);
+
+        if ($filename === '') {
+            return null;
+        }
+
+        $path = 'profil-fotos/' . ltrim($filename, "/\\");
+
+        return Storage::disk('public')->exists($path) ? $path : null;
     }
 }
