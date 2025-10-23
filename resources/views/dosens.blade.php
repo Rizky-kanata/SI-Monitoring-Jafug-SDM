@@ -159,7 +159,7 @@
                                             class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-200"
                                             data-action="edit"
                                             data-update-template="{{ route('profils.update', ['profil' => '__ID__']) }}"
-                                            data-profile='@json($profil)'
+                                            data-profile="{{ $profil->toJson(JSON_UNESCAPED_UNICODE) }}"
                                             data-modal-target="edit-modal"
                                         >
                                             Edit
@@ -169,7 +169,7 @@
                                             class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-200"
                                             data-action="delete"
                                             data-destroy-template="{{ route('profils.destroy', ['profil' => '__ID__']) }}"
-                                            data-profile='@json(['id' => $profil->id, 'nama_dosen' => $profil->nama_dosen])'
+                                            data-profile="{{ json_encode(['id' => $profil->id, 'nama_dosen' => $profil->nama_dosen], JSON_UNESCAPED_UNICODE) }}"
                                             data-modal-target="delete-modal"
                                         >
                                             Hapus
