@@ -36,6 +36,13 @@ class KepangkatanSeeder extends Seeder
                 'tanggal_tmt' => null,
                 'status_publikasi' => 'belum_diajukan',
             ],
+            [
+                'kode_dosen' => 'EXE',
+                'nama_dosen' => 'Abduh Sayid Albana',
+                'jabatan_fungsional' => 'Lektor Kepala',
+                'tanggal_tmt' => Carbon::now()->subYear()->format('Y-m-d'),
+                'status_publikasi' => 'terpublikasi',
+            ],
         ];
 
         foreach ($records as $record) {
