@@ -35,4 +35,14 @@
 
         {{ $slot }}
     </nav>
+
+    <form method="POST" action="{{ route('logout') }}" class="mt-auto">
+        @csrf
+        <button
+            type="submit"
+            class="w-full rounded-2xl bg-white/10 px-4 py-2 text-left text-sm font-medium text-white transition hover:bg-white/15"
+        >
+            Keluar
+        </button>
+    </form>
 </div>
