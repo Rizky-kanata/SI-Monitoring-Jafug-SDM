@@ -14,68 +14,68 @@ class KepangkatanSeeder extends Seeder
      */
     public function run(): void
     {
-        $records = [
-            [
-                'kode_dosen' => 'DEZ',
-                'jabatan_fungsional' => 'Asisten Ahli',
-                'pangkat' => 'III/b',
-                'golongan' => 'Penata Muda Tk. I',
-                'tanggal_sk' => Carbon::now()->subMonths(9)->toDateString(),
-                'tanggal_mulai' => Carbon::now()->subMonths(8)->toDateString(),
-                'status' => 'diajukan',
-                'catatan' => 'Menunggu verifikasi dari fakultas.',
-            ],
-            [
-                'kode_dosen' => 'GRA',
-                'jabatan_fungsional' => 'Lektor',
-                'pangkat' => 'III/d',
-                'golongan' => 'Penata Tk. I',
-                'tanggal_sk' => Carbon::now()->subYears(2)->subMonths(3)->toDateString(),
-                'tanggal_mulai' => Carbon::now()->subYears(2)->toDateString(),
-                'status' => 'disetujui',
-                'catatan' => 'Telah disahkan dengan SK terbaru.',
-            ],
-            [
-                'kode_dosen' => 'NSX',
-                'jabatan_fungsional' => 'Lektor Kepala',
-                'pangkat' => 'IV/a',
-                'golongan' => 'Pembina',
-                'tanggal_sk' => null,
-                'tanggal_mulai' => null,
-                'status' => 'draft',
-                'catatan' => 'Monitoring kelengkapan berkas.',
-            ],
-            [
-                'kode_dosen' => 'EXE',
-                'jabatan_fungsional' => 'Lektor Kepala',
-                'pangkat' => 'IV/b',
-                'golongan' => 'Pembina Tk. I',
-                'tanggal_sk' => Carbon::now()->subYear()->toDateString(),
-                'tanggal_mulai' => Carbon::now()->subMonths(10)->toDateString(),
-                'status' => 'ditolak',
-                'catatan' => 'Perlu revisi pada lampiran penelitian.',
-            ],
+        $now = Carbon::now();
+        $statusCycle = ['draft', 'diajukan', 'disetujui', 'ditolak'];
+
+        Profil::query()
+            ->orderBy('nama_dosen')
+            ->get()
+            ->each(function (Profil $profil, int $index) use ($now, $statusCycle) {
+                $status = $statusCycle[$index % count($statusCycle)];
+                $jabatan = $this->resolveJabatan($profil);
+                $pangkatGolongan = $this->mapJabatanToPangkat($jabatan);
+
+                Kepangkatan::updateOrCreate(
+                    ['profil_id' => $profil->id],
+                    [
+                        'jabatan_fungsional' => $jabatan,
+                        'pangkat' => $pangkatGolongan['pangkat'],
+                        'golongan' => $pangkatGolongan['golongan'],
+                        'tanggal_sk' => $status === 'draft' ? null : $now->copy()->subMonths(rand(3, 18))->toDateString(),
+                        'tanggal_mulai' => $status === 'draft' ? null : $now->copy()->subMonths(rand(1, 12))->toDateString(),
+                        'status' => $status,
+                        'catatan' => $this->generateCatatan($status),
+                    ]
+                );
+            });
+    }
+
+    private function resolveJabatan(Profil $profil): string
+    {
+        $default = 'Asisten Ahli';
+        $mapping = [
+            'AA' => 'Asisten Ahli',
+            'L' => 'Lektor',
+            'LK' => 'Lektor Kepala',
+            'NJFA' => 'Non-JFA',
         ];
 
-        foreach ($records as $record) {
-            $profil = Profil::where('kode_dosen', $record['kode_dosen'])->first();
+        $jabatan = strtoupper(trim((string) ($profil->jabatan_fungsional ?? '')));
 
-            if (! $profil) {
-                continue;
-            }
+        return $mapping[$jabatan] ?? $default;
+    }
 
-            Kepangkatan::updateOrCreate(
-                ['profil_id' => $profil->id],
-                [
-                    'jabatan_fungsional' => $record['jabatan_fungsional'],
-                    'pangkat' => $record['pangkat'],
-                    'golongan' => $record['golongan'],
-                    'tanggal_sk' => $record['tanggal_sk'],
-                    'tanggal_mulai' => $record['tanggal_mulai'],
-                    'status' => $record['status'],
-                    'catatan' => $record['catatan'],
-                ]
-            );
-        }
+    /**
+     * @return array{pangkat: string|null, golongan: string|null}
+     */
+    private function mapJabatanToPangkat(string $jabatan): array
+    {
+        return match ($jabatan) {
+            'Lektor Kepala' => ['pangkat' => 'IV/a', 'golongan' => 'Pembina'],
+            'Lektor' => ['pangkat' => 'III/c', 'golongan' => 'Penata'],
+            'Asisten Ahli' => ['pangkat' => 'III/b', 'golongan' => 'Penata Muda Tk. I'],
+            default => ['pangkat' => null, 'golongan' => null],
+        };
+    }
+
+    private function generateCatatan(string $status): string
+    {
+        return match ($status) {
+            'draft' => 'Lengkapi berkas dan susun draft pengajuan kenaikan pangkat.',
+            'diajukan' => 'Berkas telah diajukan ke fakultas, menunggu tindak lanjut.',
+            'disetujui' => 'Kenaikan pangkat sudah disahkan. Update data pendukung bila perlu.',
+            'ditolak' => 'Pengajuan ditolak. Cek catatan evaluasi dan siapkan revisi.',
+            default => '',
+        };
     }
 }
