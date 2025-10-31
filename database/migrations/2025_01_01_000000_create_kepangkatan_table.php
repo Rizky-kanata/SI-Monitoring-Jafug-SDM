@@ -13,8 +13,17 @@ return new class extends Migration
     {
         Schema::create('kepangkatans', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_dosen')->unique();
+            $table->foreignId('profil_id')
+                ->unique()
+                ->constrained('profils')
+                ->cascadeOnDelete();
             $table->string('jabatan_fungsional');
+            $table->string('pangkat')->nullable();
+            $table->string('golongan')->nullable();
+            $table->date('tanggal_sk')->nullable();
+            $table->date('tanggal_mulai')->nullable();
+            $table->enum('status', ['draft', 'diajukan', 'disetujui', 'ditolak'])->default('draft');
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }

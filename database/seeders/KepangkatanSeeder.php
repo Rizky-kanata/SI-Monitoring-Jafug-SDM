@@ -17,44 +17,63 @@ class KepangkatanSeeder extends Seeder
         $records = [
             [
                 'kode_dosen' => 'DEZ',
-                'nama_dosen' => 'Desita Nur Rachmaniar',
                 'jabatan_fungsional' => 'Asisten Ahli',
-                'tanggal_tmt' => Carbon::now()->subMonths(8)->format('Y-m-d'),
-                'status_publikasi' => 'menunggu_verifikasi',
+                'pangkat' => 'III/b',
+                'golongan' => 'Penata Muda Tk. I',
+                'tanggal_sk' => Carbon::now()->subMonths(9)->toDateString(),
+                'tanggal_mulai' => Carbon::now()->subMonths(8)->toDateString(),
+                'status' => 'diajukan',
+                'catatan' => 'Menunggu verifikasi dari fakultas.',
             ],
             [
                 'kode_dosen' => 'GRA',
-                'nama_dosen' => 'Granita Hajar',
                 'jabatan_fungsional' => 'Lektor',
-                'tanggal_tmt' => Carbon::now()->subYears(3)->format('Y-m-d'),
-                'status_publikasi' => 'terpublikasi',
+                'pangkat' => 'III/d',
+                'golongan' => 'Penata Tk. I',
+                'tanggal_sk' => Carbon::now()->subYears(2)->subMonths(3)->toDateString(),
+                'tanggal_mulai' => Carbon::now()->subYears(2)->toDateString(),
+                'status' => 'disetujui',
+                'catatan' => 'Telah disahkan dengan SK terbaru.',
             ],
             [
                 'kode_dosen' => 'NSX',
-                'nama_dosen' => 'Nisa Isrofi',
                 'jabatan_fungsional' => 'Lektor Kepala',
-                'tanggal_tmt' => null,
-                'status_publikasi' => 'belum_diajukan',
+                'pangkat' => 'IV/a',
+                'golongan' => 'Pembina',
+                'tanggal_sk' => null,
+                'tanggal_mulai' => null,
+                'status' => 'draft',
+                'catatan' => 'Monitoring kelengkapan berkas.',
             ],
             [
                 'kode_dosen' => 'EXE',
-                'nama_dosen' => 'Abduh Sayid Albana',
                 'jabatan_fungsional' => 'Lektor Kepala',
-                'tanggal_tmt' => Carbon::now()->subYear()->format('Y-m-d'),
-                'status_publikasi' => 'terpublikasi',
+                'pangkat' => 'IV/b',
+                'golongan' => 'Pembina Tk. I',
+                'tanggal_sk' => Carbon::now()->subYear()->toDateString(),
+                'tanggal_mulai' => Carbon::now()->subMonths(10)->toDateString(),
+                'status' => 'ditolak',
+                'catatan' => 'Perlu revisi pada lampiran penelitian.',
             ],
         ];
 
         foreach ($records as $record) {
             $profil = Profil::where('kode_dosen', $record['kode_dosen'])->first();
 
+            if (! $profil) {
+                continue;
+            }
+
             Kepangkatan::updateOrCreate(
-                ['kode_dosen' => $record['kode_dosen']],
+                ['profil_id' => $profil->id],
                 [
-                    'nama_dosen' => $profil?->nama_dosen ?? $record['nama_dosen'],
                     'jabatan_fungsional' => $record['jabatan_fungsional'],
-                    'tanggal_tmt' => $record['tanggal_tmt'],
-                    'status_publikasi' => $record['status_publikasi'],
+                    'pangkat' => $record['pangkat'],
+                    'golongan' => $record['golongan'],
+                    'tanggal_sk' => $record['tanggal_sk'],
+                    'tanggal_mulai' => $record['tanggal_mulai'],
+                    'status' => $record['status'],
+                    'catatan' => $record['catatan'],
                 ]
             );
         }

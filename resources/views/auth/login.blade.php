@@ -84,6 +84,46 @@
             box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
         }
 
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            background-color: rgba(37, 99, 235, 0.08);
+        }
+
+        .toggle-password:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        .toggle-password img {
+            width: 22px;
+            height: 22px;
+            display: block;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -205,13 +245,25 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    autocomplete="current-password"
-                    required
-                >
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button
+                        type="button"
+                        class="toggle-password"
+                        aria-label="Tampilkan password"
+                        aria-pressed="false"
+                        data-visible-icon="{{ asset('images/icons/eye-open.svg') }}"
+                        data-hidden-icon="{{ asset('images/icons/eye-closed.svg') }}"
+                    >
+                        <img src="{{ asset('images/icons/eye-closed.svg') }}" alt="" aria-hidden="true">
+                    </button>
+                </div>
                 @error('password')
                     <span class="error">{{ $message }}</span>
                 @enderror
@@ -240,6 +292,45 @@
             <button type="submit">Masuk</button>
         </form>
     </main>
+
+    <script>
+        (function () {
+            const passwordInput = document.getElementById('password');
+            const toggleButton = document.querySelector('.toggle-password');
+
+            if (!passwordInput || !toggleButton) {
+                return;
+            }
+
+            const icon = toggleButton.querySelector('img');
+            const visibleIcon = toggleButton.dataset.visibleIcon;
+            const hiddenIcon = toggleButton.dataset.hiddenIcon;
+            let isVisible = false;
+
+            function updateState() {
+                passwordInput.type = isVisible ? 'text' : 'password';
+                toggleButton.setAttribute('aria-pressed', String(isVisible));
+                toggleButton.setAttribute('aria-label', isVisible ? 'Sembunyikan password' : 'Tampilkan password');
+                if (icon && visibleIcon && hiddenIcon) {
+                    icon.src = isVisible ? visibleIcon : hiddenIcon;
+                }
+            }
+
+            toggleButton.addEventListener('click', function () {
+                isVisible = !isVisible;
+                updateState();
+            });
+
+            toggleButton.addEventListener('keydown', function (event) {
+                if (event.key === ' ' || event.key === 'Enter') {
+                    event.preventDefault();
+                    toggleButton.click();
+                }
+            });
+
+            updateState();
+        })();
+    </script>
 </body>
 
 </html>

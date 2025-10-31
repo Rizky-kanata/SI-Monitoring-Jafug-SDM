@@ -6,7 +6,6 @@ use App\Models\Kepangkatan;
 use App\Models\Profil;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -17,44 +16,34 @@ class KepangkatanController extends Controller
      */
     public function index(Request $request): View
     {
-        $sortable = [
-            'nama_dosen',
-            'kode_dosen',
-            'jabatan_fungsional',
-            'tanggal_tmt',
-            'status_publikasi',
-        ];
+        $statusFilter = $request->string('status')->toString();
+        $search = $request->string('search')->toString();
 
-        $sort = $request->string('sort')->toString() ?: 'nama_dosen';
-        $direction = $request->string('direction')->lower() === 'desc' ? 'desc' : 'asc';
-
-        if (! in_array($sort, $sortable, true)) {
-            $sort = 'nama_dosen';
-        }
-
-        $query = Kepangkatan::query()->with('profil');
-
-        if ($sort === 'tanggal_tmt') {
-            $query
-                ->orderByRaw('tanggal_tmt IS NULL')
-                ->orderBy('tanggal_tmt', $direction);
-        } else {
-            $query->orderBy($sort, $direction);
-        }
-
-        $kepangkatans = $query->paginate(12)->withQueryString();
-        $statusMetadata = Kepangkatan::statusMetadata();
-        $statusIndicators = $kepangkatans->mapWithKeys(function (Kepangkatan $record) use ($statusMetadata) {
-            return [$record->id => $this->makeIndicatorFor($record, $statusMetadata)];
-        });
+        $records = Kepangkatan::query()
+            ->with('profil')
+            ->when(
+                $statusFilter !== '' && array_key_exists($statusFilter, Kepangkatan::statusOptions()),
+                fn ($query) => $query->where('status', $statusFilter)
+            )
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('profil', function ($relation) use ($search) {
+                    $relation
+                        ->where('nama_dosen', 'like', '%' . $search . '%')
+                        ->orWhere('kode_dosen', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderByDesc('updated_at')
+            ->paginate(10)
+            ->withQueryString();
 
         return view('kepangkatan.index', [
-            'kepangkatans' => $kepangkatans,
-            'statusIndicators' => $statusIndicators,
-            'statusMetadata' => $statusMetadata,
+            'kepangkatans' => $records,
             'statusOptions' => Kepangkatan::statusOptions(),
-            'sort' => $sort,
-            'direction' => $direction,
+            'statusMetadata' => Kepangkatan::statusMetadata(),
+            'filters' => [
+                'status' => $statusFilter,
+                'search' => $search,
+            ],
         ]);
     }
 
@@ -76,15 +65,7 @@ class KepangkatanController extends Controller
     {
         $validated = $this->validatePayload($request);
 
-        $profil = Profil::where('kode_dosen', $validated['kode_dosen'])->firstOrFail();
-
-        Kepangkatan::create([
-            'nama_dosen' => $profil->nama_dosen,
-            'kode_dosen' => $validated['kode_dosen'],
-            'jabatan_fungsional' => $validated['jabatan_fungsional'],
-            'tanggal_tmt' => $validated['tanggal_tmt'],
-            'status_publikasi' => $validated['status_publikasi'],
-        ]);
+        Kepangkatan::create($validated);
 
         return redirect()
             ->route('kepangkatan.index')
@@ -97,8 +78,8 @@ class KepangkatanController extends Controller
     public function edit(Kepangkatan $kepangkatan): View
     {
         return view('kepangkatan.edit', [
-            'kepangkatan' => $kepangkatan,
-            'profilOptions' => $this->profilOptions(),
+            'kepangkatan' => $kepangkatan->load('profil'),
+            'profilOptions' => $this->profilOptions($kepangkatan->profil_id),
             'statusOptions' => Kepangkatan::statusOptions(),
         ]);
     }
@@ -110,15 +91,7 @@ class KepangkatanController extends Controller
     {
         $validated = $this->validatePayload($request, $kepangkatan->id);
 
-        $profil = Profil::where('kode_dosen', $validated['kode_dosen'])->firstOrFail();
-
-        $kepangkatan->update([
-            'nama_dosen' => $profil->nama_dosen,
-            'kode_dosen' => $validated['kode_dosen'],
-            'jabatan_fungsional' => $validated['jabatan_fungsional'],
-            'tanggal_tmt' => $validated['tanggal_tmt'],
-            'status_publikasi' => $validated['status_publikasi'],
-        ]);
+        $kepangkatan->update($validated);
 
         return redirect()
             ->route('kepangkatan.index')
@@ -138,21 +111,39 @@ class KepangkatanController extends Controller
     }
 
     /**
-     * @return array<int, array<string, string>>
+     * Ambil daftar profil yang belum memiliki data kepangkatan (kecuali profil yang sedang diedit).
+     *
+     * @return array<int, array<string, string|int>>
      */
-    private function profilOptions(): array
+    private function profilOptions(?int $currentProfilId = null): array
     {
+        $assigned = Kepangkatan::query()
+            ->when($currentProfilId, fn ($query) => $query->where('profil_id', '!=', $currentProfilId))
+            ->pluck('profil_id')
+            ->all();
+
         return Profil::query()
             ->orderBy('nama_dosen')
-            ->get(['kode_dosen', 'nama_dosen'])
+            ->get(['id', 'kode_dosen', 'nama_dosen'])
+            ->filter(function (Profil $profil) use ($assigned, $currentProfilId) {
+                if ($currentProfilId !== null && $profil->id === $currentProfilId) {
+                    return true;
+                }
+
+                return ! in_array($profil->id, $assigned, true);
+            })
             ->map(fn (Profil $profil) => [
+                'id' => $profil->id,
                 'kode_dosen' => $profil->kode_dosen,
                 'nama_dosen' => $profil->nama_dosen,
             ])
+            ->values()
             ->all();
     }
 
     /**
+     * Validasi data kepangkatan sebelum disimpan.
+     *
      * @return array<string, mixed>
      */
     private function validatePayload(Request $request, ?int $ignoreId = null): array
@@ -160,53 +151,23 @@ class KepangkatanController extends Controller
         $statusKeys = array_keys(Kepangkatan::statusMetadata());
 
         return $request->validate([
-            'kode_dosen' => [
+            'profil_id' => [
                 'required',
-                'string',
-                'max:255',
-                Rule::exists('profils', 'kode_dosen'),
-                Rule::unique('kepangkatans', 'kode_dosen')->ignore($ignoreId),
+                'integer',
+                Rule::exists('profils', 'id'),
+                Rule::unique('kepangkatans', 'profil_id')->ignore($ignoreId),
             ],
             'jabatan_fungsional' => ['required', 'string', 'max:255'],
-            'tanggal_tmt' => ['nullable', 'date'],
-            'status_publikasi' => ['required', Rule::in($statusKeys)],
+            'pangkat' => ['nullable', 'string', 'max:255'],
+            'golongan' => ['nullable', 'string', 'max:255'],
+            'tanggal_sk' => ['nullable', 'date'],
+            'tanggal_mulai' => ['nullable', 'date'],
+            'status' => ['required', Rule::in($statusKeys)],
+            'catatan' => ['nullable', 'string'],
         ], [
-            'kode_dosen.required' => 'Kode dosen wajib dipilih.',
-            'kode_dosen.exists' => 'Kode dosen tidak ditemukan dalam data profil.',
-            'kode_dosen.unique' => 'Kode dosen sudah memiliki data kepangkatan.',
+            'profil_id.required' => 'Profil dosen wajib dipilih.',
+            'profil_id.exists' => 'Profil dosen tidak ditemukan.',
+            'profil_id.unique' => 'Profil dosen sudah memiliki data kepangkatan.',
         ]);
-    }
-
-    /**
-     * @param  array<string, array<string, string>>  $statusMetadata
-     * @return array{label: string, description: string, badge: string}
-     */
-    private function makeIndicatorFor(Kepangkatan $record, array $statusMetadata): array
-    {
-        $metadata = $statusMetadata[$record->status_publikasi] ?? [
-            'label' => 'Status Tidak Dikenal',
-            'description' => 'Status publikasi tidak terdaftar dalam sistem.',
-            'badge' => 'bg-slate-100 text-slate-700 ring-slate-200',
-        ];
-
-        $tanggalTmt = $record->tanggal_tmt;
-
-        if ($tanggalTmt === null) {
-            return [
-                'label' => 'TMT Belum Diisi',
-                'description' => 'Lengkapi tanggal TMT untuk memastikan monitoring kepangkatan.',
-                'badge' => 'bg-amber-100 text-amber-700 ring-amber-200',
-            ];
-        }
-
-        if ($tanggalTmt->lte(Carbon::now()->subYears(2))) {
-            return [
-                'label' => $metadata['label'] . ' • Perlu Pembaruan TMT',
-                'description' => 'Tanggal TMT lebih dari 2 tahun yang lalu. Pertimbangkan untuk memperbarui data kepangkatan.',
-                'badge' => 'bg-rose-100 text-rose-700 ring-rose-200',
-            ];
-        }
-
-        return $metadata;
     }
 }

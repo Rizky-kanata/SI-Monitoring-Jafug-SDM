@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Kepangkatan Dosen KK RIIB')
+@section('title', 'Data Kepangkatan Dosen')
 
 @section('sidebar')
     <x-sidebar :links="[
@@ -14,29 +14,11 @@
 @endsection
 
 @section('content')
-    @php
-        $baseQuery = request()->except(['page', 'sort', 'direction']);
-        $buildSortLink = static function (string $field) use ($baseQuery, $sort, $direction) {
-            $isSorted = $sort === $field;
-            $nextDirection = $isSorted && $direction === 'asc' ? 'desc' : 'asc';
-
-            return [
-                'href' => route('kepangkatan.index', array_merge($baseQuery, [
-                    'sort' => $field,
-                    'direction' => $nextDirection,
-                ])),
-                'isSorted' => $isSorted,
-                'symbol' => $isSorted ? ($direction === 'asc' ? 'ASC' : 'DESC') : '--',
-                'aria' => $isSorted ? ($direction === 'asc' ? 'ascending' : 'descending') : 'none',
-            ];
-        };
-    @endphp
-
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
-                <h1 class="text-2xl font-semibold text-slate-900">Kepangkatan Dosen Kelompok Keahlian RIIB</h1>
-                <p class="text-sm text-slate-500">Monitor proses publikasi kepangkatan dan masa berlaku TMT dosen KK RIIB.</p>
+                <h1 class="text-2xl font-semibold text-slate-900">Manajemen Kepangkatan Dosen</h1>
+                <p class="text-sm text-slate-500">Pantau proses kenaikan pangkat dan catatan tindak lanjut untuk setiap dosen KK RIIB.</p>
             </div>
             <a
                 href="{{ route('kepangkatan.create') }}"
@@ -46,6 +28,50 @@
             </a>
         </div>
 
+        <form method="GET" action="{{ route('kepangkatan.index') }}" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
+            <div class="grid gap-4 md:grid-cols-3 md:items-end">
+                <div class="md:col-span-2">
+                    <label for="search" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Cari Dosen</label>
+                    <input
+                        type="search"
+                        id="search"
+                        name="search"
+                        value="{{ $filters['search'] }}"
+                        placeholder="Masukkan nama atau kode dosen"
+                        class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    >
+                </div>
+                <div>
+                    <label for="status" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Status</label>
+                    <select
+                        id="status"
+                        name="status"
+                        class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    >
+                        <option value="">Semua Status</option>
+                        @foreach ($statusOptions as $value => $label)
+                            <option value="{{ $value }}" @selected($filters['status'] === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="md:col-span-3 flex flex-wrap items-center gap-3">
+                    <button
+                        type="submit"
+                        class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700"
+                    >
+                        Terapkan Filter
+                    </button>
+                    <a
+                        href="{{ route('kepangkatan.index') }}"
+                        class="inline-flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-white"
+                    >
+                        Reset
+                    </a>
+                    <span class="text-xs text-slate-500">Total {{ $kepangkatans->total() }} data</span>
+                </div>
+            </div>
+        </form>
+
         @if (session('success'))
             <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm text-emerald-700" role="alert">
                 {{ session('success') }}
@@ -54,71 +80,55 @@
 
         <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200">
             <div class="overflow-x-auto">
-                <table class="min-w-[60rem] divide-y divide-slate-200 text-sm">
+                <table class="min-w-[64rem] divide-y divide-slate-200 text-sm">
                     <thead class="bg-slate-50/80">
                         <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            @php($kodeSort = $buildSortLink('kode_dosen'))
-                            <th class="px-5 py-3" aria-sort="{{ $kodeSort['aria'] }}">
-                                <a href="{{ $kodeSort['href'] }}" class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $kodeSort['isSorted'] ? 'text-blue-600' : 'text-slate-500' }}">
-                                    Kode Dosen
-                                    <span class="text-[0.65rem]">{{ $kodeSort['symbol'] }}</span>
-                                </a>
-                            </th>
-
-                            @php($namaSort = $buildSortLink('nama_dosen'))
-                            <th class="px-5 py-3" aria-sort="{{ $namaSort['aria'] }}">
-                                <a href="{{ $namaSort['href'] }}" class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $namaSort['isSorted'] ? 'text-blue-600' : 'text-slate-500' }}">
-                                    Nama Dosen
-                                    <span class="text-[0.65rem]">{{ $namaSort['symbol'] }}</span>
-                                </a>
-                            </th>
-
-                            @php($jabatanSort = $buildSortLink('jabatan_fungsional'))
-                            <th class="px-5 py-3" aria-sort="{{ $jabatanSort['aria'] }}">
-                                <a href="{{ $jabatanSort['href'] }}" class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $jabatanSort['isSorted'] ? 'text-blue-600' : 'text-slate-500' }}">
-                                    Jabatan Fungsional
-                                    <span class="text-[0.65rem]">{{ $jabatanSort['symbol'] }}</span>
-                                </a>
-                            </th>
-
-                            @php($tmtSort = $buildSortLink('tanggal_tmt'))
-                            <th class="px-5 py-3" aria-sort="{{ $tmtSort['aria'] }}">
-                                <a href="{{ $tmtSort['href'] }}" class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $tmtSort['isSorted'] ? 'text-blue-600' : 'text-slate-500' }}">
-                                    Tanggal TMT
-                                    <span class="text-[0.65rem]">{{ $tmtSort['symbol'] }}</span>
-                                </a>
-                            </th>
-
-                            <th class="px-5 py-3">Status Publikasi</th>
-                            <th class="px-5 py-3">Indikator</th>
+                            <th class="px-5 py-3">Dosen</th>
+                            <th class="px-5 py-3">Jabatan Fungsional</th>
+                            <th class="px-5 py-3">Pangkat &amp; Golongan</th>
+                            <th class="px-5 py-3">Tanggal SK</th>
+                            <th class="px-5 py-3">Mulai Tugas</th>
+                            <th class="px-5 py-3">Status</th>
+                            <th class="px-5 py-3">Catatan</th>
                             <th class="px-5 py-3 text-right">Aksi</th>
                         </tr>
                     </thead>
-
                     <tbody class="divide-y divide-slate-200 bg-white">
                         @forelse ($kepangkatans as $kepangkatan)
                             @php
-                                $indicator = $statusIndicators[$kepangkatan->id] ?? null;
-                                $statusLabel = $statusMetadata[$kepangkatan->status_publikasi]['label'] ?? 'Status Tidak Dikenal';
+                                $profil = $kepangkatan->profil;
+                                $metadata = $statusMetadata[$kepangkatan->status] ?? null;
+                                $catatanSingkat = \Illuminate\Support\Str::limit($kepangkatan->catatan ?? '-', 70);
                             @endphp
-
                             <tr class="transition hover:bg-slate-50/80">
-                                <td class="px-5 py-4 font-medium text-slate-700">{{ $kepangkatan->kode_dosen ?? '--' }}</td>
-                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->nama_dosen }}</td>
-                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
-                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->tanggal_tmt?->format('d/m/Y') ?? '--' }}</td>
-                                <td class="px-5 py-4 text-slate-600">{{ $statusLabel }}</td>
                                 <td class="px-5 py-4">
-                                    @if ($indicator)
-                                        <div class="space-y-1">
-                                            <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $indicator['badge'] }}">
-                                                {{ $indicator['label'] }}
-                                            </span>
-                                            <p class="text-xs text-slate-500">{{ $indicator['description'] }}</p>
-                                        </div>
-                                    @else
-                                        <span class="text-xs text-slate-500">--</span>
-                                    @endif
+                                    <div class="font-semibold text-slate-800">{{ $profil?->nama_dosen ?? '-' }}</div>
+                                    <div class="text-xs text-slate-500">{{ $profil?->kode_dosen ?? 'Tidak ada kode' }}</div>
+                                </td>
+                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
+                                <td class="px-5 py-4 text-slate-600">
+                                    <div>{{ $kepangkatan->pangkat ?? '-' }}</div>
+                                    <div class="text-xs text-slate-500">{{ $kepangkatan->golongan ?? '-' }}</div>
+                                </td>
+                                <td class="px-5 py-4 text-slate-600">
+                                    {{ $kepangkatan->tanggal_sk?->format('d/m/Y') ?? '-' }}
+                                </td>
+                                <td class="px-5 py-4 text-slate-600">
+                                    {{ $kepangkatan->tanggal_mulai?->format('d/m/Y') ?? '-' }}
+                                </td>
+                                <td class="px-5 py-4">
+                                    <div class="space-y-1">
+                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $metadata['badge'] ?? 'bg-slate-100 text-slate-700 ring-slate-200' }}">
+                                            {{ $metadata['label'] ?? ucfirst($kepangkatan->status) }}
+                                        </span>
+                                        @if (! empty($metadata['description']))
+                                            <p class="text-xs text-slate-500">{{ $metadata['description'] }}</p>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-5 py-4 text-slate-600">
+                                    <p class="text-xs text-slate-500">{{ $catatanSingkat }}</p>
+                                    <p class="mt-2 text-[0.65rem] uppercase tracking-wide text-slate-400">Update {{ $kepangkatan->updated_at?->format('d/m/Y') ?? '-' }}</p>
                                 </td>
                                 <td class="px-5 py-4">
                                     <div class="flex justify-end gap-2">
@@ -128,7 +138,7 @@
                                         >
                                             Edit
                                         </a>
-                                        <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $kepangkatan->nama_dosen }}?');">
+                                        <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $profil?->nama_dosen ?? 'dosen ini' }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">
@@ -140,7 +150,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-5 py-10 text-center text-sm text-slate-500">Belum ada data kepangkatan.</td>
+                                <td colspan="8" class="px-5 py-10 text-center text-sm text-slate-500">Belum ada data kepangkatan.</td>
                             </tr>
                         @endforelse
                     </tbody>

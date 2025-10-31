@@ -16,43 +16,42 @@ class Kepangkatan extends Model
      * @var array<int, string>
      */
     public const STATUS_METADATA = [
-        'belum_diajukan' => [
-            'label' => 'Belum Diajukan',
-            'description' => 'Dokumen kepangkatan belum diajukan untuk proses publikasi.',
+        'draft' => [
+            'label' => 'Draft',
+            'description' => 'Data kepangkatan masih dalam proses pengumpulan berkas.',
             'badge' => 'bg-slate-100 text-slate-700 ring-slate-200',
         ],
-        'menunggu_verifikasi' => [
-            'label' => 'Menunggu Verifikasi',
-            'description' => 'Pengajuan sudah dikirim dan menunggu verifikasi operator.',
-            'badge' => 'bg-amber-100 text-amber-700 ring-amber-200',
+        'diajukan' => [
+            'label' => 'Diajukan',
+            'description' => 'Pengajuan sudah dikirim dan menunggu evaluasi.',
+            'badge' => 'bg-amber-100 text-amber-800 ring-amber-200',
         ],
-        'perlu_revisi' => [
+        'disetujui' => [
+            'label' => 'Disetujui',
+            'description' => 'Kenaikan pangkat telah disetujui dan dinyatakan sah.',
+            'badge' => 'bg-emerald-100 text-emerald-800 ring-emerald-200',
+        ],
+        'ditolak' => [
             'label' => 'Perlu Revisi',
-            'description' => 'Hasil review meminta revisi sebelum publikasi.',
-            'badge' => 'bg-rose-100 text-rose-700 ring-rose-200',
-        ],
-        'siap_publikasi' => [
-            'label' => 'Siap Publikasi',
-            'description' => 'Semua persyaratan terpenuhi dan siap dipublikasikan.',
-            'badge' => 'bg-sky-100 text-sky-700 ring-sky-200',
-        ],
-        'terpublikasi' => [
-            'label' => 'Terpublikasi',
-            'description' => 'Data kepangkatan telah terpublikasi secara resmi.',
-            'badge' => 'bg-emerald-100 text-emerald-700 ring-emerald-200',
+            'description' => 'Pengajuan ditolak, mohon cek catatan revisi.',
+            'badge' => 'bg-rose-100 text-rose-800 ring-rose-200',
         ],
     ];
 
     protected $fillable = [
-        'nama_dosen',
-        'kode_dosen',
+        'profil_id',
         'jabatan_fungsional',
-        'tanggal_tmt',
-        'status_publikasi',
+        'pangkat',
+        'golongan',
+        'tanggal_sk',
+        'tanggal_mulai',
+        'status',
+        'catatan',
     ];
 
     protected $casts = [
-        'tanggal_tmt' => 'date',
+        'tanggal_sk' => 'date',
+        'tanggal_mulai' => 'date',
     ];
 
     public static function statusOptions(): array
@@ -70,6 +69,21 @@ class Kepangkatan extends Model
 
     public function profil(): BelongsTo
     {
-        return $this->belongsTo(Profil::class, 'kode_dosen', 'kode_dosen');
+        return $this->belongsTo(Profil::class);
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return self::STATUS_METADATA[$this->status]['label'] ?? ucfirst($this->status);
+    }
+
+    public function getStatusDescriptionAttribute(): string
+    {
+        return self::STATUS_METADATA[$this->status]['description'] ?? '';
+    }
+
+    public function getStatusBadgeAttribute(): string
+    {
+        return self::STATUS_METADATA[$this->status]['badge'] ?? 'bg-slate-100 text-slate-700 ring-slate-200';
     }
 }
