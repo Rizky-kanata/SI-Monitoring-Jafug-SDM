@@ -3,17 +3,16 @@
 @section('title', 'Data Kepangkatan Dosen')
 
 @section('sidebar')
-    <x-sidebar :links="[
-        ['label' => 'Data Profil Dosen', 'href' => route('profils.index'), 'active' => request()->routeIs('profils.*')],
-        ['label' => 'Data Kepangkatan', 'href' => route('kepangkatan.index'), 'active' => request()->routeIs('kepangkatan.*')],
-        ['label' => 'Data Linieritas', 'href' => '#'],
-        ['label' => 'Data Matrix', 'href' => '#'],
-        ['label' => 'Data Pengajaran & Muatan Riset', 'href' => '#'],
-        ['label' => 'Data Materi Kegiatan & Dokumen SK', 'href' => '#'],
-    ]" class="h-full" />
+    <x-sidebar class="h-full" />
 @endsection
 
 @section('content')
+    @php
+        $totalProfil = $metrics['totalProfil'] ?? 0;
+        $totalKepangkatan = $metrics['totalKepangkatan'] ?? 0;
+        $totalDisetujui = $metrics['totalDisetujui'] ?? 0;
+    @endphp
+
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
@@ -27,6 +26,24 @@
                 + Tambah Data Kepangkatan
             </a>
         </div>
+
+        <dl class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+                <dt class="text-sm font-medium text-slate-500">Total Dosen</dt>
+                <dd class="mt-2 text-3xl font-semibold text-slate-900">{{ number_format($totalProfil) }}</dd>
+                <dd class="mt-1 text-xs text-slate-500">Jumlah dosen yang terdaftar di modul profil.</dd>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+                <dt class="text-sm font-medium text-slate-500">Data Kepangkatan Tercatat</dt>
+                <dd class="mt-2 text-3xl font-semibold text-slate-900">{{ number_format($totalKepangkatan) }}</dd>
+                <dd class="mt-1 text-xs text-slate-500">Total entri kepangkatan yang tersimpan.</dd>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
+                <dt class="text-sm font-medium text-slate-500">Status Disetujui</dt>
+                <dd class="mt-2 text-3xl font-semibold text-slate-900">{{ number_format($totalDisetujui) }}</dd>
+                <dd class="mt-1 text-xs text-slate-500">Pengajuan kepangkatan yang sudah disetujui.</dd>
+            </div>
+        </dl>
 
         <form method="GET" action="{{ route('kepangkatan.index') }}" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
             <div class="grid gap-4 md:grid-cols-3 md:items-end">
@@ -90,7 +107,7 @@
                             <th class="px-5 py-3">Mulai Tugas</th>
                             <th class="px-5 py-3">Status</th>
                             <th class="px-5 py-3">Catatan</th>
-                            <th class="px-5 py-3 text-right">Aksi</th>
+                            <th class="px-5 py-3 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 bg-white">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KepangkatanController;
 use App\Http\Controllers\ProfilController;
 use Illuminate\Support\Facades\Auth;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return Auth::check()
-        ? redirect()->route('profils.index')
+        ? redirect()->route('dashboard')
         : redirect()->route('login');
 });
 
@@ -17,6 +18,8 @@ Route::post('/login', [AuthController::class, 'store'])->name('login.attempt');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
+
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('profils', ProfilController::class)
         ->names('profils')

@@ -36,6 +36,10 @@ class KepangkatanController extends Controller
             ->paginate(10)
             ->withQueryString();
 
+        $totalProfil = Profil::count();
+        $totalKepangkatan = Kepangkatan::count();
+        $disetujui = Kepangkatan::where('status', 'disetujui')->count();
+
         return view('kepangkatan.index', [
             'kepangkatans' => $records,
             'statusOptions' => Kepangkatan::statusOptions(),
@@ -43,6 +47,11 @@ class KepangkatanController extends Controller
             'filters' => [
                 'status' => $statusFilter,
                 'search' => $search,
+            ],
+            'metrics' => [
+                'totalProfil' => $totalProfil,
+                'totalKepangkatan' => $totalKepangkatan,
+                'totalDisetujui' => $disetujui,
             ],
         ]);
     }

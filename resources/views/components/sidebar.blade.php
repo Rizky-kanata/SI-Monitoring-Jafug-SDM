@@ -1,6 +1,36 @@
-@props([
-    'links' => [],
-])
+@props(['links' => []])
+
+@php
+    $defaultLinks = [
+        [
+            'label' => 'Dashboard',
+            'href' => route('dashboard'),
+            'active' => request()->routeIs('dashboard'),
+        ],
+        [
+            'label' => 'Data Profil Dosen',
+            'href' => route('profils.index'),
+            'active' => request()->routeIs('profils.*'),
+        ],
+        [
+            'label' => 'Data Kepangkatan',
+            'href' => route('kepangkatan.index'),
+            'active' => request()->routeIs('kepangkatan.*'),
+        ],
+        ['label' => 'Data Linieritas', 'href' => '#', 'active' => false],
+        ['label' => 'Data Matrix', 'href' => '#', 'active' => false],
+        ['label' => 'Data Pengajaran & Muatan Riset', 'href' => '#', 'active' => false],
+        ['label' => 'Data Materi Kegiatan & Dokumen SK', 'href' => '#', 'active' => false],
+    ];
+
+    $navLinks = collect(empty($links) ? $defaultLinks : $links)
+        ->map(fn ($link) => [
+            'label' => $link['label'] ?? '',
+            'href' => $link['href'] ?? '#',
+            'active' => (bool) ($link['active'] ?? false),
+        ])
+        ->all();
+@endphp
 
 <div {{ $attributes->class('flex h-full flex-col gap-10 px-6 py-8 text-white lg:px-8') }}>
     <div class="flex flex-col items-start gap-4">
@@ -16,7 +46,7 @@
     </div>
 
     <nav class="space-y-1">
-        @foreach ($links as $link)
+        @foreach ($navLinks as $link)
             @php
                 $isActive = $link['active'] ?? false;
                 $href = $link['href'] ?? '#';
