@@ -25,6 +25,13 @@ class KepangkatanSeeder extends Seeder
                 $jabatan = $this->resolveJabatan($profil);
                 $pangkatGolongan = $this->mapJabatanToPangkat($jabatan);
 
+                $tanggalMulai = $status === 'draft'
+                    ? null
+                    : $now->copy()->subMonths(rand(1, 12))->toDateString();
+                $tanggalTmt = $status === 'draft'
+                    ? null
+                    : $now->copy()->subMonths(rand(1, 18))->toDateString();
+
                 Kepangkatan::updateOrCreate(
                     ['profil_id' => $profil->id],
                     [
@@ -32,8 +39,10 @@ class KepangkatanSeeder extends Seeder
                         'pangkat' => $pangkatGolongan['pangkat'],
                         'golongan' => $pangkatGolongan['golongan'],
                         'tanggal_sk' => $status === 'draft' ? null : $now->copy()->subMonths(rand(3, 18))->toDateString(),
-                        'tanggal_mulai' => $status === 'draft' ? null : $now->copy()->subMonths(rand(1, 12))->toDateString(),
+                        'tanggal_mulai' => $tanggalMulai,
+                        'tanggal_tmt' => $tanggalTmt,
                         'status' => $status,
+                        'is_published' => in_array($status, ['diajukan', 'disetujui'], true),
                         'catatan' => $this->generateCatatan($status),
                     ]
                 );

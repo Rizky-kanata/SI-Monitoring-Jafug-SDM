@@ -10,14 +10,17 @@
     @php
         $totalProfil = $metrics['totalProfil'] ?? 0;
         $totalKepangkatan = $metrics['totalKepangkatan'] ?? 0;
-        $totalDisetujui = $metrics['totalDisetujui'] ?? 0;
+        $totalPublished = $metrics['totalPublished'] ?? 0;
     @endphp
 
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
                 <h1 class="text-2xl font-semibold text-slate-900">Manajemen Kepangkatan Dosen</h1>
-                <p class="text-sm text-slate-500">Pantau proses kenaikan pangkat dan catatan tindak lanjut untuk setiap dosen KK RIIB.</p>
+                <p class="text-sm text-slate-500">Pantau proses kenaikan pangkat (TMT) dan catatan tindak lanjut untuk setiap dosen KK RIIB.</p>
+                <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                    {{ now()->translatedFormat('l, d F Y') }}
+                </p>
             </div>
             <a
                 href="{{ route('kepangkatan.create') }}"
@@ -39,15 +42,15 @@
                 <dd class="mt-1 text-xs text-slate-500">Total entri kepangkatan yang tersimpan.</dd>
             </div>
             <div class="rounded-2xl border border-slate-200 bg-slate-50/60 p-5">
-                <dt class="text-sm font-medium text-slate-500">Status Disetujui</dt>
-                <dd class="mt-2 text-3xl font-semibold text-slate-900">{{ number_format($totalDisetujui) }}</dd>
-                <dd class="mt-1 text-xs text-slate-500">Pengajuan kepangkatan yang sudah disetujui.</dd>
+                <dt class="text-sm font-medium text-slate-500">Status Publikasi</dt>
+                <dd class="mt-2 text-3xl font-semibold text-slate-900">{{ number_format($totalPublished) }}</dd>
+                <dd class="mt-1 text-xs text-slate-500">Data kepangkatan yang sudah dipublikasikan.</dd>
             </div>
         </dl>
 
         <form method="GET" action="{{ route('kepangkatan.index') }}" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
             <div class="grid gap-4 md:grid-cols-3 md:items-end">
-                <div class="md:col-span-2">
+                <div class="md:col-span-3">
                     <label for="search" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Cari Dosen</label>
                     <input
                         type="search"
@@ -59,15 +62,27 @@
                     >
                 </div>
                 <div>
-                    <label for="status" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Status</label>
+                    <label for="publication" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Status Publikasi</label>
                     <select
-                        id="status"
-                        name="status"
+                        id="publication"
+                        name="publication"
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
-                        <option value="">Semua Status</option>
-                        @foreach ($statusOptions as $value => $label)
-                            <option value="{{ $value }}" @selected($filters['status'] === $value)>{{ $label }}</option>
+                        <option value="">Semua Status Publikasi</option>
+                        <option value="sudah" @selected($filters['publication'] === 'sudah')>Sudah dipublikasikan</option>
+                        <option value="belum" @selected($filters['publication'] === 'belum')>Belum dipublikasikan</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="tmt_status" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Status TMT</label>
+                    <select
+                        id="tmt_status"
+                        name="tmt_status"
+                        class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    >
+                        <option value="">Semua Status TMT</option>
+                        @foreach ($tmtStatusOptions as $value => $label)
+                            <option value="{{ $value }}" @selected($filters['tmt_status'] === $value)>{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -102,11 +117,11 @@
                         <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <th class="px-5 py-3">Dosen</th>
                             <th class="px-5 py-3">Jabatan Fungsional</th>
-                            <th class="px-5 py-3">Pangkat &amp; Golongan</th>
-                            <th class="px-5 py-3">Tanggal SK</th>
-                            <th class="px-5 py-3">Mulai Tugas</th>
-                            <th class="px-5 py-3">Status</th>
-                            <th class="px-5 py-3">Catatan</th>
+                            <th class="px-5 py-3">Tanggal TMT</th>
+                            <th class="px-5 py-3">Status TMT</th>
+                            <th class="px-5 py-3">Status Publikasi</th>
+                            <th class="px-5 py-3 text-center">Indikator</th>
+                            <th class="px-5 py-3">Keterangan</th>
                             <th class="px-5 py-3 text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -114,8 +129,6 @@
                         @forelse ($kepangkatans as $kepangkatan)
                             @php
                                 $profil = $kepangkatan->profil;
-                                $metadata = $statusMetadata[$kepangkatan->status] ?? null;
-                                $catatanSingkat = \Illuminate\Support\Str::limit($kepangkatan->catatan ?? '-', 70);
                             @endphp
                             <tr class="transition hover:bg-slate-50/80">
                                 <td class="px-5 py-4">
@@ -124,28 +137,29 @@
                                 </td>
                                 <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
                                 <td class="px-5 py-4 text-slate-600">
-                                    <div>{{ $kepangkatan->pangkat ?? '-' }}</div>
-                                    <div class="text-xs text-slate-500">{{ $kepangkatan->golongan ?? '-' }}</div>
+                                    {{ $kepangkatan->tanggal_tmt_display }}
                                 </td>
                                 <td class="px-5 py-4 text-slate-600">
-                                    {{ $kepangkatan->tanggal_sk?->format('d/m/Y') ?? '-' }}
+                                    <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+                                        {{ $kepangkatan->status_tmt_label }}
+                                    </span>
                                 </td>
                                 <td class="px-5 py-4 text-slate-600">
-                                    {{ $kepangkatan->tanggal_mulai?->format('d/m/Y') ?? '-' }}
+                                    <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $kepangkatan->is_published ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-amber-50 text-amber-700 ring-amber-200' }} ring-1">
+                                        {{ $kepangkatan->status_publikasi_label }}
+                                    </span>
                                 </td>
                                 <td class="px-5 py-4">
-                                    <div class="space-y-1">
-                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $metadata['badge'] ?? 'bg-slate-100 text-slate-700 ring-slate-200' }}">
-                                            {{ $metadata['label'] ?? ucfirst($kepangkatan->status) }}
-                                        </span>
-                                        @if (! empty($metadata['description']))
-                                            <p class="text-xs text-slate-500">{{ $metadata['description'] }}</p>
-                                        @endif
+                                    <div class="flex items-center justify-center">
+                                        <span
+                                            class="inline-flex h-4 w-4 items-center justify-center rounded-full {{ $kepangkatan->indicator_classes }}"
+                                            title="Indikator {{ $kepangkatan->indicator_label }}"
+                                            aria-label="Indikator {{ $kepangkatan->indicator_label }}"
+                                        ></span>
                                     </div>
                                 </td>
                                 <td class="px-5 py-4 text-slate-600">
-                                    <p class="text-xs text-slate-500">{{ $catatanSingkat }}</p>
-                                    <p class="mt-2 text-[0.65rem] uppercase tracking-wide text-slate-400">Update {{ $kepangkatan->updated_at?->format('d/m/Y') ?? '-' }}</p>
+                                    <p class="text-xs leading-relaxed">{{ $kepangkatan->keterangan }}</p>
                                 </td>
                                 <td class="px-5 py-4">
                                     <div class="flex justify-end gap-2">

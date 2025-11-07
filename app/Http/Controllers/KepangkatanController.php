@@ -16,14 +16,20 @@ class KepangkatanController extends Controller
      */
     public function index(Request $request): View
     {
-        $statusFilter = $request->string('status')->toString();
+        $publicationFilter = $request->string('publication')->toString();
+        $tmtStatusFilter = $request->string('tmt_status')->toString();
         $search = $request->string('search')->toString();
 
         $records = Kepangkatan::query()
             ->with('profil')
+            ->when($publicationFilter !== '', function ($query) use ($publicationFilter) {
+                if (in_array($publicationFilter, ['sudah', 'belum'], true)) {
+                    $query->where('is_published', $publicationFilter === 'sudah');
+                }
+            })
             ->when(
-                $statusFilter !== '' && array_key_exists($statusFilter, Kepangkatan::statusOptions()),
-                fn ($query) => $query->where('status', $statusFilter)
+                $tmtStatusFilter !== '' && array_key_exists($tmtStatusFilter, Kepangkatan::tmtStatusOptions()),
+                fn ($query) => $query->whereTmtStatus($tmtStatusFilter)
             )
             ->when($search !== '', function ($query) use ($search) {
                 $query->whereHas('profil', function ($relation) use ($search) {
@@ -38,20 +44,21 @@ class KepangkatanController extends Controller
 
         $totalProfil = Profil::count();
         $totalKepangkatan = Kepangkatan::count();
-        $disetujui = Kepangkatan::where('status', 'disetujui')->count();
+        $totalPublished = Kepangkatan::where('is_published', true)->count();
 
         return view('kepangkatan.index', [
             'kepangkatans' => $records,
-            'statusOptions' => Kepangkatan::statusOptions(),
+            'tmtStatusOptions' => Kepangkatan::tmtStatusOptions(),
             'statusMetadata' => Kepangkatan::statusMetadata(),
             'filters' => [
-                'status' => $statusFilter,
+                'publication' => $publicationFilter,
+                'tmt_status' => $tmtStatusFilter,
                 'search' => $search,
             ],
             'metrics' => [
                 'totalProfil' => $totalProfil,
                 'totalKepangkatan' => $totalKepangkatan,
-                'totalDisetujui' => $disetujui,
+                'totalPublished' => $totalPublished,
             ],
         ]);
     }
@@ -159,7 +166,7 @@ class KepangkatanController extends Controller
     {
         $statusKeys = array_keys(Kepangkatan::statusMetadata());
 
-        return $request->validate([
+        $data = $request->validate([
             'profil_id' => [
                 'required',
                 'integer',
@@ -171,12 +178,18 @@ class KepangkatanController extends Controller
             'golongan' => ['nullable', 'string', 'max:255'],
             'tanggal_sk' => ['nullable', 'date'],
             'tanggal_mulai' => ['nullable', 'date'],
+            'tanggal_tmt' => ['nullable', 'date'],
             'status' => ['required', Rule::in($statusKeys)],
+            'is_published' => ['nullable', 'boolean'],
             'catatan' => ['nullable', 'string'],
         ], [
             'profil_id.required' => 'Profil dosen wajib dipilih.',
             'profil_id.exists' => 'Profil dosen tidak ditemukan.',
             'profil_id.unique' => 'Profil dosen sudah memiliki data kepangkatan.',
         ]);
+
+        $data['is_published'] = $request->boolean('is_published');
+
+        return $data;
     }
 }

@@ -3,6 +3,14 @@
     $selectedStatus = old('status', optional($kepangkatan)->status);
     $tanggalSk = old('tanggal_sk', optional(optional($kepangkatan)->tanggal_sk)?->format('Y-m-d'));
     $tanggalMulai = old('tanggal_mulai', optional(optional($kepangkatan)->tanggal_mulai)?->format('Y-m-d'));
+    $tanggalTmt = old(
+        'tanggal_tmt',
+        optional(optional($kepangkatan)->tanggal_tmt ?? optional($kepangkatan)->tanggal_mulai)?->format('Y-m-d')
+    );
+    $isPublished = old(
+        'is_published',
+        optional($kepangkatan)->is_published ? '1' : '0'
+    );
 @endphp
 
 <div class="space-y-6">
@@ -116,6 +124,51 @@
                 class="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             >
             @error('tanggal_mulai')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+        <div>
+            <label for="tanggal_tmt" class="block text-sm font-semibold text-slate-700">Tanggal TMT</label>
+            <input
+                type="date"
+                id="tanggal_tmt"
+                name="tanggal_tmt"
+                value="{{ $tanggalTmt }}"
+                class="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            >
+            <p class="mt-2 text-xs text-slate-500">Tanggal mulai masa TMT. Dihitung selama 2 tahun sejak tanggal ini.</p>
+            @error('tanggal_tmt')
+                <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
+            @enderror
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-700">Status Publikasi</label>
+            <div class="mt-4 flex flex-wrap gap-4">
+                <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                        type="radio"
+                        name="is_published"
+                        value="1"
+                        class="h-4 w-4 border-slate-300 text-emerald-600 focus:ring-emerald-500"
+                        @checked($isPublished === '1')
+                    >
+                    Sudah
+                </label>
+                <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                        type="radio"
+                        name="is_published"
+                        value="0"
+                        class="h-4 w-4 border-slate-300 text-amber-600 focus:ring-amber-500"
+                        @checked($isPublished === '0')
+                    >
+                    Belum
+                </label>
+            </div>
+            @error('is_published')
                 <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
             @enderror
         </div>
