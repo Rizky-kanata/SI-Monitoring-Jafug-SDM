@@ -17,16 +17,18 @@ class ProfilSeeder extends Seeder
         $data = json_decode($json, true);
 
         foreach ($data as $item) {
-            Profil::create([
-                'kode_dosen' => $item['kode_dosen'],
-                'nama_dosen' => $item['nama_dosen'],
-                'prodi' => $item['prodi'],
-                'kelompok_keahlian' => $item['kelompok_keahlian'],
-                'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
-                'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
-                'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
-                'foto_path' => $this->resolveFotoPath($item['foto'] ?? null),
-            ]);
+            Profil::updateOrCreate(
+                ['kode_dosen' => $item['kode_dosen']],
+                [
+                    'nama_dosen' => $item['nama_dosen'],
+                    'prodi' => $item['prodi'],
+                    'kelompok_keahlian' => $item['kelompok_keahlian'],
+                    'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
+                    'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
+                    'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
+                    'foto_path' => $this->resolveFotoPath($item['foto'] ?? null),
+                ]
+            );
         }
     }
 

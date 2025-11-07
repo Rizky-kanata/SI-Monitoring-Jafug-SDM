@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Storage;
 
 class Profil extends Model
@@ -39,5 +40,10 @@ class Profil extends Model
         }
 
         return Storage::disk('public')->url($this->foto_path);
+    }
+
+    public function kepangkatan(): HasOne
+    {
+        return $this->hasOne(Kepangkatan::class);
     }
 }

@@ -18,16 +18,26 @@
             <div class="space-y-1">
                 <h1 class="text-2xl font-semibold text-slate-900">Manajemen Kepangkatan Dosen</h1>
                 <p class="text-sm text-slate-500">Pantau proses kenaikan pangkat (TMT) dan catatan tindak lanjut untuk setiap dosen KK RIIB.</p>
-                <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                    {{ now()->translatedFormat('l, d F Y') }}
-                </p>
             </div>
-            <a
-                href="{{ route('kepangkatan.create') }}"
-                class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-            >
-                + Tambah Data Kepangkatan
-            </a>
+            <div class="flex flex-col items-center gap-3 md:flex-row">
+                <a
+                    href="{{ route('kepangkatan.create') }}"
+                    class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                >
+                    + Tambah Data Kepangkatan
+                </a>
+                <div class="inline-flex items-center gap-3 rounded-3xl bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 ring-1 ring-slate-200 shadow-sm">
+                    <span class="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-slate-900 text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 9h18M4.5 7.5h15a1.5 1.5 0 0 1 1.5 1.5v10.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 19.5V9a1.5 1.5 0 0 1 1.5-1.5Zm3 6h3v3h-3v-3Zm6 0h3v3h-3v-3Z" />
+                        </svg>
+                    </span>
+                    <div class="text-right">
+                        <p class="text-[0.6rem] tracking-[0.2em] text-slate-400">Hari ini</p>
+                        <p class="text-sm font-semibold tracking-widest text-slate-700">{{ now()->translatedFormat('l, d F Y') }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <dl class="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -117,11 +127,11 @@
                         <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <th class="px-5 py-3">Dosen</th>
                             <th class="px-5 py-3">Jabatan Fungsional</th>
-                            <th class="px-5 py-3">Tanggal TMT</th>
-                            <th class="px-5 py-3">Status TMT</th>
-                            <th class="px-5 py-3">Status Publikasi</th>
-                            <th class="px-5 py-3 text-center">Indikator</th>
-                            <th class="px-5 py-3">Keterangan</th>
+                            <th class="px-5 py-3 w-36">Tanggal TMT</th>
+                            <th class="px-5 py-3 w-36">Status TMT</th>
+                            <th class="px-5 py-3 w-32">Status Publikasi</th>
+                            <th class="px-5 py-3 text-center w-20">Indikator</th>
+                            <th class="px-5 py-3 text-center">Keterangan</th>
                             <th class="px-5 py-3 text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -135,21 +145,21 @@
                                     <div class="font-semibold text-slate-800">{{ $profil?->nama_dosen ?? '-' }}</div>
                                     <div class="text-xs text-slate-500">{{ $profil?->kode_dosen ?? 'Tidak ada kode' }}</div>
                                 </td>
-                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional }}</td>
-                                <td class="px-5 py-4 text-slate-600">
+                                <td class="px-5 py-4 text-slate-600">{{ $kepangkatan->jabatan_fungsional_label }}</td>
+                                <td class="px-5 py-4 text-slate-600 w-36">
                                     {{ $kepangkatan->tanggal_tmt_display }}
                                 </td>
-                                <td class="px-5 py-4 text-slate-600">
+                                <td class="px-5 py-4 text-slate-600 w-36">
                                     <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
                                         {{ $kepangkatan->status_tmt_label }}
                                     </span>
                                 </td>
-                                <td class="px-5 py-4 text-slate-600">
+                                <td class="px-5 py-4 text-slate-600 w-32">
                                     <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $kepangkatan->is_published ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-amber-50 text-amber-700 ring-amber-200' }} ring-1">
                                         {{ $kepangkatan->status_publikasi_label }}
                                     </span>
                                 </td>
-                                <td class="px-5 py-4">
+                                <td class="px-5 py-4 text-center w-20">
                                     <div class="flex items-center justify-center">
                                         <span
                                             class="inline-flex h-4 w-4 items-center justify-center rounded-full {{ $kepangkatan->indicator_classes }}"
@@ -159,7 +169,7 @@
                                     </div>
                                 </td>
                                 <td class="px-5 py-4 text-slate-600">
-                                    <p class="text-xs leading-relaxed">{{ $kepangkatan->keterangan }}</p>
+                                    <p class="text-s leading-relaxed">{{ $kepangkatan->keterangan }}</p>
                                 </td>
                                 <td class="px-5 py-4">
                                     <div class="flex justify-end gap-2">
@@ -169,7 +179,7 @@
                                         >
                                             Edit
                                         </a>
-                                        <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $profil?->nama_dosen ?? 'dosen ini' }}?');">
+                                        <form action="{{ route('kepangkatan.destroy', $kepangkatan) }}" method="POST" onsubmit="return confirm('Hapus data kepangkatan untuk {{ $profil?->nama_dosen ?? '' }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 transition hover:bg-rose-200">

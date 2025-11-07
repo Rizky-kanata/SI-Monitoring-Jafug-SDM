@@ -46,6 +46,13 @@ class Kepangkatan extends Model
         'terlewat' => 'Terlewat Masa TMT',
     ];
 
+    public const JABATAN_LABELS = [
+        'AA' => 'Asisten Ahli',
+        'L' => 'Lektor',
+        'LK' => 'Lektor Kepala',
+        'NJFA' => 'Non-JFA',
+    ];
+
     protected $fillable = [
         'profil_id',
         'jabatan_fungsional',
@@ -191,6 +198,29 @@ class Kepangkatan extends Model
             'red' => 'bg-rose-500',
             default => 'bg-slate-400',
         };
+    }
+
+    public function getJabatanFungsionalLabelAttribute(): string
+    {
+        $value = trim((string) ($this->attributes['jabatan_fungsional'] ?? ''));
+
+        if ($value === '') {
+            return '-';
+        }
+
+        $code = strtoupper($value);
+
+        if (isset(self::JABATAN_LABELS[$code])) {
+            return self::JABATAN_LABELS[$code];
+        }
+
+        foreach (self::JABATAN_LABELS as $label) {
+            if (strcasecmp($label, $value) === 0) {
+                return $label;
+            }
+        }
+
+        return $value;
     }
 
     public function getKeteranganAttribute(): string
