@@ -196,6 +196,11 @@
             margin-bottom: 24px;
         }
 
+        .alert.success {
+            background-color: #d1fae5;
+            color: #0f5132;
+        }
+
         @media (max-width: 480px) {
             .card {
                 padding: 28px 24px;
@@ -223,6 +228,12 @@
         @if ($errors->any())
             <div class="alert" role="alert">
                 Username atau password tidak sesuai. Silakan coba lagi.
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div class="alert success" role="status">
+                {{ session('status') }}
             </div>
         @endif
 
@@ -282,9 +293,7 @@
                 </label>
                 <a
                     class="forgot-link"
-                    href="https://wa.me/628123122708?text=Selamat%20siang%20Pak%20Nizar.%0ASaya%20lupa%20password%20Website%20Admin%20RIIB,%20tolong%20beri%20saya%20passwordnya."
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="{{ route('password.request') }}"
                 >
                     Lupa Password?
                 </a>

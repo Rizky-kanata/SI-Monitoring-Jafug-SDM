@@ -35,4 +35,14 @@ return [
         ],
     ],
 
+    'whatsapp' => [
+        'endpoint' => env('WHATSAPP_OTP_ENDPOINT'),
+        'token' => env('WHATSAPP_OTP_TOKEN'),
+        'recipient' => env('WHATSAPP_OTP_NUMBER', '6289516003000'),
+        'device' => env('WHATSAPP_OTP_DEVICE'),
+        'country_code' => env('WHATSAPP_OTP_COUNTRY_CODE', '62'),
+        'delay' => env('WHATSAPP_OTP_DELAY'),
+        'typing' => env('WHATSAPP_OTP_TYPING', false),
+    ],
+
 ];

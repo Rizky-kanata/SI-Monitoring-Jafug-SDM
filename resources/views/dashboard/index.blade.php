@@ -73,7 +73,7 @@
                     <p class="text-sm text-slate-500">Hubungi tim support untuk bantuan teknis atau kendala penggunaan dashboard.</p>
                 </div>
                 <a
-                    href="https://api.whatsapp.com/send/?phone=628123122708&text&type=phone_number&app_absent=0"
+                    href="https://api.whatsapp.com/send/?phone={{ config('services.whatsapp.recipient') ?? '6289516003000' }}&text&type=phone_number&app_absent=0"
                     class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
                     target="_blank"
                     rel="noopener noreferrer"
