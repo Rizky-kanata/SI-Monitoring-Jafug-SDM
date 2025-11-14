@@ -22,7 +22,7 @@ class PasswordResetController extends Controller
     public function showRequest(): View
     {
         return view('auth.passwords.forgot', [
-            'whatsapp' => config('services.whatsapp.recipient') ?? '6289516003000',
+            'whatsapp' => config('services.whatsapp.recipient') ?? '6282122229276',
         ]);
     }
 

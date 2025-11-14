@@ -131,7 +131,7 @@
 <body>
     <main class="card" aria-labelledby="forgot-heading">
         @php
-            $whatsappRecipient = $whatsapp ?? config('services.whatsapp.recipient') ?? '6289516003000';
+$whatsappRecipient = $whatsapp ?? config('services.whatsapp.recipient') ?? '6282122229276';
         @endphp
         <h1 id="forgot-heading">Lupa Password</h1>
         <p class="subtitle">
