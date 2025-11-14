@@ -45,4 +45,15 @@ return [
         'typing' => env('WHATSAPP_OTP_TYPING', false),
     ],
 
+    'password_reset' => [
+        'fallback_email' => env('PASSWORD_RESET_FALLBACK_EMAIL'),
+    ],
+
+    'brevo' => [
+        'api_key' => env('BREVO_API_KEY'),
+        'endpoint' => env('BREVO_API_ENDPOINT', 'https://api.brevo.com/v3/smtp/email'),
+        'senders_endpoint' => env('BREVO_SENDERS_ENDPOINT', 'https://api.brevo.com/v3/senders'),
+        'events_endpoint' => env('BREVO_EVENTS_ENDPOINT', 'https://api.brevo.com/v3/smtp/statistics/events'),
+    ],
+
 ];

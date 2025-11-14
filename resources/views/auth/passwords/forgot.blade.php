@@ -130,13 +130,9 @@
 
 <body>
     <main class="card" aria-labelledby="forgot-heading">
-        @php
-$whatsappRecipient = $whatsapp ?? config('services.whatsapp.recipient') ?? '6282122229276';
-        @endphp
         <h1 id="forgot-heading">Lupa Password</h1>
         <p class="subtitle">
-            Masukkan username Anda. Kode OTP akan dikirim ke WhatsApp admin
-            <strong>{{ $whatsappRecipient }}</strong>.
+            Masukkan username Anda. Kode OTP akan dikirim ke email yang terdaftar pada akun.
         </p>
 
         @if ($errors->any())
@@ -166,7 +162,7 @@ $whatsappRecipient = $whatsapp ?? config('services.whatsapp.recipient') ?? '6282
                 <span class="error">{{ $message }}</span>
             @enderror
 
-            <button type="submit">Kirim OTP via WhatsApp</button>
+            <button type="submit">Kirim OTP via Email</button>
         </form>
 
         <a href="{{ route('login') }}" class="back-link">

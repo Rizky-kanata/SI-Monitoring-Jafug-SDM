@@ -133,8 +133,7 @@
     <main class="card" aria-labelledby="verify-heading">
         <h1 id="verify-heading">Verifikasi OTP</h1>
         <p class="subtitle">
-            Masukkan kode OTP yang dikirim ke WhatsApp admin
-            <strong>{{ $whatsapp ?? config('services.whatsapp.recipient') ?? '6289516003000' }}</strong>, lalu buat password baru.
+            Masukkan kode OTP yang dikirim ke email terdaftar Anda, lalu buat password baru.
         </p>
 
         @if ($errors->any())

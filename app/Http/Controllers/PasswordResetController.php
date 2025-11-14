@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendPasswordOtpEmail;
 use App\Models\PasswordOtp;
 use App\Models\User;
-use App\Services\WhatsappOtpSender;
+use App\Services\BrevoMailer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,15 +16,9 @@ use Throwable;
 
 class PasswordResetController extends Controller
 {
-    public function __construct(private WhatsappOtpSender $otpSender)
-    {
-    }
-
     public function showRequest(): View
     {
-        return view('auth.passwords.forgot', [
-            'whatsapp' => config('services.whatsapp.recipient') ?? '6282122229276',
-        ]);
+        return view('auth.passwords.forgot');
     }
 
     public function sendOtp(Request $request): RedirectResponse
@@ -36,6 +31,20 @@ class PasswordResetController extends Controller
 
         /** @var User $user */
         $user = User::where('username', $validated['username'])->firstOrFail();
+
+        if (! $user->email) {
+            $fallbackEmail = config('services.password_reset.fallback_email');
+
+            if (! $fallbackEmail) {
+                return back()
+                    ->withInput()
+                    ->withErrors(['username' => 'Akun ini belum memiliki email terdaftar. Hubungi administrator.']);
+            }
+
+            $user->forceFill([
+                'email' => $fallbackEmail,
+            ])->save();
+        }
 
         PasswordOtp::where('user_id', $user->id)->delete();
 
@@ -51,23 +60,27 @@ class PasswordResetController extends Controller
             'max_attempts' => 5,
         ]);
 
-        $message = "Kode OTP Reset Password Portal Admin RIIB: {$code}. Berlaku 10 menit.";
-
         try {
-            $this->otpSender->send($message);
+            app(BrevoMailer::class)->assertSenderVerified((string) config('mail.from.address'));
         } catch (Throwable $exception) {
-            Log::error('Gagal mengirim OTP WhatsApp.', [
-                'exception' => $exception->getMessage(),
+            Log::error('Validasi pengirim Brevo gagal.', [
+                'message' => $exception->getMessage(),
             ]);
 
             return back()
                 ->withInput()
-                ->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba kembali nanti.']);
+                ->withErrors(['username' => 'Konfigurasi email belum siap: ' . $exception->getMessage()]);
         }
+
+        SendPasswordOtpEmail::dispatch(
+            $user->email,
+            $user->name ?? $user->username,
+            $code
+        );
 
         return redirect()
             ->route('password.verify', $token)
-            ->with('status', 'Kode OTP telah dikirim ke WhatsApp admin.');
+            ->with('status', 'Kode OTP telah dikirim ke email terdaftar.');
     }
 
     public function showVerify(string $token): RedirectResponse|View
@@ -90,7 +103,6 @@ class PasswordResetController extends Controller
 
         return view('auth.passwords.verify', [
             'token' => $token,
-            'whatsapp' => config('services.whatsapp.recipient') ?? '6289516003000',
         ]);
     }
 
