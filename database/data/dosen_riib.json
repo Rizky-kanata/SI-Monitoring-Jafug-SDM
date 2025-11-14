@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "kode_dosen":  "DEZ",
         "nama_dosen":  "Desita Nur Rachmaniar",
@@ -7,7 +7,7 @@
         "sub_kelompok_keahlian":  "LSCE",
         "nip":  25930030,
         "nidn":  "0707029303",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "GRA",
@@ -17,7 +17,7 @@
         "sub_kelompok_keahlian":  "LSCE",
         "nip":  24950003,
         "nidn":  "0723079501",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "NSX",
@@ -27,7 +27,7 @@
         "sub_kelompok_keahlian":  "LSCE",
         "nip":  25930031,
         "nidn":  "0712059303",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "EOQ",
@@ -37,7 +37,7 @@
         "sub_kelompok_keahlian":  "LSCE",
         "nip":  20920036,
         "nidn":  "0725059202",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "CEO",
@@ -47,7 +47,7 @@
         "sub_kelompok_keahlian":  "LSCE",
         "nip":  22960010,
         "nidn":  "0523119601",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "BSG",
@@ -57,7 +57,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  24800005,
         "nidn":  "0730088001",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "DAQ",
@@ -67,7 +67,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  22920004,
         "nidn":  "0309069201",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "DBB",
@@ -77,7 +77,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  19900005,
         "nidn":  "0722069004",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "HGM",
@@ -87,7 +87,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  25900003,
         "nidn":  "#N/A",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "KNY",
@@ -97,7 +97,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  23990019,
         "nidn":  "0704069901",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "AGM",
@@ -107,7 +107,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  24970010,
         "nidn":  "#N/A",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "SSQ",
@@ -117,7 +117,7 @@
         "sub_kelompok_keahlian":  "MERB",
         "nip":  24930005,
         "nidn":  "0704029302",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "AWX",
@@ -127,7 +127,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  15720039,
         "nidn":  "08961580023",
-        "jabatan_fungsional":  "Non-JFA",
+        "jabatan_fungsional":  "NJFA",
         "foto":  "agoes-windarto.jpg"
     },
     {
@@ -138,7 +138,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  22960061,
         "nidn":  "0729059601",
-        "jabatan_fungsional":  "Non-JFA",
+        "jabatan_fungsional":  "NJFA",
         "foto":  "alifiansyah-arrizqy-hidayat.jpg"
     },
     {
@@ -149,7 +149,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  19900002,
         "nidn":  "0715039004",
-        "jabatan_fungsional":  "Asisten Ahli",
+        "jabatan_fungsional":  "AA",
         "foto":  "anfazul-faridatul-azizah.jpg"
     },
     {
@@ -160,7 +160,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  22900033,
         "nidn":  "0714019002",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "HDN",
@@ -170,7 +170,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  25950003,
         "nidn":  "#N/A",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "KUZ",
@@ -180,7 +180,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  21890010,
         "nidn":  "0720088905",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "AYV",
@@ -190,7 +190,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  23880010,
         "nidn":  "0401078801",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "CNO",
@@ -200,7 +200,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  15890076,
         "nidn":  "0708128901",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "LHA",
@@ -210,7 +210,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  23990020,
         "nidn":  "0722079901",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "NOE",
@@ -220,7 +220,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  19900003,
         "nidn":  "0725059004",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "IKI",
@@ -230,7 +230,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  22940003,
         "nidn":  "0719109401",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "ZQA",
@@ -240,7 +240,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  20930036,
         "nidn":  "0711069301",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "TRL",
@@ -250,7 +250,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  22980046,
         "nidn":  "0702049801",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "WYR",
@@ -260,7 +260,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  22970043,
         "nidn":  "0701069701",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "WEK",
@@ -270,7 +270,7 @@
         "sub_kelompok_keahlian":  "MSB",
         "nip":  25010008,
         "nidn":  "#N/A",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "EXE",
@@ -280,7 +280,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  19900001,
         "nidn":  "0702039003",
-        "jabatan_fungsional":  "Lektor",
+        "jabatan_fungsional":  "L",
         "foto":  "abduh-sayid-albana.jpg"
     },
     {
@@ -291,7 +291,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  23850011,
         "nidn":  "0728058503",
-        "jabatan_fungsional":  "Asisten Ahli",
+        "jabatan_fungsional":  "AA",
         "foto":  "achmad-muzakki.jpg"
     },
     {
@@ -302,7 +302,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  25820001,
         "nidn":  "0702038201",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "MAE",
@@ -312,7 +312,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  20920039,
         "nidn":  "0724089201",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "NZR",
@@ -322,7 +322,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  21910012,
         "nidn":  "0708119103",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "PAM",
@@ -332,7 +332,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  22950019,
         "nidn":  "0706019502",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "RTL",
@@ -342,7 +342,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  23890011,
         "nidn":  "0704068902",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "TTK",
@@ -352,7 +352,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  20860014,
         "nidn":  "0710028604",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "WAY",
@@ -362,7 +362,7 @@
         "sub_kelompok_keahlian":  "QBI",
         "nip":  19870002,
         "nidn":  "0702048705",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "AUX",
@@ -372,7 +372,7 @@
         "sub_kelompok_keahlian":  "SME",
         "nip":  23970026,
         "nidn":  "0718099702",
-        "jabatan_fungsional":  "Non-JFA"
+        "jabatan_fungsional":  "NJFA"
     },
     {
         "kode_dosen":  "BIA",
@@ -382,7 +382,7 @@
         "sub_kelompok_keahlian":  "SME",
         "nip":  20930043,
         "nidn":  "0703119301",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     },
     {
         "kode_dosen":  "HKC",
@@ -392,7 +392,7 @@
         "sub_kelompok_keahlian":  "SME",
         "nip":  22970044,
         "nidn":  "0719079702",
-        "jabatan_fungsional":  "Asisten Ahli"
+        "jabatan_fungsional":  "AA"
     },
     {
         "kode_dosen":  "MUF",
@@ -402,6 +402,6 @@
         "sub_kelompok_keahlian":  "SME",
         "nip":  15890066,
         "nidn":  "0424098901",
-        "jabatan_fungsional":  "Lektor"
+        "jabatan_fungsional":  "L"
     }
 ]

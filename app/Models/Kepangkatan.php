@@ -86,6 +86,11 @@ class Kepangkatan extends Model
         return self::STATUS_METADATA;
     }
 
+    public static function jabatanOptions(): array
+    {
+        return self::JABATAN_LABELS;
+    }
+
     public static function tmtStatusOptions(): array
     {
         return self::TMT_STATUS;

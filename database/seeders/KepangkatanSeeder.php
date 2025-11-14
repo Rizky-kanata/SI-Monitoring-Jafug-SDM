@@ -16,13 +16,14 @@ class KepangkatanSeeder extends Seeder
     {
         $now = Carbon::now();
         $statusCycle = ['draft', 'diajukan', 'disetujui', 'ditolak'];
+        $jabatanMap = $this->loadJabatanCodes();
 
         Profil::query()
             ->orderBy('nama_dosen')
             ->get()
-            ->each(function (Profil $profil, int $index) use ($now, $statusCycle) {
+            ->each(function (Profil $profil, int $index) use ($now, $statusCycle, $jabatanMap) {
                 $status = $statusCycle[$index % count($statusCycle)];
-                $jabatan = $this->resolveJabatan($profil);
+                $jabatan = $this->resolveJabatan($profil, $jabatanMap);
                 $pangkatGolongan = $this->mapJabatanToPangkat($jabatan);
 
                 $tanggalMulai = null;
@@ -63,19 +64,17 @@ class KepangkatanSeeder extends Seeder
             });
     }
 
-    private function resolveJabatan(Profil $profil): string
+    private function resolveJabatan(Profil $profil, array $jabatanMap): string
     {
-        $default = 'Asisten Ahli';
-        $mapping = [
-            'AA' => 'Asisten Ahli',
-            'L' => 'Lektor',
-            'LK' => 'Lektor Kepala',
-            'NJFA' => 'Non-JFA',
-        ];
+        $raw = strtoupper(trim((string) ($jabatanMap[$profil->kode_dosen] ?? $profil->jabatan_fungsional ?? ''))); // @phpstan-ignore-line
 
-        $jabatan = strtoupper(trim((string) ($profil->jabatan_fungsional ?? '')));
-
-        return $mapping[$jabatan] ?? $default;
+        return match ($raw) {
+            'AA', 'ASISTEN AHLI' => 'AA',
+            'L', 'LEKTOR' => 'L',
+            'LK', 'LEKTOR KEPALA' => 'LK',
+            'NJFA', 'NON-JFA', 'NON JFA' => 'NJFA',
+            default => 'NJFA',
+        };
     }
 
     /**
@@ -84,11 +83,26 @@ class KepangkatanSeeder extends Seeder
     private function mapJabatanToPangkat(string $jabatan): array
     {
         return match ($jabatan) {
-            'Lektor Kepala' => ['pangkat' => 'IV/a', 'golongan' => 'Pembina'],
-            'Lektor' => ['pangkat' => 'III/c', 'golongan' => 'Penata'],
-            'Asisten Ahli' => ['pangkat' => 'III/b', 'golongan' => 'Penata Muda Tk. I'],
+            'LK' => ['pangkat' => 'IV/a', 'golongan' => 'Pembina'],
+            'L' => ['pangkat' => 'III/c', 'golongan' => 'Penata'],
+            'AA' => ['pangkat' => 'III/b', 'golongan' => 'Penata Muda Tk. I'],
             default => ['pangkat' => null, 'golongan' => null],
         };
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function loadJabatanCodes(): array
+    {
+        $path = base_path('database/data/dosen_riib.json');
+        $json = json_decode(file_get_contents($path), true) ?? [];
+
+        return collect($json)
+            ->mapWithKeys(fn ($item) => [
+                $item['kode_dosen'] => strtoupper(trim((string) ($item['jabatan_fungsional'] ?? ''))),
+            ])
+            ->all();
     }
 
     private function generateCatatan(string $status): string

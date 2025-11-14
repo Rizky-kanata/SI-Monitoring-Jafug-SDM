@@ -1,6 +1,7 @@
 @php
     $selectedProfil = old('profil_id', optional($kepangkatan)->profil_id);
     $selectedStatus = old('status', optional($kepangkatan)->status);
+    $selectedJabatan = old('jabatan_fungsional', optional($kepangkatan)->jabatan_fungsional);
     $tanggalSk = old('tanggal_sk', optional(optional($kepangkatan)->tanggal_sk)?->format('Y-m-d'));
     $tanggalMulai = old('tanggal_mulai', optional(optional($kepangkatan)->tanggal_mulai)?->format('Y-m-d'));
     $tanggalTmt = old(
@@ -38,14 +39,19 @@
     <div class="grid gap-6 md:grid-cols-2">
         <div>
             <label for="jabatan_fungsional" class="block text-sm font-semibold text-slate-700">Jabatan Fungsional</label>
-            <input
-                type="text"
+            <select
                 id="jabatan_fungsional"
                 name="jabatan_fungsional"
-                value="{{ old('jabatan_fungsional', optional($kepangkatan)->jabatan_fungsional) }}"
                 class="mt-3 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 required
             >
+                <option value="">-- Pilih Jabatan --</option>
+                @foreach (($jabatanOptions ?? \App\Models\Kepangkatan::jabatanOptions()) as $code => $label)
+                    <option value="{{ $code }}" @selected($code === $selectedJabatan)>
+                        {{ $label }} ({{ $code }})
+                    </option>
+                @endforeach
+            </select>
             @error('jabatan_fungsional')
                 <p class="mt-2 text-sm text-rose-600">{{ $message }}</p>
             @enderror

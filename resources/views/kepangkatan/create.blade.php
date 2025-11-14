@@ -32,6 +32,7 @@
                 'kepangkatan' => null,
                 'profilOptions' => $profilOptions,
                 'statusOptions' => $statusOptions,
+                'jabatanOptions' => $jabatanOptions,
             ])
 
             <div class="flex items-center justify-end gap-3">

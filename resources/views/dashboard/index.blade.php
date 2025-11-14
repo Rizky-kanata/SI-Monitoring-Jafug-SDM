@@ -117,7 +117,7 @@
                                         <div class="font-semibold text-slate-800">{{ $record->profil?->nama_dosen ?? 'Tanpa nama' }}</div>
                                         <div class="text-xs text-slate-500">{{ $record->profil?->kode_dosen ?? 'Tidak ada kode' }}</div>
                                     </td>
-                                    <td class="px-5 py-4 text-slate-600">{{ $record->jabatan_fungsional ?? '-' }}</td>
+                                    <td class="px-5 py-4 text-slate-600">{{ $record->jabatan_fungsional_label ?? '-' }}</td>
                                     <td class="px-5 py-4">
                                         <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $record->status_badge }}">
                                             {{ $record->status_label }}

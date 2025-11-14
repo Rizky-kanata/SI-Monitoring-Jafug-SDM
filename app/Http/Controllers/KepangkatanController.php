@@ -71,6 +71,7 @@ class KepangkatanController extends Controller
         return view('kepangkatan.create', [
             'profilOptions' => $this->profilOptions(),
             'statusOptions' => Kepangkatan::statusOptions(),
+            'jabatanOptions' => Kepangkatan::jabatanOptions(),
         ]);
     }
 
@@ -97,6 +98,7 @@ class KepangkatanController extends Controller
             'kepangkatan' => $kepangkatan->load('profil'),
             'profilOptions' => $this->profilOptions($kepangkatan->profil_id),
             'statusOptions' => Kepangkatan::statusOptions(),
+            'jabatanOptions' => Kepangkatan::jabatanOptions(),
         ]);
     }
 
@@ -173,7 +175,7 @@ class KepangkatanController extends Controller
                 Rule::exists('profils', 'id'),
                 Rule::unique('kepangkatans', 'profil_id')->ignore($ignoreId),
             ],
-            'jabatan_fungsional' => ['required', 'string', 'max:255'],
+            'jabatan_fungsional' => ['required', Rule::in(array_keys(Kepangkatan::jabatanOptions()))],
             'pangkat' => ['nullable', 'string', 'max:255'],
             'golongan' => ['nullable', 'string', 'max:255'],
             'tanggal_sk' => ['nullable', 'date'],
