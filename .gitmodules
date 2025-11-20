@@ -1,0 +1,4 @@
+[submodule "public/diagram-generator"]
+	path = public/diagram-generator
+	url = https://github.com/Probzap/Diagram-Generator-by-Form.git
+	branch = dev
