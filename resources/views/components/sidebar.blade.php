@@ -17,6 +17,12 @@
             'href' => route('kepangkatan.index'),
             'active' => request()->routeIs('kepangkatan.*'),
         ],
+        [
+            'label' => 'Data Form Diagram Dosen',
+            'href' => route('diagram.generator'),
+            'active' => false,
+            'new_tab' => true,
+        ],
         ['label' => 'Data Linieritas', 'href' => '#', 'active' => false],
         ['label' => 'Data Matrix', 'href' => '#', 'active' => false],
         ['label' => 'Data Pengajaran & Muatan Riset', 'href' => '#', 'active' => false],
@@ -28,6 +34,7 @@
             'label' => $link['label'] ?? '',
             'href' => $link['href'] ?? '#',
             'active' => (bool) ($link['active'] ?? false),
+            'new_tab' => (bool) ($link['new_tab'] ?? false),
         ])
         ->all();
 @endphp
@@ -50,9 +57,13 @@
             @php
                 $isActive = $link['active'] ?? false;
                 $href = $link['href'] ?? '#';
+                $openInNewTab = $link['new_tab'] ?? false;
             @endphp
             <a
                 href="{{ $href }}"
+                @if ($openInNewTab)
+                    target="_blank" rel="noopener noreferrer"
+                @endif
                 @class([
                     'flex items-center rounded-2xl px-4 py-2 text-sm font-medium transition',
                     'bg-white/10 text-white shadow-sm backdrop-blur hover:bg-white/15' => $isActive,

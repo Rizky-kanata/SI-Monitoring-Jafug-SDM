@@ -56,4 +56,8 @@ return [
         'events_endpoint' => env('BREVO_EVENTS_ENDPOINT', 'https://api.brevo.com/v3/smtp/statistics/events'),
     ],
 
+    'diagram_generator' => [
+        'url' => env('DIAGRAM_GENERATOR_URL', '/diagram-generator/public/index.php'),
+    ],
+
 ];

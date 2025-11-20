@@ -10,7 +10,6 @@ use Illuminate\Validation\Rule;
 
 class ProfilController extends Controller
 {
-    private const DEFAULT_KELOMPOK = 'RIIB';
 
     public function index(Request $request)
     {
@@ -127,10 +126,6 @@ class ProfilController extends Controller
             $data['foto_path'] = $request->file('foto')->store('profil-fotos', 'public');
         } elseif (!$profil) {
             $data['foto_path'] = null;
-        }
-
-        if (!$profil) {
-            $data['kelompok_keahlian'] = self::DEFAULT_KELOMPOK;
         }
 
         return $data;

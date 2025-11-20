@@ -96,9 +96,20 @@ class KepangkatanSeeder extends Seeder
     private function loadJabatanCodes(): array
     {
         $path = base_path('database/data/dosen_riib.json');
-        $json = json_decode(file_get_contents($path), true) ?? [];
+        $content = file_get_contents($path);
 
-        return collect($json)
+        if ($content === false) {
+            return [];
+        }
+
+        $json = preg_replace('/^\xEF\xBB\xBF/', '', $content ?? '');
+        $decoded = json_decode($json, true);
+
+        if (! is_array($decoded)) {
+            return [];
+        }
+
+        return collect($decoded)
             ->mapWithKeys(fn ($item) => [
                 $item['kode_dosen'] => strtoupper(trim((string) ($item['jabatan_fungsional'] ?? ''))),
             ])

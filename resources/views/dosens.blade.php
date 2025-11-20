@@ -136,7 +136,6 @@
                                 <td class="px-5 py-4">
                                     <div class="space-y-1">
                                         <p class="text-sm font-semibold text-slate-800">{{ $profil->nama_dosen }}</p>
-                                        <p class="text-xs text-slate-500">{{ $profil->kelompok_keahlian }}</p>
                                     </div>
                                 </td>
                                 <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->kode_dosen }}</td>

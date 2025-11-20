@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Profil;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class ProfilSeeder extends Seeder
 {
@@ -13,8 +14,19 @@ class ProfilSeeder extends Seeder
      */
     public function run(): void
     {
-        $json = file_get_contents(base_path('database/data/dosen_riib.json'));
+        $path = base_path('database/data/dosen_riib.json');
+        $json = file_get_contents($path);
+
+        if ($json === false) {
+            throw new RuntimeException("Gagal membaca file data profil: {$path}");
+        }
+
+        $json = preg_replace('/^\xEF\xBB\xBF/', '', $json ?? '');
         $data = json_decode($json, true);
+
+        if (! is_array($data)) {
+            throw new RuntimeException('Format JSON dosen_riib.json tidak valid: ' . json_last_error_msg());
+        }
 
         foreach ($data as $item) {
             Profil::updateOrCreate(
@@ -22,7 +34,6 @@ class ProfilSeeder extends Seeder
                 [
                     'nama_dosen' => $item['nama_dosen'],
                     'prodi' => $item['prodi'],
-                    'kelompok_keahlian' => $item['kelompok_keahlian'],
                     'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
                     'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
                     'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
