@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
         ->names('kepangkatan')
         ->except(['show']);
 
-    Route::get('/diagram-generator', function () {
+    Route::get('/diagram-generator-link', function () {
         $target = config('services.diagram_generator.url', '/diagram-generator/public/index.php');
 
         if (! filter_var($target, FILTER_VALIDATE_URL)) {
