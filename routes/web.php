@@ -42,7 +42,9 @@ Route::middleware('auth')->group(function () {
         ->except(['show']);
 
     Route::get('/diagram-generator-link', function () {
-        $target = config('services.diagram_generator.url', '/diagram-generator/public/index.php');
+        $base = rtrim(config('services.diagram_generator.url', '/diagram-generator/public/index.php'), '/');
+        // Paksa ke halaman login Diagram Generator agar tidak kembali ke dashboard RIIB.
+        $target = "{$base}/login";
 
         if (! filter_var($target, FILTER_VALIDATE_URL)) {
             $target = url($target);
