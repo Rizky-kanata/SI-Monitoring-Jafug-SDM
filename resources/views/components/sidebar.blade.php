@@ -18,15 +18,11 @@
             'active' => request()->routeIs('kepangkatan.*'),
         ],
         [
-            'label' => 'Data Form Diagram Dosen',
+            'label' => 'Data Diagram RIIB',
             'href' => route('diagram.generator'),
-            'active' => false,
+            'active' => request()->routeIs('diagram.generator'),
             'new_tab' => true,
         ],
-        ['label' => 'Data Linieritas', 'href' => '#', 'active' => false],
-        ['label' => 'Data Matrix', 'href' => '#', 'active' => false],
-        ['label' => 'Data Pengajaran & Muatan Riset', 'href' => '#', 'active' => false],
-        ['label' => 'Data Materi Kegiatan & Dokumen SK', 'href' => '#', 'active' => false],
     ];
 
     $navLinks = collect(empty($links) ? $defaultLinks : $links)

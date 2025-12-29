@@ -15,36 +15,28 @@ class KepangkatanSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
-        $statusCycle = ['draft', 'diajukan', 'disetujui', 'ditolak'];
         $jabatanMap = $this->loadJabatanCodes();
 
         Profil::query()
             ->orderBy('nama_dosen')
             ->get()
-            ->each(function (Profil $profil, int $index) use ($now, $statusCycle, $jabatanMap) {
-                $status = $statusCycle[$index % count($statusCycle)];
+            ->each(function (Profil $profil, int $index) use ($now, $jabatanMap) {
                 $jabatan = $this->resolveJabatan($profil, $jabatanMap);
                 $pangkatGolongan = $this->mapJabatanToPangkat($jabatan);
+                $scenario = $index % 3;
 
-                $tanggalMulai = null;
-                $tanggalTmt = null;
-
-                if ($status !== 'draft') {
-                    $scenario = $index % 3;
-
-                    if ($scenario === 0) {
-                        $futureStart = $now->copy()->addMonths(rand(1, 6));
-                        $tanggalMulai = $futureStart->toDateString();
-                        $tanggalTmt = $futureStart->toDateString();
-                    } elseif ($scenario === 1) {
-                        $activeStart = $now->copy()->subMonths(rand(1, 18));
-                        $tanggalMulai = $activeStart->toDateString();
-                        $tanggalTmt = $activeStart->toDateString();
-                    } else {
-                        $pastStart = $now->copy()->subMonths(rand(30, 48));
-                        $tanggalMulai = $pastStart->toDateString();
-                        $tanggalTmt = $pastStart->toDateString();
-                    }
+                if ($scenario === 0) {
+                    $tanggalSk = $now->copy()->addMonths(rand(1, 9))->toDateString();
+                    $isPublished = false;
+                    $catatan = 'Menunggu periode TMT dimulai.';
+                } elseif ($scenario === 1) {
+                    $tanggalSk = $now->copy()->subMonths(rand(1, 18))->toDateString();
+                    $isPublished = $index % 2 === 0;
+                    $catatan = $isPublished ? 'Publikasi sudah diurus.' : 'Publikasi belum diurus.';
+                } else {
+                    $tanggalSk = $now->copy()->subMonths(rand(30, 60))->toDateString();
+                    $isPublished = $index % 3 === 0;
+                    $catatan = $isPublished ? 'Publikasi sudah diurus.' : 'Publikasi belum diurus.';
                 }
 
                 Kepangkatan::updateOrCreate(
@@ -53,12 +45,11 @@ class KepangkatanSeeder extends Seeder
                         'jabatan_fungsional' => $jabatan,
                         'pangkat' => $pangkatGolongan['pangkat'],
                         'golongan' => $pangkatGolongan['golongan'],
-                        'tanggal_sk' => $status === 'draft' ? null : $now->copy()->subMonths(rand(3, 18))->toDateString(),
-                        'tanggal_mulai' => $tanggalMulai,
-                        'tanggal_tmt' => $tanggalTmt,
-                        'status' => $status,
-                        'is_published' => in_array($status, ['diajukan', 'disetujui'], true),
-                        'catatan' => $this->generateCatatan($status),
+                        'tanggal_sk' => $tanggalSk,
+                        'tanggal_mulai' => $tanggalSk,
+                        'tanggal_tmt' => $tanggalSk,
+                        'is_published' => $isPublished,
+                        'catatan' => $catatan,
                     ]
                 );
             });
@@ -116,14 +107,4 @@ class KepangkatanSeeder extends Seeder
             ->all();
     }
 
-    private function generateCatatan(string $status): string
-    {
-        return match ($status) {
-            'draft' => 'Lengkapi berkas dan susun draft pengajuan kenaikan pangkat.',
-            'diajukan' => 'Berkas telah diajukan ke fakultas, menunggu tindak lanjut.',
-            'disetujui' => 'Kenaikan pangkat sudah disahkan. Update data pendukung bila perlu.',
-            'ditolak' => 'Pengajuan ditolak. Cek catatan evaluasi dan siapkan revisi.',
-            default => '',
-        };
-    }
 }

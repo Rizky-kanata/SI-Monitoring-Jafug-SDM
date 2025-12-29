@@ -58,6 +58,8 @@ return [
 
     'diagram_generator' => [
         'url' => env('DIAGRAM_GENERATOR_URL', '/diagram-generator/public/index.php'),
+        'sso_secret' => env('DIAGRAM_GENERATOR_SSO_SECRET'),
+        'sso_ttl' => env('DIAGRAM_GENERATOR_SSO_TTL', 300),
     ],
 
 ];

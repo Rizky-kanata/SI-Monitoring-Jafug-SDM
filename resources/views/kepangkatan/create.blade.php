@@ -31,7 +31,6 @@
             @include('kepangkatan.partials.form-fields', [
                 'kepangkatan' => null,
                 'profilOptions' => $profilOptions,
-                'statusOptions' => $statusOptions,
                 'jabatanOptions' => $jabatanOptions,
             ])
 

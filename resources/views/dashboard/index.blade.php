@@ -55,12 +55,11 @@
             </div>
 
             <div class="rounded-3xl bg-gradient-to-br from-blue-600 to-blue-700 p-6 text-white shadow-lg">
-                <p class="text-sm font-medium text-blue-100">Status Publikasi</p>
+                <p class="text-sm font-medium text-blue-100">Status Kepangkatan</p>
                 <ul class="mt-3 space-y-2 text-sm text-blue-50">
-                    <li>• Draft: pengisian data awal.</li>
-                    <li>• Diajukan: menunggu evaluasi.</li>
-                    <li>• Disetujui: siap diumumkan.</li>
-                    <li>• Ditolak: butuh revisi lanjutan.</li>
+                    <li>- Merah: Sudah lewat TMT tapi belum mengurus Publikasi.</li>
+                    <li>- Kuning: Masih dalam periode TMT dan belum punya publikasi dan/atau jika sudah melewati periode TMT namun sudah mengurus publikasi.</li>
+                    <li>- Hijau: Jika sedang maupun belum menjalani periode TMT namun sudah mengurus publikasi.</li>
                 </ul>
                 <p class="mt-4 text-xs uppercase tracking-wide text-blue-100">Gunakan modul kepangkatan untuk memperbarui status.</p>
             </div>
@@ -106,7 +105,8 @@
                             <tr>
                                 <th class="px-5 py-3">Dosen</th>
                                 <th class="px-5 py-3">Jabatan</th>
-                                <th class="px-5 py-3">Status</th>
+                                <th class="px-5 py-3">Status TMT</th>
+                                <th class="px-5 py-3">Status Publikasi</th>
                                 <th class="px-5 py-3">Diubah</th>
                             </tr>
                         </thead>
@@ -118,16 +118,21 @@
                                         <div class="text-xs text-slate-500">{{ $record->profil?->kode_dosen ?? 'Tidak ada kode' }}</div>
                                     </td>
                                     <td class="px-5 py-4 text-slate-600">{{ $record->jabatan_fungsional_label ?? '-' }}</td>
-                                    <td class="px-5 py-4">
-                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ring-1 {{ $record->status_badge }}">
-                                            {{ $record->status_label }}
+                                    <td class="px-5 py-4 text-slate-600">
+                                        <span class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200">
+                                            {{ $record->status_tmt_label }}
+                                        </span>
+                                    </td>
+                                    <td class="px-5 py-4 text-slate-600">
+                                        <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $record->is_published ? 'bg-emerald-50 text-emerald-700 ring-emerald-200' : 'bg-amber-50 text-amber-700 ring-amber-200' }} ring-1">
+                                            {{ $record->status_publikasi_label }}
                                         </span>
                                     </td>
                                     <td class="px-5 py-4 text-slate-500">{{ $record->updated_at?->diffForHumans() ?? '-' }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-5 py-6 text-center text-sm text-slate-500">
+                                    <td colspan="5" class="px-5 py-6 text-center text-sm text-slate-500">
                                         Belum ada aktivitas kepangkatan yang tercatat.
                                     </td>
                                 </tr>

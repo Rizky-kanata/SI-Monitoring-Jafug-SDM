@@ -8,6 +8,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 Route::get('/', function () {
     return Auth::check()
@@ -40,11 +41,21 @@ Route::middleware('auth')->group(function () {
     Route::resource('kepangkatan', KepangkatanController::class)
         ->names('kepangkatan')
         ->except(['show']);
+    Route::get('kepangkatan/export/pdf', [KepangkatanController::class, 'exportPdf'])
+        ->name('kepangkatan.export');
 
     Route::get('/diagram-generator-link', function () {
         $base = rtrim(config('services.diagram_generator.url', '/diagram-generator/public/index.php'), '/');
-        // Paksa ke halaman login Diagram Generator agar tidak kembali ke dashboard RIIB.
-        $target = "{$base}/login";
+        $secret = (string) config('services.diagram_generator.sso_secret', '');
+        if ($secret === '') {
+            $target = "{$base}/login";
+        } else {
+            $timestamp = now()->timestamp;
+            $nonce = Str::random(16);
+            $payload = $timestamp . '|' . $nonce;
+            $signature = hash_hmac('sha256', $payload, $secret);
+            $target = "{$base}/sso/admin?timestamp={$timestamp}&nonce={$nonce}&signature={$signature}";
+        }
 
         if (! filter_var($target, FILTER_VALIDATE_URL)) {
             $target = url($target);

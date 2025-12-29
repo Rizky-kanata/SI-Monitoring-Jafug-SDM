@@ -12,34 +12,6 @@ class Kepangkatan extends Model
 {
     use HasFactory;
 
-    /**
-     * Metadata status legacy (masih digunakan di modul lain).
-     *
-     * @var array<string, array<string, string>>
-     */
-    public const STATUS_METADATA = [
-        'draft' => [
-            'label' => 'Draft',
-            'description' => 'Data kepangkatan masih dalam proses pengumpulan berkas.',
-            'badge' => 'bg-slate-100 text-slate-700 ring-slate-200',
-        ],
-        'diajukan' => [
-            'label' => 'Diajukan',
-            'description' => 'Pengajuan sudah dikirim dan menunggu evaluasi.',
-            'badge' => 'bg-amber-100 text-amber-800 ring-amber-200',
-        ],
-        'disetujui' => [
-            'label' => 'Disetujui',
-            'description' => 'Kenaikan pangkat telah disetujui dan dinyatakan sah.',
-            'badge' => 'bg-emerald-100 text-emerald-800 ring-emerald-200',
-        ],
-        'ditolak' => [
-            'label' => 'Perlu Revisi',
-            'description' => 'Pengajuan ditolak, mohon cek catatan revisi.',
-            'badge' => 'bg-rose-100 text-rose-800 ring-rose-200',
-        ],
-    ];
-
     public const TMT_STATUS = [
         'belum' => 'Belum TMT',
         'berjalan' => 'Sedang Dalam Masa TMT',
@@ -61,7 +33,6 @@ class Kepangkatan extends Model
         'tanggal_sk',
         'tanggal_mulai',
         'tanggal_tmt',
-        'status',
         'is_published',
         'catatan',
     ];
@@ -72,19 +43,6 @@ class Kepangkatan extends Model
         'tanggal_tmt' => 'date',
         'is_published' => 'boolean',
     ];
-
-    public static function statusOptions(): array
-    {
-        return array_combine(
-            array_keys(self::STATUS_METADATA),
-            array_column(self::STATUS_METADATA, 'label')
-        );
-    }
-
-    public static function statusMetadata(): array
-    {
-        return self::STATUS_METADATA;
-    }
 
     public static function jabatanOptions(): array
     {
@@ -129,21 +87,6 @@ class Kepangkatan extends Model
                 ->whereNull('tanggal_tmt')
                 ->orWhereDate('tanggal_tmt', '>', $now);
         });
-    }
-
-    public function getStatusLabelAttribute(): string
-    {
-        return self::STATUS_METADATA[$this->status]['label'] ?? ucfirst($this->status);
-    }
-
-    public function getStatusDescriptionAttribute(): string
-    {
-        return self::STATUS_METADATA[$this->status]['description'] ?? '';
-    }
-
-    public function getStatusBadgeAttribute(): string
-    {
-        return self::STATUS_METADATA[$this->status]['badge'] ?? 'bg-slate-100 text-slate-700 ring-slate-200';
     }
 
     public function getTanggalTmtDisplayAttribute(): string
@@ -245,6 +188,6 @@ class Kepangkatan extends Model
 
     private function effectiveTmtDate(): ?Carbon
     {
-        return $this->tanggal_tmt ?? $this->tanggal_mulai;
+        return $this->tanggal_tmt ?? $this->tanggal_mulai ?? $this->tanggal_sk;
     }
 }

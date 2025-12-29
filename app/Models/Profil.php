@@ -14,6 +14,7 @@ class Profil extends Model
         'nama_dosen',
         'prodi',
         'sub_kelompok_keahlian',
+        'lab',
         'nip',
         'nidn',
         'foto_path',

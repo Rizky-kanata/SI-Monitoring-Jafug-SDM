@@ -15,7 +15,7 @@
             </div>
             <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 data-modal-target="create-modal"
             >
                 + Tambah Profil
@@ -52,8 +52,8 @@
                 <table class="min-w-[72rem] divide-y divide-slate-200 text-sm">
                     <thead class="bg-slate-50/80">
                         <tr class="text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                            <th class="px-5 py-3">No.</th>
-                            <th class="px-5 py-3">Foto</th>
+                            <th class="px-5 py-3">Foto Dosen</th>
+                            <th class="px-5 py-3">Kode Dosen</th>
                             <th class="px-5 py-3" aria-sort="{{ $sort === 'nama_dosen' ? ($direction === 'asc' ? 'ascending' : 'descending') : 'none' }}">
                                 @php
                                     $isNamaSorted = $sort === 'nama_dosen';
@@ -62,10 +62,11 @@
                                 <a href="{{ route('profils.index', ['sort' => 'nama_dosen', 'direction' => $namaDirection]) }}"
                                    class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $isNamaSorted ? 'text-blue-600' : 'text-slate-500' }}">
                                     Nama Dosen
-                                    <span class="text-[0.65rem]">{{ $isNamaSorted ? ($direction === 'asc' ? '▲' : '▼') : '⇅' }}</span>
+                                    <span class="text-[0.65rem]">{{ $isNamaSorted ? ($direction === 'asc' ? '^' : 'v') : '<>' }}</span>
                                 </a>
                             </th>
-                            <th class="px-5 py-3">Kode Dosen</th>
+                            <th class="px-5 py-3">NIP</th>
+                            <th class="px-5 py-3">NIDN</th>
                             <th class="px-5 py-3" aria-sort="{{ $sort === 'prodi' ? ($direction === 'asc' ? 'ascending' : 'descending') : 'none' }}">
                                 @php
                                     $isProdiSorted = $sort === 'prodi';
@@ -74,7 +75,7 @@
                                 <a href="{{ route('profils.index', ['sort' => 'prodi', 'direction' => $prodiDirection]) }}"
                                    class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $isProdiSorted ? 'text-blue-600' : 'text-slate-500' }}">
                                     Program Studi
-                                    <span class="text-[0.65rem]">{{ $isProdiSorted ? ($direction === 'asc' ? '▲' : '▼') : '⇅' }}</span>
+                                    <span class="text-[0.65rem]">{{ $isProdiSorted ? ($direction === 'asc' ? '^' : 'v') : '<>' }}</span>
                                 </a>
                             </th>
                             <th class="px-5 py-3" aria-sort="{{ $sort === 'sub_kelompok_keahlian' ? ($direction === 'asc' ? 'ascending' : 'descending') : 'none' }}">
@@ -85,23 +86,11 @@
                                 <a href="{{ route('profils.index', ['sort' => 'sub_kelompok_keahlian', 'direction' => $subDirection]) }}"
                                    class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $isSubSorted ? 'text-blue-600' : 'text-slate-500' }}">
                                     Sub Kelompok Keahlian
-                                    <span class="text-[0.65rem]">{{ $isSubSorted ? ($direction === 'asc' ? '▲' : '▼') : '⇅' }}</span>
+                                    <span class="text-[0.65rem]">{{ $isSubSorted ? ($direction === 'asc' ? '^' : 'v') : '<>' }}</span>
                                 </a>
                             </th>
-                            <th class="px-5 py-3">NIP</th>
-                            <th class="px-5 py-3">NIDN</th>
-                            <th class="px-5 py-3" aria-sort="{{ $sort === 'created_at' ? ($direction === 'asc' ? 'ascending' : 'descending') : 'none' }}">
-                                @php
-                                    $isCreatedSorted = $sort === 'created_at';
-                                    $createdDirection = $isCreatedSorted && $direction === 'asc' ? 'desc' : 'asc';
-                                @endphp
-                                <a href="{{ route('profils.index', ['sort' => 'created_at', 'direction' => $createdDirection]) }}"
-                                   class="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide transition hover:text-blue-600 {{ $isCreatedSorted ? 'text-blue-600' : 'text-slate-500' }}">
-                                    Tanggal Input
-                                    <span class="text-[0.65rem]">{{ $isCreatedSorted ? ($direction === 'asc' ? '▲' : '▼') : '⇅' }}</span>
-                                </a>
-                            </th>
-                            <th class="px-5 py-3 text-right">Aksi</th>
+                            <th class="px-5 py-3">Lab</th>
+                            <th class="px-5 py-3 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 bg-white">
@@ -117,11 +106,10 @@
                                     }
                                 }
                                 if ($initials === '') {
-                                    $initials = '—';
+                                    $initials = '-';
                                 }
                             @endphp
-                            <tr class="transition hover:bg-slate-50/80">
-                                <td class="px-5 py-4 text-sm font-semibold text-slate-500">{{ $loop->iteration }}</td>
+                                                        <tr class="transition hover:bg-slate-50/80">
                                 <td class="px-5 py-4">
                                     <div class="flex items-center">
                                         <div class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
@@ -133,17 +121,17 @@
                                         </div>
                                     </div>
                                 </td>
+                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->kode_dosen }}</td>
                                 <td class="px-5 py-4">
                                     <div class="space-y-1">
                                         <p class="text-sm font-semibold text-slate-800">{{ $profil->nama_dosen }}</p>
                                     </div>
                                 </td>
-                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->kode_dosen }}</td>
+                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->nip ?? '-' }}</td>
+                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->nidn ?? '-' }}</td>
                                 <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->prodi }}</td>
                                 <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->sub_kelompok_keahlian }}</td>
-                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->nip ?? '—' }}</td>
-                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->nidn ?? '—' }}</td>
-                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->created_at?->format('d M Y') ?? '—' }}</td>
+                                <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->lab ?? '-' }}</td>
                                 <td class="px-5 py-4">
                                     <div class="flex justify-end gap-2">
                                         <button
@@ -171,7 +159,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="px-5 py-10 text-center text-sm text-slate-500">
+                                <td colspan="9" class="px-5 py-10 text-center text-sm text-slate-500">
                                     Belum ada data profil dosen.
                                 </td>
                             </tr>
@@ -209,6 +197,10 @@
                     <input type="text" id="create-sub_kelompok_keahlian" name="sub_kelompok_keahlian" value="{{ old('sub_kelompok_keahlian') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
                 </div>
                 <div class="grid gap-2">
+                    <label for="create-lab" class="text-sm font-medium text-slate-600">Lab</label>
+                    <input type="text" id="create-lab" name="lab" value="{{ old('lab') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
+                </div>
+                <div class="grid gap-2">
                     <label for="create-foto" class="text-sm font-medium text-slate-600">Foto Profil</label>
                     <input type="file" id="create-foto" name="foto" accept="image/*" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
                     <p class="text-xs text-slate-500">Format JPG, PNG, atau WEBP dengan ukuran maksimum 2 MB.</p>
@@ -223,7 +215,7 @@
                 </div>
                 <div class="flex items-center justify-end gap-3 pt-4">
                     <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan</button>
+                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan</button>
                 </div>
             </form>
         </div>
@@ -256,6 +248,10 @@
                     <input type="text" id="edit-sub_kelompok_keahlian" name="sub_kelompok_keahlian" value="{{ old('sub_kelompok_keahlian') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
                 </div>
                 <div class="grid gap-2">
+                    <label for="edit-lab" class="text-sm font-medium text-slate-600">Lab</label>
+                    <input type="text" id="edit-lab" name="lab" value="{{ old('lab') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
+                </div>
+                <div class="grid gap-2">
                     <label for="edit-foto" class="text-sm font-medium text-slate-600">Foto Profil</label>
                     <input type="file" id="edit-foto" name="foto" accept="image/*" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
                     <p class="text-xs text-slate-500">Unggah foto baru untuk mengganti foto yang tersimpan (maksimum 2 MB).</p>
@@ -277,7 +273,7 @@
                 </div>
                 <div class="flex items-center justify-end gap-3 pt-4">
                     <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan Perubahan</button>
+                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
@@ -294,16 +290,30 @@
                 <input type="hidden" name="sort" value="{{ $sort }}">
                 <input type="hidden" name="direction" value="{{ $direction }}">
                 <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                <button type="submit" class="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Hapus</button>
+                <button type="submit" class="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Hapus</button>
             </form>
         </div>
     </div>
 @endpush
 
 @push('scripts')
+    <input
+        type="hidden"
+        id="profil-initial-state"
+        class="hidden"
+        value="{{ e(json_encode([
+            'modal' => $openModal ?? null,
+            'editingProfil' => $editingProfil ?? null,
+            'hasErrors' => $errors->any(),
+            'wasUpdate' => old('_method') === 'PUT',
+            'oldProfilId' => old('profil_id'),
+        ], JSON_UNESCAPED_UNICODE)) }}"
+    >
     <script>
         const body = document.body;
         const modals = document.querySelectorAll('.modal');
+        const initialStateInput = document.getElementById('profil-initial-state');
+        const initialState = initialStateInput ? JSON.parse(initialStateInput.value || '{}') : {};
 
         function openModal(modal) {
             modal.classList.remove('hidden');
@@ -333,6 +343,7 @@
                     form.querySelector('#edit-nama_dosen').value = profileData.nama_dosen ?? '';
                     form.querySelector('#edit-prodi').value = profileData.prodi ?? '';
                     form.querySelector('#edit-sub_kelompok_keahlian').value = profileData.sub_kelompok_keahlian ?? '';
+                    form.querySelector('#edit-lab').value = profileData.lab ?? '';
                     form.querySelector('#edit-nip').value = profileData.nip ?? '';
                     form.querySelector('#edit-nidn').value = profileData.nidn ?? '';
                     const previewContainer = form.querySelector('[data-preview-container]');
@@ -394,11 +405,11 @@
             });
         });
 
-        const initialModal = @json($openModal ?? null);
-        const initialEditingProfil = @json($editingProfil ?? null);
-        const hasErrors = @json($errors->any());
-        const wasUpdate = @json(old('_method') === 'PUT');
-        const oldProfilId = @json(old('profil_id'));
+        const initialModal = initialState.modal ?? null;
+        const initialEditingProfil = initialState.editingProfil ?? null;
+        const hasErrors = initialState.hasErrors ?? false;
+        const wasUpdate = initialState.wasUpdate ?? false;
+        const oldProfilId = initialState.oldProfilId ?? null;
 
         if (initialModal === 'create') {
             const modal = document.getElementById('create-modal');
@@ -418,6 +429,7 @@
                 form.querySelector('#edit-nama_dosen').value = initialEditingProfil.nama_dosen ?? '';
                 form.querySelector('#edit-prodi').value = initialEditingProfil.prodi ?? '';
                 form.querySelector('#edit-sub_kelompok_keahlian').value = initialEditingProfil.sub_kelompok_keahlian ?? '';
+                form.querySelector('#edit-lab').value = initialEditingProfil.lab ?? '';
                 form.querySelector('#edit-nip').value = initialEditingProfil.nip ?? '';
                 form.querySelector('#edit-nidn').value = initialEditingProfil.nidn ?? '';
                 const previewImage = form.querySelector('[data-preview-image]');

@@ -9,6 +9,12 @@ use RuntimeException;
 
 class ProfilSeeder extends Seeder
 {
+    private const LAB_OPTIONS = [
+        'Lab Data & AI',
+        'Lab Rekayasa Perangkat Lunak',
+        'Lab Sistem Cerdas',
+        'Lab Multimedia & Jaringan',
+    ];
     /**
      * Run the database seeds.
      */
@@ -35,6 +41,7 @@ class ProfilSeeder extends Seeder
                     'nama_dosen' => $item['nama_dosen'],
                     'prodi' => $item['prodi'],
                     'sub_kelompok_keahlian' => $item['sub_kelompok_keahlian'],
+                    'lab' => $this->resolveLab($item),
                     'nip' => $this->normalizeIdentifier($item['nip'] ?? null),
                     'nidn' => $this->normalizeIdentifier($item['nidn'] ?? null),
                     'foto_path' => $this->resolveFotoPath($item['foto'] ?? null),
@@ -65,5 +72,16 @@ class ProfilSeeder extends Seeder
         $path = 'profil-fotos/' . ltrim($filename, "/\\");
 
         return Storage::disk('public')->exists($path) ? $path : null;
+    }
+
+    /**
+     * @param array<string, mixed> $item
+     */
+    private function resolveLab(array $item): string
+    {
+        $seed = (string) ($item['kode_dosen'] ?? $item['nama_dosen'] ?? uniqid());
+        $index = abs((int) crc32($seed)) % count(self::LAB_OPTIONS);
+
+        return self::LAB_OPTIONS[$index];
     }
 }

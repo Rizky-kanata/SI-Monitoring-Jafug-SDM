@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Kepangkatan;
 use App\Models\Profil;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 
 class KepangkatanController extends Controller
 {
@@ -16,51 +19,42 @@ class KepangkatanController extends Controller
      */
     public function index(Request $request): View
     {
-        $publicationFilter = $request->string('publication')->toString();
-        $tmtStatusFilter = $request->string('tmt_status')->toString();
-        $search = $request->string('search')->toString();
-
-        $records = Kepangkatan::query()
+        $filters = $this->resolveFilters($request);
+        $recordsQuery = $this->buildFilteredQuery($filters)
             ->with('profil')
-            ->when($publicationFilter !== '', function ($query) use ($publicationFilter) {
-                if (in_array($publicationFilter, ['sudah', 'belum'], true)) {
-                    $query->where('is_published', $publicationFilter === 'sudah');
-                }
-            })
-            ->when(
-                $tmtStatusFilter !== '' && array_key_exists($tmtStatusFilter, Kepangkatan::tmtStatusOptions()),
-                fn ($query) => $query->whereTmtStatus($tmtStatusFilter)
-            )
-            ->when($search !== '', function ($query) use ($search) {
-                $query->whereHas('profil', function ($relation) use ($search) {
-                    $relation
-                        ->where('nama_dosen', 'like', '%' . $search . '%')
-                        ->orWhere('kode_dosen', 'like', '%' . $search . '%');
-                });
-            })
-            ->orderByDesc('updated_at')
-            ->paginate(10)
-            ->withQueryString();
+            ->orderByDesc('updated_at');
 
-        $totalProfil = Profil::count();
-        $totalKepangkatan = Kepangkatan::count();
-        $totalPublished = Kepangkatan::where('is_published', true)->count();
+        $perPage = $this->resolvePerPage($filters['per_page'], $recordsQuery);
+        $records = $recordsQuery->paginate($perPage)->withQueryString();
 
         return view('kepangkatan.index', [
             'kepangkatans' => $records,
             'tmtStatusOptions' => Kepangkatan::tmtStatusOptions(),
-            'statusMetadata' => Kepangkatan::statusMetadata(),
-            'filters' => [
-                'publication' => $publicationFilter,
-                'tmt_status' => $tmtStatusFilter,
-                'search' => $search,
-            ],
-            'metrics' => [
-                'totalProfil' => $totalProfil,
-                'totalKepangkatan' => $totalKepangkatan,
-                'totalPublished' => $totalPublished,
-            ],
+            'filters' => $filters,
+            'perPageOptions' => $this->perPageOptions(),
         ]);
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $filters = $this->resolveFilters($request);
+        $records = $this->buildFilteredQuery($filters)
+            ->with('profil')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        $statusLabel = $filters['tmt_status'] !== ''
+            ? (Kepangkatan::tmtStatusOptions()[$filters['tmt_status']] ?? $filters['tmt_status'])
+            : 'Semua Status';
+
+        $filenameSuffix = $filters['tmt_status'] !== '' ? $filters['tmt_status'] : 'semua';
+        $filename = 'kepangkatan-tmt-' . Str::slug($filenameSuffix) . '.pdf';
+
+        return Pdf::loadView('kepangkatan.pdf', [
+            'records' => $records,
+            'filters' => $filters,
+            'statusLabel' => $statusLabel,
+        ])->download($filename);
     }
 
     /**
@@ -70,7 +64,6 @@ class KepangkatanController extends Controller
     {
         return view('kepangkatan.create', [
             'profilOptions' => $this->profilOptions(),
-            'statusOptions' => Kepangkatan::statusOptions(),
             'jabatanOptions' => Kepangkatan::jabatanOptions(),
         ]);
     }
@@ -97,7 +90,6 @@ class KepangkatanController extends Controller
         return view('kepangkatan.edit', [
             'kepangkatan' => $kepangkatan->load('profil'),
             'profilOptions' => $this->profilOptions($kepangkatan->profil_id),
-            'statusOptions' => Kepangkatan::statusOptions(),
             'jabatanOptions' => Kepangkatan::jabatanOptions(),
         ]);
     }
@@ -166,8 +158,6 @@ class KepangkatanController extends Controller
      */
     private function validatePayload(Request $request, ?int $ignoreId = null): array
     {
-        $statusKeys = array_keys(Kepangkatan::statusMetadata());
-
         $data = $request->validate([
             'profil_id' => [
                 'required',
@@ -179,9 +169,6 @@ class KepangkatanController extends Controller
             'pangkat' => ['nullable', 'string', 'max:255'],
             'golongan' => ['nullable', 'string', 'max:255'],
             'tanggal_sk' => ['nullable', 'date'],
-            'tanggal_mulai' => ['nullable', 'date'],
-            'tanggal_tmt' => ['nullable', 'date'],
-            'status' => ['required', Rule::in($statusKeys)],
             'is_published' => ['nullable', 'boolean'],
             'catatan' => ['nullable', 'string'],
         ], [
@@ -191,7 +178,81 @@ class KepangkatanController extends Controller
         ]);
 
         $data['is_published'] = $request->boolean('is_published');
+        $data['tanggal_mulai'] = $data['tanggal_sk'] ?? null;
+        $data['tanggal_tmt'] = $data['tanggal_sk'] ?? null;
 
         return $data;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function resolveFilters(Request $request): array
+    {
+        return [
+            'publication' => $request->string('publication')->toString(),
+            'tmt_status' => $request->string('tmt_status')->toString(),
+            'search' => $request->string('search')->toString(),
+            'per_page' => $request->string('per_page')->toString(),
+        ];
+    }
+
+    private function buildFilteredQuery(array $filters): Builder
+    {
+        $publicationFilter = $filters['publication'];
+        $tmtStatusFilter = $filters['tmt_status'];
+        $search = $filters['search'];
+
+        return Kepangkatan::query()
+            ->when($publicationFilter !== '', function ($query) use ($publicationFilter) {
+                if (in_array($publicationFilter, ['sudah', 'belum'], true)) {
+                    $query->where('is_published', $publicationFilter === 'sudah');
+                }
+            })
+            ->when(
+                $tmtStatusFilter !== '' && array_key_exists($tmtStatusFilter, Kepangkatan::tmtStatusOptions()),
+                fn ($query) => $query->whereTmtStatus($tmtStatusFilter)
+            )
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('profil', function ($relation) use ($search) {
+                    $relation
+                        ->where('nama_dosen', 'like', '%' . $search . '%')
+                        ->orWhere('kode_dosen', 'like', '%' . $search . '%');
+                });
+            });
+    }
+
+    /**
+     * @return array<int|string, string>
+     */
+    private function perPageOptions(): array
+    {
+        return [
+            10 => '10',
+            25 => '25',
+            50 => '50',
+            75 => '75',
+            100 => '100',
+            'all' => 'All',
+        ];
+    }
+
+    private function resolvePerPage(string $value, Builder $query): int
+    {
+        $options = array_keys($this->perPageOptions());
+        $value = $value === '' ? '10' : $value;
+
+        if ($value === 'all') {
+            $count = (clone $query)->count();
+            return max(1, $count);
+        }
+
+        $numeric = (int) $value;
+
+        if (! in_array($numeric, $options, true)) {
+            $numeric = 10;
+        }
+
+        return $numeric;
     }
 }

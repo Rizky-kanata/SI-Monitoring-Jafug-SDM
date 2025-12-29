@@ -11,7 +11,7 @@
         <div class="space-y-1">
             <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Kepangkatan Dosen</p>
             <h1 class="text-2xl font-semibold text-slate-900">Ubah Data Kepangkatan</h1>
-            <p class="text-sm text-slate-500">Perbarui status proses dan detail kenaikan pangkat untuk {{ $kepangkatan->profil?->nama_dosen ?? 'dosen terkait' }}.</p>
+            <p class="text-sm text-slate-500">Perbarui detail kenaikan pangkat untuk {{ $kepangkatan->profil?->nama_dosen ?? 'dosen terkait' }}.</p>
         </div>
 
         @if ($errors->any())
@@ -32,7 +32,6 @@
             @include('kepangkatan.partials.form-fields', [
                 'kepangkatan' => $kepangkatan,
                 'profilOptions' => $profilOptions,
-                'statusOptions' => $statusOptions,
                 'jabatanOptions' => $jabatanOptions,
             ])
 
