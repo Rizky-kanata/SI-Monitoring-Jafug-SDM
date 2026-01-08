@@ -58,6 +58,10 @@
       .indicator-default {
         background: #94a3b8;
       }
+      .indicator-cell {
+        text-align: center;
+        vertical-align: middle;
+      }
     </style>
   </head>
   <body>
@@ -87,7 +91,7 @@
             <td>{{ $record->tanggal_sk ? $record->tanggal_sk->format('d/m/Y') : '-' }}</td>
             <td>{{ $record->status_tmt_label }}</td>
             <td>{{ $record->status_publikasi_label }}</td>
-            <td style="text-align: center;">
+            <td class="indicator-cell">
               <span class="indicator indicator-{{ $record->indicator_color ?? 'default' }}"></span>
             </td>
           </tr>
