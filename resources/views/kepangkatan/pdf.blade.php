@@ -26,13 +26,15 @@
       td {
         border: 1px solid #e2e8f0;
         padding: 6px 8px;
-        vertical-align: top;
       }
       th {
         background: #f1f5f9;
         text-transform: uppercase;
         font-size: 10px;
         letter-spacing: 0.08em;
+      }
+      td {
+        vertical-align: middle;
       }
       .muted {
         color: #64748b;
