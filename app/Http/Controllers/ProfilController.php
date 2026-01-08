@@ -18,7 +18,12 @@ class ProfilController extends Controller
 
     public function create(Request $request)
     {
-        return $this->renderIndex($request, 'create');
+        [$sort, $direction] = $this->resolveSort($request);
+
+        return view('profil.create', [
+            'sort' => $sort,
+            'direction' => $direction,
+        ]);
     }
 
     public function store(Request $request)
@@ -45,7 +50,13 @@ class ProfilController extends Controller
 
     public function edit(Request $request, Profil $profil)
     {
-        return $this->renderIndex($request, 'edit', $profil);
+        [$sort, $direction] = $this->resolveSort($request);
+
+        return view('profil.edit', [
+            'profil' => $profil,
+            'sort' => $sort,
+            'direction' => $direction,
+        ]);
     }
 
     public function update(Request $request, Profil $profil)
@@ -85,17 +96,14 @@ class ProfilController extends Controller
             ->with('success', 'Profil deleted successfully.');
     }
 
-    private function renderIndex(Request $request, ?string $openModal = null, ?Profil $editingProfil = null)
+    private function renderIndex(Request $request)
     {
         [$sort, $direction] = $this->resolveSort($request);
 
         $profils = Profil::orderBy($sort, $direction)->get();
-        $editingProfil = $editingProfil?->fresh();
 
         return view('dosens', [
             'profils' => $profils,
-            'openModal' => $openModal,
-            'editingProfil' => $editingProfil,
             'sort' => $sort,
             'direction' => $direction,
             'total' => $profils->count(),

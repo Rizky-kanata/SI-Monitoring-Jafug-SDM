@@ -13,13 +13,12 @@
                 <h2 class="text-2xl font-semibold text-slate-900">Profil Dosen Kelompok Keahlian RIIB</h2>
                 <p class="text-sm text-slate-500">Daftar pantau dan pengelolaan informasi profil dosen kelompok keahlian RIIB.</p>
             </div>
-            <button
-                type="button"
+            <a
+                href="{{ route('profils.create', ['sort' => $sort, 'direction' => $direction]) }}"
                 class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                data-modal-target="create-modal"
             >
                 + Tambah Profil
-            </button>
+            </a>
         </div>
 
         @if (session('success'))
@@ -134,26 +133,25 @@
                                 <td class="px-5 py-4 text-sm text-slate-600">{{ $profil->lab ?? '-' }}</td>
                                 <td class="px-5 py-4">
                                     <div class="flex justify-end gap-2">
-                                        <button
-                                            type="button"
+                                        <a
+                                            href="{{ route('profils.edit', ['profil' => $profil, 'sort' => $sort, 'direction' => $direction]) }}"
                                             class="inline-flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-200"
-                                            data-action="edit"
-                                            data-update-template="{{ route('profils.update', ['profil' => '__ID__']) }}"
-                                            data-profile="{{ $profil->toJson(JSON_UNESCAPED_UNICODE) }}"
-                                            data-modal-target="edit-modal"
                                         >
                                             Edit
-                                        </button>
-                                        <button
-                                            type="button"
-                                            class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-200"
-                                            data-action="delete"
-                                            data-destroy-template="{{ route('profils.destroy', ['profil' => '__ID__']) }}"
-                                            data-profile="{{ json_encode(['id' => $profil->id, 'nama_dosen' => $profil->nama_dosen], JSON_UNESCAPED_UNICODE) }}"
-                                            data-modal-target="delete-modal"
+                                        </a>
+                                        <form
+                                            action="{{ route('profils.destroy', $profil) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Hapus profil {{ e($profil->nama_dosen) }}?');"
                                         >
-                                            Hapus
-                                        </button>
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="sort" value="{{ $sort }}">
+                                            <input type="hidden" name="direction" value="{{ $direction }}">
+                                            <button type="submit" class="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-200">
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -170,350 +168,3 @@
         </div>
     </div>
 @endsection
-
-@push('modals')
-    <div class="modal fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-6" id="create-modal">
-        <div class="relative w-full max-w-2xl rounded-2xl bg-white p-8 shadow-2xl ring-1 ring-slate-200">
-            <button type="button" class="modal-close absolute right-4 top-4 text-lg text-slate-400 transition hover:text-slate-600" data-modal-close>&times;</button>
-            <h3 class="text-xl font-semibold text-slate-900">Tambah Profil Dosen</h3>
-            <form action="{{ route('profils.store') }}" method="POST" enctype="multipart/form-data" class="mt-6 grid gap-4">
-                @csrf
-                <input type="hidden" name="sort" value="{{ old('sort', $sort) }}">
-                <input type="hidden" name="direction" value="{{ old('direction', $direction) }}">
-                <div class="grid gap-2">
-                    <label for="create-kode_dosen" class="text-sm font-medium text-slate-600">Kode Dosen</label>
-                    <input type="text" id="create-kode_dosen" name="kode_dosen" value="{{ old('kode_dosen') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-nama_dosen" class="text-sm font-medium text-slate-600">Nama Dosen</label>
-                    <input type="text" id="create-nama_dosen" name="nama_dosen" value="{{ old('nama_dosen') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-prodi" class="text-sm font-medium text-slate-600">Program Studi</label>
-                    <input type="text" id="create-prodi" name="prodi" value="{{ old('prodi') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-sub_kelompok_keahlian" class="text-sm font-medium text-slate-600">Sub Kelompok Keahlian</label>
-                    <input type="text" id="create-sub_kelompok_keahlian" name="sub_kelompok_keahlian" value="{{ old('sub_kelompok_keahlian') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-lab" class="text-sm font-medium text-slate-600">Lab</label>
-                    <input type="text" id="create-lab" name="lab" value="{{ old('lab') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-foto" class="text-sm font-medium text-slate-600">Foto Profil</label>
-                    <input type="file" id="create-foto" name="foto" accept="image/*" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                    <p class="text-xs text-slate-500">Format JPG, PNG, atau WEBP dengan ukuran maksimum 2 MB.</p>
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-nip" class="text-sm font-medium text-slate-600">NIP</label>
-                    <input type="text" id="create-nip" name="nip" value="{{ old('nip') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="create-nidn" class="text-sm font-medium text-slate-600">NIDN</label>
-                    <input type="text" id="create-nidn" name="nidn" value="{{ old('nidn') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="flex items-center justify-end gap-3 pt-4">
-                    <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-6" id="edit-modal">
-        <div class="relative w-full max-w-2xl rounded-2xl bg-white p-8 shadow-2xl ring-1 ring-slate-200">
-            <button type="button" class="modal-close absolute right-4 top-4 text-lg text-slate-400 transition hover:text-slate-600" data-modal-close>&times;</button>
-            <h3 class="text-xl font-semibold text-slate-900">Edit Profil Dosen</h3>
-            <form id="edit-form" method="POST" enctype="multipart/form-data" class="mt-6 grid gap-4">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="edit-profil_id" name="profil_id" value="{{ old('profil_id') }}">
-                <input type="hidden" name="sort" value="{{ old('sort', $sort) }}">
-                <input type="hidden" name="direction" value="{{ old('direction', $direction) }}">
-                <div class="grid gap-2">
-                    <label for="edit-kode_dosen" class="text-sm font-medium text-slate-600">Kode Dosen</label>
-                    <input type="text" id="edit-kode_dosen" name="kode_dosen" value="{{ old('kode_dosen') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-nama_dosen" class="text-sm font-medium text-slate-600">Nama Dosen</label>
-                    <input type="text" id="edit-nama_dosen" name="nama_dosen" value="{{ old('nama_dosen') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-prodi" class="text-sm font-medium text-slate-600">Program Studi</label>
-                    <input type="text" id="edit-prodi" name="prodi" value="{{ old('prodi') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-sub_kelompok_keahlian" class="text-sm font-medium text-slate-600">Sub Kelompok Keahlian</label>
-                    <input type="text" id="edit-sub_kelompok_keahlian" name="sub_kelompok_keahlian" value="{{ old('sub_kelompok_keahlian') }}" required class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-lab" class="text-sm font-medium text-slate-600">Lab</label>
-                    <input type="text" id="edit-lab" name="lab" value="{{ old('lab') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-foto" class="text-sm font-medium text-slate-600">Foto Profil</label>
-                    <input type="file" id="edit-foto" name="foto" accept="image/*" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                    <p class="text-xs text-slate-500">Unggah foto baru untuk mengganti foto yang tersimpan (maksimum 2 MB).</p>
-                    <div class="mt-2 flex items-center gap-3" data-preview-container>
-                        <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
-                            <img src="{{ $editingProfil?->foto_url }}" alt="{{ $editingProfil?->foto_url ? 'Foto ' . $editingProfil->nama_dosen : '' }}" class="h-full w-full object-cover object-center {{ $editingProfil?->foto_url ? '' : 'hidden' }}" data-preview-image>
-                            <span class="text-xs font-medium text-slate-500 {{ $editingProfil?->foto_url ? 'hidden' : '' }}" data-preview-placeholder>Belum ada foto</span>
-                        </div>
-                        <p class="text-xs text-slate-500">Foto saat ini.</p>
-                    </div>
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-nip" class="text-sm font-medium text-slate-600">NIP</label>
-                    <input type="text" id="edit-nip" name="nip" value="{{ old('nip') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="grid gap-2">
-                    <label for="edit-nidn" class="text-sm font-medium text-slate-600">NIDN</label>
-                    <input type="text" id="edit-nidn" name="nidn" value="{{ old('nidn') }}" class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100">
-                </div>
-                <div class="flex items-center justify-end gap-3 pt-4">
-                    <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                    <button type="submit" class="rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 p-6" id="delete-modal">
-        <div class="relative w-full max-w-lg rounded-2xl bg-white p-8 shadow-2xl ring-1 ring-slate-200">
-            <button type="button" class="modal-close absolute right-4 top-4 text-lg text-slate-400 transition hover:text-slate-600" data-modal-close>&times;</button>
-            <h3 class="text-xl font-semibold text-slate-900">Hapus Profil</h3>
-            <p id="delete-message" class="mt-3 text-sm text-slate-600">Apakah Anda yakin ingin menghapus profil ini?</p>
-            <form id="delete-form" method="POST" class="mt-6 flex items-center justify-end gap-3">
-                @csrf
-                @method('DELETE')
-                <input type="hidden" name="sort" value="{{ $sort }}">
-                <input type="hidden" name="direction" value="{{ $direction }}">
-                <button type="button" class="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100" data-modal-close>Batal</button>
-                <button type="submit" class="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-600">Hapus</button>
-            </form>
-        </div>
-    </div>
-@endpush
-
-@push('scripts')
-    <input
-        type="hidden"
-        id="profil-initial-state"
-        class="hidden"
-        value="{{ json_encode([
-            'modal' => $openModal ?? null,
-            'editingProfil' => $editingProfil ?? null,
-            'hasErrors' => $errors->any(),
-            'wasUpdate' => old('_method') === 'PUT',
-            'oldProfilId' => old('profil_id'),
-        ], JSON_UNESCAPED_UNICODE) }}"
-    >
-    <script>
-        const body = document.body;
-        const modals = document.querySelectorAll('.modal');
-        const initialStateInput = document.getElementById('profil-initial-state');
-        const initialState = initialStateInput ? JSON.parse(initialStateInput.value || '{}') : {};
-
-        function openModal(modal) {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            body.style.overflow = 'hidden';
-        }
-
-        function closeModal(modal) {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-            if (![...modals].some(m => !m.classList.contains('hidden'))) {
-                body.style.overflow = '';
-            }
-        }
-
-        document.querySelectorAll('[data-modal-target]').forEach(trigger => {
-            trigger.addEventListener('click', () => {
-                const target = document.getElementById(trigger.dataset.modalTarget);
-                if (!target) return;
-
-                if (trigger.dataset.action === 'edit') {
-                    const profileData = JSON.parse(trigger.dataset.profile);
-                    const template = trigger.dataset.updateTemplate;
-                    const form = document.getElementById('edit-form');
-                    form.action = template.replace('__ID__', profileData.id);
-                    form.querySelector('#edit-kode_dosen').value = profileData.kode_dosen ?? '';
-                    form.querySelector('#edit-nama_dosen').value = profileData.nama_dosen ?? '';
-                    form.querySelector('#edit-prodi').value = profileData.prodi ?? '';
-                    form.querySelector('#edit-sub_kelompok_keahlian').value = profileData.sub_kelompok_keahlian ?? '';
-                    form.querySelector('#edit-lab').value = profileData.lab ?? '';
-                    form.querySelector('#edit-nip').value = profileData.nip ?? '';
-                    form.querySelector('#edit-nidn').value = profileData.nidn ?? '';
-                    const previewContainer = form.querySelector('[data-preview-container]');
-                    const previewImage = form.querySelector('[data-preview-image]');
-                    const previewPlaceholder = form.querySelector('[data-preview-placeholder]');
-                    if (previewImage) {
-                        if (profileData.foto_url) {
-                            previewImage.src = profileData.foto_url;
-                            previewImage.alt = `Foto ${profileData.nama_dosen ?? 'dosen'}`;
-                            previewImage.classList.remove('hidden');
-                            if (previewPlaceholder) {
-                                previewPlaceholder.classList.add('hidden');
-                            }
-                        } else {
-                            previewImage.src = '';
-                            previewImage.alt = '';
-                            previewImage.classList.add('hidden');
-                            if (previewPlaceholder) {
-                                previewPlaceholder.classList.remove('hidden');
-                            }
-                        }
-                    }
-                    if (previewContainer) {
-                        previewContainer.classList.remove('hidden');
-                    }
-                    const idField = form.querySelector('#edit-profil_id');
-                    if (idField) {
-                        idField.value = profileData.id;
-                    }
-                }
-
-                if (trigger.dataset.action === 'delete') {
-                    const profileData = JSON.parse(trigger.dataset.profile);
-                    const template = trigger.dataset.destroyTemplate;
-                    const form = document.getElementById('delete-form');
-                    form.action = template.replace('__ID__', profileData.id);
-                    const message = document.getElementById('delete-message');
-                    message.textContent = `Apakah Anda yakin ingin menghapus ${profileData.nama_dosen}?`;
-                }
-
-                openModal(target);
-            });
-        });
-
-        document.querySelectorAll('[data-modal-close]').forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = button.closest('.modal');
-                if (modal) {
-                    closeModal(modal);
-                }
-            });
-        });
-
-        modals.forEach(modal => {
-            modal.addEventListener('click', event => {
-                if (event.target === modal) {
-                    closeModal(modal);
-                }
-            });
-        });
-
-        const initialModal = initialState.modal ?? null;
-        const initialEditingProfil = initialState.editingProfil ?? null;
-        const hasErrors = initialState.hasErrors ?? false;
-        const wasUpdate = initialState.wasUpdate ?? false;
-        const oldProfilId = initialState.oldProfilId ?? null;
-
-        if (initialModal === 'create') {
-            const modal = document.getElementById('create-modal');
-            if (modal) {
-                openModal(modal);
-            }
-        }
-
-        if (initialModal === 'edit' && initialEditingProfil) {
-            const modal = document.getElementById('edit-modal');
-            const editTrigger = document.querySelector('[data-action="edit"]');
-            if (modal && editTrigger) {
-                const template = editTrigger.dataset.updateTemplate;
-                const form = document.getElementById('edit-form');
-                form.action = template.replace('__ID__', initialEditingProfil.id);
-                form.querySelector('#edit-kode_dosen').value = initialEditingProfil.kode_dosen ?? '';
-                form.querySelector('#edit-nama_dosen').value = initialEditingProfil.nama_dosen ?? '';
-                form.querySelector('#edit-prodi').value = initialEditingProfil.prodi ?? '';
-                form.querySelector('#edit-sub_kelompok_keahlian').value = initialEditingProfil.sub_kelompok_keahlian ?? '';
-                form.querySelector('#edit-lab').value = initialEditingProfil.lab ?? '';
-                form.querySelector('#edit-nip').value = initialEditingProfil.nip ?? '';
-                form.querySelector('#edit-nidn').value = initialEditingProfil.nidn ?? '';
-                const previewImage = form.querySelector('[data-preview-image]');
-                const previewPlaceholder = form.querySelector('[data-preview-placeholder]');
-                if (previewImage) {
-                    if (initialEditingProfil.foto_url) {
-                        previewImage.src = initialEditingProfil.foto_url;
-                        previewImage.alt = `Foto ${initialEditingProfil.nama_dosen ?? 'dosen'}`;
-                        previewImage.classList.remove('hidden');
-                        if (previewPlaceholder) {
-                            previewPlaceholder.classList.add('hidden');
-                        }
-                    } else {
-                        previewImage.src = '';
-                        previewImage.alt = '';
-                        previewImage.classList.add('hidden');
-                        if (previewPlaceholder) {
-                            previewPlaceholder.classList.remove('hidden');
-                        }
-                    }
-                }
-                const idField = form.querySelector('#edit-profil_id');
-                if (idField) {
-                    idField.value = initialEditingProfil.id;
-                }
-                openModal(modal);
-            }
-        }
-
-        if (hasErrors && !wasUpdate) {
-            const modal = document.getElementById('create-modal');
-            if (modal) {
-                openModal(modal);
-            }
-        }
-
-        if (hasErrors && wasUpdate && oldProfilId) {
-            const modal = document.getElementById('edit-modal');
-            const editButtons = Array.from(document.querySelectorAll('[data-action="edit"]'));
-            const form = document.getElementById('edit-form');
-            const matchedButton = editButtons.find(button => {
-                try {
-                    const profileData = JSON.parse(button.dataset.profile);
-                    return Number(profileData.id) === Number(oldProfilId);
-                } catch (error) {
-                    return false;
-                }
-            });
-
-            if (modal && form) {
-                const template = (matchedButton ?? editButtons[0])?.dataset.updateTemplate;
-                if (template) {
-                    form.action = template.replace('__ID__', oldProfilId);
-                }
-
-                if (matchedButton) {
-                    try {
-                        const profileData = JSON.parse(matchedButton.dataset.profile);
-                        const previewImage = form.querySelector('[data-preview-image]');
-                        const previewPlaceholder = form.querySelector('[data-preview-placeholder]');
-                        if (previewImage) {
-                            if (profileData.foto_url) {
-                                previewImage.src = profileData.foto_url;
-                                previewImage.alt = `Foto ${profileData.nama_dosen ?? 'dosen'}`;
-                                previewImage.classList.remove('hidden');
-                                if (previewPlaceholder) {
-                                    previewPlaceholder.classList.add('hidden');
-                                }
-                            } else {
-                                previewImage.src = '';
-                                previewImage.alt = '';
-                                previewImage.classList.add('hidden');
-                                if (previewPlaceholder) {
-                                    previewPlaceholder.classList.remove('hidden');
-                                }
-                            }
-                        }
-                    } catch (error) {
-                        // ignore JSON parse issues
-                    }
-                }
-
-                openModal(modal);
-            }
-        }
-    </script>
-@endpush
