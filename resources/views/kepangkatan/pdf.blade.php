@@ -38,6 +38,26 @@
         color: #64748b;
         font-size: 10px;
       }
+      .indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+      .indicator-green {
+        background: #10b981;
+      }
+      .indicator-yellow {
+        background: #f59e0b;
+      }
+      .indicator-red {
+        background: #ef4444;
+      }
+      .indicator-default {
+        background: #94a3b8;
+      }
     </style>
   </head>
   <body>
@@ -55,6 +75,7 @@
           <th>Tanggal SK</th>
           <th>Status TMT</th>
           <th>Status Publikasi</th>
+          <th>Indikator</th>
         </tr>
       </thead>
       <tbody>
@@ -66,10 +87,13 @@
             <td>{{ $record->tanggal_sk ? $record->tanggal_sk->format('d/m/Y') : '-' }}</td>
             <td>{{ $record->status_tmt_label }}</td>
             <td>{{ $record->status_publikasi_label }}</td>
+            <td style="text-align: center;">
+              <span class="indicator indicator-{{ $record->indicator_color ?? 'default' }}"></span>
+            </td>
           </tr>
         @empty
           <tr>
-            <td colspan="6" class="muted">Tidak ada data kepangkatan untuk filter ini.</td>
+            <td colspan="7" class="muted">Tidak ada data kepangkatan untuk filter ini.</td>
           </tr>
         @endforelse
       </tbody>
