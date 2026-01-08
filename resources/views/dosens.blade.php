@@ -301,13 +301,13 @@
         type="hidden"
         id="profil-initial-state"
         class="hidden"
-        value="{{ e(json_encode([
+        value="{{ json_encode([
             'modal' => $openModal ?? null,
             'editingProfil' => $editingProfil ?? null,
             'hasErrors' => $errors->any(),
             'wasUpdate' => old('_method') === 'PUT',
             'oldProfilId' => old('profil_id'),
-        ], JSON_UNESCAPED_UNICODE)) }}"
+        ], JSON_UNESCAPED_UNICODE) }}"
     >
     <script>
         const body = document.body;
