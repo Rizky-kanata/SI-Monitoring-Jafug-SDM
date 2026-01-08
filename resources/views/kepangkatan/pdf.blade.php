@@ -36,6 +36,9 @@
       td {
         vertical-align: middle;
       }
+      .text-center {
+        text-align: center;
+      }
       .muted {
         color: #64748b;
         font-size: 10px;
@@ -76,23 +79,23 @@
       <thead>
         <tr>
           <th>Nama Dosen</th>
-          <th>Kode Dosen</th>
+          <th class="text-center">Kode Dosen</th>
           <th>Jabatan</th>
-          <th>Tanggal SK</th>
+          <th class="text-center">Tanggal SK</th>
           <th>Status TMT</th>
-          <th>Status Publikasi</th>
-          <th>Indikator</th>
+          <th class="text-center">Status Publikasi</th>
+          <th class="text-center">Indikator</th>
         </tr>
       </thead>
       <tbody>
         @forelse ($records as $record)
           <tr>
             <td>{{ $record->profil?->nama_dosen ?? '-' }}</td>
-            <td>{{ $record->profil?->kode_dosen ?? '-' }}</td>
+            <td class="text-center">{{ $record->profil?->kode_dosen ?? '-' }}</td>
             <td>{{ $record->jabatan_fungsional_label }}</td>
-            <td>{{ $record->tanggal_sk ? $record->tanggal_sk->format('d/m/Y') : '-' }}</td>
+            <td class="text-center">{{ $record->tanggal_sk ? $record->tanggal_sk->format('d/m/Y') : '-' }}</td>
             <td>{{ $record->status_tmt_label }}</td>
-            <td>{{ $record->status_publikasi_label }}</td>
+            <td class="text-center">{{ $record->status_publikasi_label }}</td>
             <td class="indicator-cell">
               <span class="indicator indicator-{{ $record->indicator_color ?? 'default' }}"></span>
             </td>
