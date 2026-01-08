@@ -1,0 +1,82 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+
+# Dependabot configuration for the `dosen-riib` repository.
+#
+# This repository is a Laravel application with a Vite/Tailwind front‑end.
+# It has two package manifest files at the repository root:
+#
+# * `composer.json` – manages PHP (production and development) dependencies via Composer.
+# * `package.json`  – manages JavaScript/Node development dependencies via npm.
+#
+# The configuration below schedules weekly dependency checks for both ecosystems,
+# groups updates to keep pull requests manageable, and applies sensible labels
+# and commit message prefixes.  Adjust schedules, labels or limits to suit
+# your workflow.
+
+updates:
+  # 1) Composer – PHP dependencies
+  - package-ecosystem: "composer"
+    directory: "/"           # root where composer.json is located
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Jakarta"
+    # Limit the number of open PRs Dependabot will create for Composer updates
+    open-pull-requests-limit: 10
+    # Apply labels to dependency update PRs for easier triage
+    labels: ["dependencies", "php"]
+    # Use conventional commit style messages
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Group similar dependency updates together. See docs for details:
+    # https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
+    groups:
+      composer-prod-minor-patch:
+        # Only include production dependencies (from the "require" block)
+        dependency-type: "production"
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      composer-dev-minor-patch:
+        # Only include development dependencies (from the "require-dev" block)
+        dependency-type: "development"
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      composer-major:
+        # Major updates are sent separately, regardless of dependency type
+        patterns: ["*"]
+        update-types: ["major"]
+
+  # 2) npm – JavaScript/Node dependencies
+  - package-ecosystem: "npm"
+    directory: "/"           # root where package.json is located
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:30"
+      timezone: "Asia/Jakarta"
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "javascript"]
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    groups:
+      npm-dev-minor-patch:
+        # Most dependencies in this project are development (build‑time) tools
+        dependency-type: "development"
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      npm-prod-minor-patch:
+        # If production dependencies are added later, they’ll be grouped here
+        dependency-type: "production"
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      npm-major:
+        patterns: ["*"]
+        update-types: ["major"]
