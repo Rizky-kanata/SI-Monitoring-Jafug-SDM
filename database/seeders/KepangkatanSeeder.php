@@ -15,29 +15,21 @@ class KepangkatanSeeder extends Seeder
     public function run(): void
     {
         $now = Carbon::now();
-        $jabatanMap = $this->loadJabatanCodes();
+        $metaMap = $this->loadKepangkatanMeta();
 
         Profil::query()
             ->orderBy('nama_dosen')
             ->get()
-            ->each(function (Profil $profil, int $index) use ($now, $jabatanMap) {
-                $jabatan = $this->resolveJabatan($profil, $jabatanMap);
+            ->each(function (Profil $profil) use ($now, $metaMap) {
+                $meta = $metaMap[$profil->kode_dosen] ?? [];
+                $jabatan = $this->resolveJabatan($profil, $meta['jabatan'] ?? null);
                 $pangkatGolongan = $this->mapJabatanToPangkat($jabatan);
-                $scenario = $index % 3;
-
-                if ($scenario === 0) {
-                    $tanggalSk = $now->copy()->addMonths(rand(1, 9))->toDateString();
-                    $isPublished = false;
-                    $catatan = 'Menunggu periode TMT dimulai.';
-                } elseif ($scenario === 1) {
-                    $tanggalSk = $now->copy()->subMonths(rand(1, 18))->toDateString();
-                    $isPublished = $index % 2 === 0;
-                    $catatan = $isPublished ? 'Publikasi sudah diurus.' : 'Publikasi belum diurus.';
-                } else {
-                    $tanggalSk = $now->copy()->subMonths(rand(30, 60))->toDateString();
-                    $isPublished = $index % 3 === 0;
-                    $catatan = $isPublished ? 'Publikasi sudah diurus.' : 'Publikasi belum diurus.';
-                }
+                $tanggalSk = $this->parseTanggal($meta['tanggal_tmt'] ?? null);
+                $tanggalMulai = $tanggalSk;
+                $tanggalTmt = $tanggalSk;
+                $statusPublikasi = strtolower(trim((string) ($meta['status_publikasi'] ?? '')));
+                $isPublished = $statusPublikasi === 'sudah';
+                $catatan = $isPublished ? 'Publikasi sudah diurus.' : 'Publikasi belum diurus.';
 
                 Kepangkatan::updateOrCreate(
                     ['profil_id' => $profil->id],
@@ -46,8 +38,8 @@ class KepangkatanSeeder extends Seeder
                         'pangkat' => $pangkatGolongan['pangkat'],
                         'golongan' => $pangkatGolongan['golongan'],
                         'tanggal_sk' => $tanggalSk,
-                        'tanggal_mulai' => $tanggalSk,
-                        'tanggal_tmt' => $tanggalSk,
+                        'tanggal_mulai' => $tanggalMulai,
+                        'tanggal_tmt' => $tanggalTmt,
                         'is_published' => $isPublished,
                         'catatan' => $catatan,
                     ]
@@ -55,9 +47,9 @@ class KepangkatanSeeder extends Seeder
             });
     }
 
-    private function resolveJabatan(Profil $profil, array $jabatanMap): string
+    private function resolveJabatan(Profil $profil, ?string $jabatanFromMeta = null): string
     {
-        $raw = strtoupper(trim((string) ($jabatanMap[$profil->kode_dosen] ?? $profil->jabatan_fungsional ?? ''))); // @phpstan-ignore-line
+        $raw = strtoupper(trim((string) ($jabatanFromMeta ?? $profil->jabatan_fungsional ?? ''))); // @phpstan-ignore-line
 
         return match ($raw) {
             'AA', 'ASISTEN AHLI' => 'AA',
@@ -82,9 +74,9 @@ class KepangkatanSeeder extends Seeder
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, array{jabatan: string, tanggal_tmt: string|null, status_publikasi: string|null}>
      */
-    private function loadJabatanCodes(): array
+    private function loadKepangkatanMeta(): array
     {
         $path = base_path('database/data/dosen_riib.json');
         $content = file_get_contents($path);
@@ -102,9 +94,28 @@ class KepangkatanSeeder extends Seeder
 
         return collect($decoded)
             ->mapWithKeys(fn ($item) => [
-                $item['kode_dosen'] => strtoupper(trim((string) ($item['jabatan_fungsional'] ?? ''))),
+                $item['kode_dosen'] => [
+                    'jabatan' => strtoupper(trim((string) ($item['jabatan_fungsional'] ?? ''))),
+                    'tanggal_tmt' => $item['tanggal_tmt'] ?? null,
+                    'status_publikasi' => $item['status_publikasi'] ?? null,
+                ],
             ])
             ->all();
+    }
+
+    private function parseTanggal(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($value)->toDateString();
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
 }

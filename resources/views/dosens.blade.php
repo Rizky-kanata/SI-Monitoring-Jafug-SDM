@@ -10,8 +10,8 @@
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
-                <h2 class="text-2xl font-semibold text-slate-900">Profil Dosen Kelompok Keahlian RIIB</h2>
-                <p class="text-sm text-slate-500">Daftar pantau dan pengelolaan informasi profil dosen kelompok keahlian RIIB.</p>
+                <h2 class="text-2xl font-semibold text-slate-900">Profil Dosen RIIB</h2>
+                <p class="text-sm text-slate-500">Daftar pantau dan pengelolaan informasi profil dosen RIIB.</p>
             </div>
             <a
                 href="{{ route('profils.create', ['sort' => $sort, 'direction' => $direction]) }}"
