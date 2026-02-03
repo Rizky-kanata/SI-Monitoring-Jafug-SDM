@@ -79,6 +79,12 @@ class ProfilSeeder extends Seeder
      */
     private function resolveLab(array $item): string
     {
+        $lab = trim((string) ($item['lab'] ?? ''));
+
+        if ($lab !== '') {
+            return $lab;
+        }
+
         $seed = (string) ($item['kode_dosen'] ?? $item['nama_dosen'] ?? uniqid());
         $index = abs((int) crc32($seed)) % count(self::LAB_OPTIONS);
 
