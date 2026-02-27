@@ -1,0 +1,10 @@
+{
+    "domainName":  "iebi.rg.telkomuniversity.ac.id",
+    "newPath":  "/home/iebi.rg.telkomuniversity.ac.id/public_html/master_data/storage/app/public",
+    "fileAndFolders":  [
+                           "profil-fotos"
+                       ],
+    "method":  "move",
+    "domainRandomSeed":  "",
+    "basePath":  "/home/iebi.rg.telkomuniversity.ac.id/public_html/master_data/storage"
+}
