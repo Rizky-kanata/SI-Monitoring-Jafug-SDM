@@ -45,6 +45,22 @@ Route::middleware('auth')->group(function () {
         ->name('kepangkatan.export');
 
     Route::get('/diagram-generator-link', function () {
+        if (! request()->user()?->isAdmin()) {
+            $publicLogin = (string) config('services.diagram_generator.public_login_url', '/diagram-workflow-penelitian-dosen/login');
+
+            if (! filter_var($publicLogin, FILTER_VALIDATE_URL)) {
+                if (str_starts_with($publicLogin, '//')) {
+                    $publicLogin = request()->getScheme() . ':' . $publicLogin;
+                } elseif (str_starts_with($publicLogin, '/')) {
+                    $publicLogin = request()->getSchemeAndHttpHost() . $publicLogin;
+                } else {
+                    $publicLogin = url($publicLogin);
+                }
+            }
+
+            return redirect()->away($publicLogin);
+        }
+
         $base = rtrim(config('services.diagram_generator.url', '/diagram-generator/public/index.php'), '/');
         $secret = (string) config('services.diagram_generator.sso_secret', '');
         if ($secret === '') {

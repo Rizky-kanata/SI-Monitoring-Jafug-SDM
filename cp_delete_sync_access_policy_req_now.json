@@ -1,0 +1,10 @@
+{
+    "domainName":  "iebi.rg.telkomuniversity.ac.id",
+    "skipTrash":  true,
+    "fileAndFolders":  [
+                           "sync_access_policy.php"
+                       ],
+    "path":  "/home/iebi.rg.telkomuniversity.ac.id/public_html/master_data",
+    "method":  "deleteFolderOrFile",
+    "domainRandomSeed":  ""
+}

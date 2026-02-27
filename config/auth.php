@@ -18,6 +18,11 @@ return [
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
+    'admin_usernames' => array_values(array_filter(array_map(
+        static fn (string $value): string => trim($value),
+        explode(',', (string) env('ADMIN_USERNAMES', 'mochamad_nizar_palefi_maady'))
+    ))),
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards

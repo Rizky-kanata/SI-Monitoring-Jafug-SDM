@@ -60,6 +60,7 @@ return [
         'url' => env('DIAGRAM_GENERATOR_URL', '/diagram-generator/public/index.php'),
         'sso_secret' => env('DIAGRAM_GENERATOR_SSO_SECRET'),
         'sso_ttl' => env('DIAGRAM_GENERATOR_SSO_TTL', 300),
+        'public_login_url' => env('DIAGRAM_GENERATOR_PUBLIC_LOGIN_URL', '/diagram-workflow-penelitian-dosen/login'),
     ],
 
 ];

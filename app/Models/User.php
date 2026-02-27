@@ -46,4 +46,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin(): bool
+    {
+        $adminUsernames = config('auth.admin_usernames', []);
+
+        return in_array($this->username, $adminUsernames, true);
+    }
 }
