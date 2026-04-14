@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="{{ asset('images/TelU Sby Centered.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo telu.png') }}">
 
     <title>@yield('title', config('app.name', 'Laravel'))</title>
 
@@ -40,8 +40,8 @@
                 </span>
             </button>
             <div class="flex flex-col leading-tight">
-                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Admin Panel</span>
-                <span class="text-lg font-semibold text-white">Dosen KK RIIB</span>
+                <span class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Portal SDM</span>
+                <span class="text-lg font-semibold text-white">Monitoring Kepangkatan</span>
             </div>
         </header>
 
@@ -67,19 +67,17 @@
     @else
     <div class="flex min-h-screen items-center justify-center bg-white px-6 text-center text-slate-700">
         <div class="max-w-xl space-y-4">
-            <h1 class="text-2xl font-semibold text-slate-900">Build assets before loading the dashboard</h1>
+            <h1 class="text-2xl font-semibold text-slate-900">Build assets dulu sebelum dashboard dibuka</h1>
             <p>
-                The Vite manifest could not be found at <code>public/build/manifest.json</code>. To generate it, run the
-                following commands from the project root:
+                File build belum ada di <code>public/build/manifest.json</code>. Jalankan perintah berikut dari root project:
             </p>
             <ol class="list-decimal space-y-1 text-left">
                 <li><code>npm install</code></li>
                 <li>
-                    Either <code>npm run dev</code> while developing or <code>npm run build</code> before serving the
-                    compiled assets.
+                    Pakai <code>npm run dev</code> saat develop atau <code>npm run build</code> sebelum project diserve.
                 </li>
             </ol>
-            <p>Once the manifest exists you can reload this page.</p>
+            <p>Kalau manifest udah kebentuk, tinggal reload halaman ini.</p>
         </div>
     </div>
     @endif

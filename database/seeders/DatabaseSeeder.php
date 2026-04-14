@@ -29,9 +29,6 @@ class DatabaseSeeder extends Seeder
             ])->save();
         }
 
-        $this->call([
-            ProfilSeeder::class,
-            KepangkatanSeeder::class,
-        ]);
+        // Data dosen dan kepangkatan versi SDM diisi lewat input manual atau import Excel.
     }
 }

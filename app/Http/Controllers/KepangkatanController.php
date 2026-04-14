@@ -65,6 +65,8 @@ class KepangkatanController extends Controller
         return view('kepangkatan.create', [
             'profilOptions' => $this->profilOptions(),
             'jabatanOptions' => Kepangkatan::jabatanOptions(),
+            'pangkatOptions' => Kepangkatan::pangkatOptions(),
+            'golonganOptions' => Kepangkatan::golonganOptions(),
         ]);
     }
 
@@ -91,6 +93,8 @@ class KepangkatanController extends Controller
             'kepangkatan' => $kepangkatan->load('profil'),
             'profilOptions' => $this->profilOptions($kepangkatan->profil_id),
             'jabatanOptions' => Kepangkatan::jabatanOptions(),
+            'pangkatOptions' => Kepangkatan::pangkatOptions(),
+            'golonganOptions' => Kepangkatan::golonganOptions(),
         ]);
     }
 
@@ -166,8 +170,8 @@ class KepangkatanController extends Controller
                 Rule::unique('kepangkatans', 'profil_id')->ignore($ignoreId),
             ],
             'jabatan_fungsional' => ['required', Rule::in(array_keys(Kepangkatan::jabatanOptions()))],
-            'pangkat' => ['nullable', 'string', 'max:255'],
-            'golongan' => ['nullable', 'string', 'max:255'],
+            'pangkat' => ['nullable', Rule::in(array_keys(Kepangkatan::pangkatOptions()))],
+            'golongan' => ['nullable', Rule::in(array_keys(Kepangkatan::golonganOptions()))],
             'tanggal_sk' => ['nullable', 'date'],
             'is_published' => ['nullable', 'boolean'],
             'catatan' => ['nullable', 'string'],
@@ -175,6 +179,8 @@ class KepangkatanController extends Controller
             'profil_id.required' => 'Profil dosen wajib dipilih.',
             'profil_id.exists' => 'Profil dosen tidak ditemukan.',
             'profil_id.unique' => 'Profil dosen sudah memiliki data kepangkatan.',
+            'pangkat.in' => 'Pangkat harus dipilih dari daftar yang tersedia.',
+            'golongan.in' => 'Golongan harus dipilih dari daftar yang tersedia.',
         ]);
 
         $data['is_published'] = $request->boolean('is_published');

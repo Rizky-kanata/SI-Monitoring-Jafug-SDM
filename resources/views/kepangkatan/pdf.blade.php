@@ -70,7 +70,7 @@
     </style>
   </head>
   <body>
-    <h1>Rekap Kepangkatan Dosen RIIB</h1>
+    <h1>Rekap Kepangkatan Dosen SDM</h1>
     <div class="meta">
       Status TMT: {{ $statusLabel }} | Dicetak: {{ now()->format('d/m/Y H:i') }}
     </div>

@@ -10,8 +10,7 @@
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div class="space-y-1">
-                <h1 class="text-2xl font-semibold text-slate-900">Manajemen Kepangkatan Dosen</h1>
-                <p class="text-sm text-slate-500">Pantau proses kenaikan pangkat (TMT) dan catatan tindak lanjut untuk setiap dosen KK RIIB.</p>
+                <h1 class="text-2xl font-semibold text-slate-900">Monitoring Kepangkatan Dosen</h1>
             </div>
             <div class="flex flex-col items-center gap-3 md:flex-row">
                 <div class="inline-flex items-center gap-3 rounded-3xl bg-slate-50 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 ring-1 ring-slate-200 shadow-sm">
@@ -22,10 +21,23 @@
                     </span>
                     <div class="text-right">
                         <p class="text-[0.6rem] tracking-[0.2em] text-slate-400">Hari ini</p>
-                        <p class="text-sm font-semibold tracking-widest text-slate-700">{{ now()->translatedFormat('l, d F Y') }}</p>
+                        <p id="hari-ini-label" class="text-sm font-semibold tracking-widest text-slate-700">{{ now()->translatedFormat('l, d F Y') }}</p>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-8 grid gap-4 lg:grid-cols-2">
+            <a href="{{ route('profils.index') }}" class="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition hover:bg-slate-100">
+                <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Data Dosen</p>
+                <h2 class="mt-2 text-lg font-semibold text-slate-900">Data dosen</h2>
+                <p class="mt-2 text-sm text-slate-500">Kelola profil dosen, import Excel, dan template dari satu halaman khusus.</p>
+            </a>
+            <a href="{{ route('kepangkatan.create') }}" class="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition hover:bg-slate-100">
+                <p class="text-xs font-semibold uppercase tracking-wide text-indigo-600">Input Manual</p>
+                <h2 class="mt-2 text-lg font-semibold text-slate-900">Tambah data kepangkatan</h2>
+                <p class="mt-2 text-sm text-slate-500">Masukkan status kenaikan pangkat dosen satu per satu dari sini.</p>
+            </a>
         </div>
 
         <form method="GET" action="{{ route('kepangkatan.index') }}" class="mt-8 rounded-2xl border border-slate-200 bg-slate-50/60 p-4">
@@ -207,3 +219,27 @@
         @endif
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        (function () {
+            const dateLabel = document.getElementById('hari-ini-label');
+            if (!dateLabel) return;
+
+            const formatter = new Intl.DateTimeFormat('id-ID', {
+                weekday: 'long',
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+            });
+
+            const renderDate = () => {
+                const now = new Date();
+                dateLabel.textContent = formatter.format(now).toUpperCase();
+            };
+
+            renderDate();
+            setInterval(renderDate, 60000);
+        })();
+    </script>
+@endpush

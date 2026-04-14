@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Admin RIIB')
+@section('title', 'Dashboard Monitoring Kepangkatan SDM')
 
 @section('sidebar')
     <x-sidebar class="h-full" />
@@ -16,7 +16,7 @@
                         {{ $user?->name ?? 'Administrator' }}
                     </h1>
                     <p class="mt-2 max-w-xl text-sm text-slate-500">
-                        Lihat ringkasan singkat mengenai aktivitas data profil dan kepangkatan dosen RIIB.
+                        Lihat ringkasan singkat mengenai aktivitas data dosen dan kepangkatan versi SDM.
                     </p>
                 </div>
                 <div class="rounded-2xl bg-slate-900 px-6 py-4 text-white shadow-lg">
@@ -31,7 +31,7 @@
             <div class="rounded-3xl bg-white p-6 shadow-lg ring-1 ring-slate-200">
                 <p class="text-sm font-medium text-slate-500">Total Profil Dosen</p>
                 <p class="mt-3 text-4xl font-semibold text-slate-900">{{ number_format($totalProfil) }}</p>
-                <p class="mt-2 text-sm text-slate-500">Jumlah dosen dalam basis data RIIB.</p>
+                <p class="mt-2 text-sm text-slate-500">Jumlah dosen dalam basis data SDM.</p>
                 <a
                     href="{{ route('profils.index') }}"
                     class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700"

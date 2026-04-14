@@ -9,9 +9,9 @@
 @section('content')
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Profil Dosen</p>
-            <h1 class="text-2xl font-semibold text-slate-900">Ubah Profil Dosen</h1>
-            <p class="text-sm text-slate-500">Perbarui informasi profil untuk {{ $profil->nama_dosen }}.</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Data Dosen</p>
+            <h1 class="text-2xl font-semibold text-slate-900">Ubah Data Dosen</h1>
+            <p class="text-sm text-slate-500">Perbarui data dosen untuk {{ $profil->nama_dosen }}.</p>
         </div>
 
         @if ($errors->any())
@@ -25,7 +25,7 @@
             </div>
         @endif
 
-        <form action="{{ route('profils.update', $profil) }}" method="POST" enctype="multipart/form-data" class="mt-8 space-y-8">
+        <form action="{{ route('profils.update', $profil) }}" method="POST" class="mt-8 space-y-8">
             @csrf
             @method('PUT')
             <input type="hidden" name="sort" value="{{ old('sort', $sort) }}">

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Admin RIIB</title>
+    <title>Login Monitoring Kepangkatan SDM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -41,7 +41,7 @@
 
         .logo {
             display: block;
-            width: 240px;
+            width: 96px;
             max-width: 100%;
             margin: 0 auto 20px;
         }
@@ -236,12 +236,12 @@
 <body>
     <main class="card" aria-labelledby="login-heading">
         <img
-            src="{{ asset('images/TelU Sby-1.png') }}"
+            src="{{ asset('images/TelU Sby Centered.png') }}"
             alt="Telkom University Surabaya"
             class="logo"
         >
-        <h1 id="login-heading">Portal Admin RIIB</h1>
-        <p class="subtitle">Masuk dengan kredensial admin untuk mengelola data dosen RIIB.</p>
+        <h1 id="login-heading">Monitoring Kepangkatan SDM</h1>
+        <p class="subtitle">Masuk untuk mengelola data dosen dan kepangkatan.</p>
 
         @if ($errors->any())
             <div class="alert" role="alert">

@@ -36,7 +36,7 @@ class SendPasswordOtpEmail implements ShouldQueue
         $mailer->send(
             $this->email,
             $this->name,
-            'Kode OTP Reset Password Portal Admin RIIB',
+            'Kode OTP Reset Password Monitoring Kepangkatan SDM',
             $html
         );
     }

@@ -25,6 +25,46 @@ class Kepangkatan extends Model
         'NJFA' => 'Non-JFA',
     ];
 
+    public const PANGKAT_OPTIONS = [
+        'Juru Muda',
+        'Juru Muda Tingkat I',
+        'Juru',
+        'Juru Tingkat I',
+        'Pengatur Muda',
+        'Pengatur Muda Tingkat I',
+        'Pengatur',
+        'Pengatur Tingkat I',
+        'Penata Muda',
+        'Penata Muda Tingkat I',
+        'Penata',
+        'Penata Tingkat I',
+        'Pembina',
+        'Pembina Tingkat I',
+        'Pembina Utama Muda',
+        'Pembina Utama Madya',
+        'Pembina Utama',
+    ];
+
+    public const GOLONGAN_OPTIONS = [
+        'I/a',
+        'I/b',
+        'I/c',
+        'I/d',
+        'II/a',
+        'II/b',
+        'II/c',
+        'II/d',
+        'III/a',
+        'III/b',
+        'III/c',
+        'III/d',
+        'IV/a',
+        'IV/b',
+        'IV/c',
+        'IV/d',
+        'IV/e',
+    ];
+
     protected $fillable = [
         'profil_id',
         'jabatan_fungsional',
@@ -52,6 +92,16 @@ class Kepangkatan extends Model
     public static function tmtStatusOptions(): array
     {
         return self::TMT_STATUS;
+    }
+
+    public static function pangkatOptions(): array
+    {
+        return array_combine(self::PANGKAT_OPTIONS, self::PANGKAT_OPTIONS);
+    }
+
+    public static function golonganOptions(): array
+    {
+        return array_combine(self::GOLONGAN_OPTIONS, self::GOLONGAN_OPTIONS);
     }
 
     public function profil(): BelongsTo

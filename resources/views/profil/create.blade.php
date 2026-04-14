@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Profil Dosen')
+@section('title', 'Tambah Data Dosen')
 
 @section('sidebar')
     <x-sidebar class="h-full" />
@@ -9,9 +9,9 @@
 @section('content')
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="space-y-1">
-            <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Profil Dosen</p>
-            <h1 class="text-2xl font-semibold text-slate-900">Tambah Profil Dosen</h1>
-            <p class="text-sm text-slate-500">Lengkapi informasi profil dosen untuk kelompok keahlian RIIB.</p>
+            <p class="text-xs font-semibold uppercase tracking-wide text-blue-600">Input Manual</p>
+            <h1 class="text-2xl font-semibold text-slate-900">Tambah Data Dosen</h1>
+            <p class="text-sm text-slate-500">Masukin data dosen satuan di sini kalau gak mau lewat upload Excel.</p>
         </div>
 
         @if ($errors->any())
@@ -25,7 +25,7 @@
             </div>
         @endif
 
-        <form action="{{ route('profils.store') }}" method="POST" enctype="multipart/form-data" class="mt-8 space-y-8">
+        <form action="{{ route('profils.store') }}" method="POST" class="mt-8 space-y-8">
             @csrf
             <input type="hidden" name="sort" value="{{ old('sort', $sort) }}">
             <input type="hidden" name="direction" value="{{ old('direction', $direction) }}">
@@ -43,7 +43,7 @@
                     type="submit"
                     class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
-                    Simpan Profil
+                    Simpan Data Dosen
                 </button>
             </div>
         </form>

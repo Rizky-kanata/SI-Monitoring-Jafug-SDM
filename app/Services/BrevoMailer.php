@@ -45,7 +45,7 @@ class BrevoMailer
                 ],
             ])
             ->setHeaders([
-                'X-Mailer' => 'Portal Admin RIIB',
+                'X-Mailer' => 'Monitoring Kepangkatan SDM',
             ]);
 
         try {

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Facades\Storage;
 
 class Profil extends Model
 {
@@ -17,30 +16,12 @@ class Profil extends Model
         'lab',
         'nip',
         'nidn',
-        'foto_path',
-    ];
-
-    protected $appends = [
-        'foto_url',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
-
-    public function getFotoUrlAttribute(): ?string
-    {
-        if (!$this->foto_path) {
-            return null;
-        }
-
-        if (!Storage::disk('public')->exists($this->foto_path)) {
-            return null;
-        }
-
-        return Storage::disk('public')->url($this->foto_path);
-    }
 
     public function kepangkatan(): HasOne
     {

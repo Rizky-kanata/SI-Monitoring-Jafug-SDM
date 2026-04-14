@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Dosen RIIB')
+@section('title', 'Profil Dosen SDM')
 
 @section('sidebar')
     <x-sidebar class="h-full" />
@@ -9,8 +9,8 @@
 @section('content')
     <div class="rounded-3xl bg-white p-8 shadow-xl ring-1 ring-slate-200">
         <div class="space-y-2">
-            <h1 class="text-2xl font-semibold text-slate-900">Daftar Profil Dosen RIIB</h1>
-            <p class="text-sm text-slate-500">Ringkasan informasi profil dosen di RIIB.</p>
+            <h1 class="text-2xl font-semibold text-slate-900">Daftar Profil Dosen SDM</h1>
+            <p class="text-sm text-slate-500">Ringkasan informasi profil dosen versi SDM.</p>
         </div>
 
         <div class="mt-8 overflow-hidden rounded-2xl border border-slate-200">

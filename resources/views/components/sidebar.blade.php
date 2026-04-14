@@ -17,12 +17,6 @@
             'href' => route('kepangkatan.index'),
             'active' => request()->routeIs('kepangkatan.*'),
         ],
-        [
-            'label' => 'Data Diagram RIIB',
-            'href' => route('diagram.generator'),
-            'active' => request()->routeIs('diagram.generator'),
-            'new_tab' => true,
-        ],
     ];
 
     $navLinks = collect(empty($links) ? $defaultLinks : $links)
@@ -40,15 +34,15 @@
         <img
             src="{{ asset('images/TelU Sby-1.png') }}"
             alt="Telkom University Surabaya"
-            class="w-full max-w-[180px] h-auto object-contain"
+            class="w-full max-w-[210px] h-auto object-contain"
         >
         <div class="space-y-1">
-            <h1 class="text-lg font-semibold leading-tight">Admin Dosen KK RIIB</h1>
-            <p class="text-sm text-slate-200/80">Pengelolaan profil dosen kelompok keahlian RIIB.</p>
+            <h1 class="text-lg font-semibold leading-tight">Admin Dosen SDM</h1>
+            <p class="text-sm text-slate-200/80">Pengelolaan data dosen dan kepangkatan.</p>
         </div>
     </div>
 
-    <nav class="space-y-1">
+    <nav class="space-y-2">
         @foreach ($navLinks as $link)
             @php
                 $isActive = $link['active'] ?? false;
@@ -61,9 +55,9 @@
                     target="_blank" rel="noopener noreferrer"
                 @endif
                 @class([
-                    'flex items-center rounded-2xl px-4 py-2 text-sm font-medium transition',
+                    'flex items-center rounded-full px-6 py-3 text-base font-semibold transition',
                     'bg-white/10 text-white shadow-sm backdrop-blur hover:bg-white/15' => $isActive,
-                    'text-slate-200/80 hover:bg-white/10 hover:text-white' => ! $isActive,
+                    'text-slate-200/90 hover:bg-white/10 hover:text-white' => ! $isActive,
                 ])
             >
                 {{ $link['label'] ?? '' }}

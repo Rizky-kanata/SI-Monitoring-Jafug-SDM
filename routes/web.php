@@ -8,7 +8,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return Auth::check()
@@ -33,10 +33,48 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    foreach (['portal-sdm', 'beranda-sdm'] as $dashboardAlias) {
+        Route::get("/{$dashboardAlias}", DashboardController::class);
+    }
 
-    Route::resource('profils', ProfilController::class)
-        ->names('profils')
-        ->except(['show']);
+    Route::prefix('data-dosen')->name('profils.')->group(function () {
+        Route::get('/', [ProfilController::class, 'index'])->name('index');
+        Route::get('/create', [ProfilController::class, 'create'])->name('create');
+        Route::post('/', [ProfilController::class, 'store'])->name('store');
+        Route::get('/template/download', [ProfilController::class, 'downloadTemplate'])->name('template');
+        Route::post('/import', [ProfilController::class, 'import'])->name('import');
+        Route::get('/{profil}/edit', [ProfilController::class, 'edit'])->name('edit');
+        Route::put('/{profil}', [ProfilController::class, 'update'])->name('update');
+        Route::delete('/{profil}', [ProfilController::class, 'destroy'])->name('destroy');
+    });
+
+    foreach (['dosen', 'profil-dosen', 'data-profil-dosen'] as $profilAlias) {
+        Route::get("/{$profilAlias}", function (Request $request) {
+            return redirect()->route('profils.index', $request->query());
+        });
+    }
+
+    Route::get('/profils', function (Request $request) {
+        return redirect()->route('profils.index', $request->query());
+    });
+    Route::get('/profils/create', function () {
+        return redirect()->route('profils.create');
+    });
+    Route::get('/profils/template/download', function () {
+        return redirect()->route('profils.template');
+    });
+    Route::post('/profils/import', function () {
+        abort(410);
+    });
+    Route::get('/profils/{profil}/edit', function ($profil) {
+        return redirect()->route('profils.edit', ['profil' => $profil]);
+    });
+    Route::put('/profils/{profil}', function () {
+        abort(410);
+    });
+    Route::delete('/profils/{profil}', function () {
+        abort(410);
+    });
 
     Route::resource('kepangkatan', KepangkatanController::class)
         ->names('kepangkatan')
@@ -44,45 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('kepangkatan/export/pdf', [KepangkatanController::class, 'exportPdf'])
         ->name('kepangkatan.export');
 
-    Route::get('/diagram-generator-link', function () {
-        if (! request()->user()?->isAdmin()) {
-            $publicLogin = (string) config('services.diagram_generator.public_login_url', '/diagram-workflow-penelitian-dosen/login');
-
-            if (! filter_var($publicLogin, FILTER_VALIDATE_URL)) {
-                if (str_starts_with($publicLogin, '//')) {
-                    $publicLogin = request()->getScheme() . ':' . $publicLogin;
-                } elseif (str_starts_with($publicLogin, '/')) {
-                    $publicLogin = request()->getSchemeAndHttpHost() . $publicLogin;
-                } else {
-                    $publicLogin = url($publicLogin);
-                }
-            }
-
-            return redirect()->away($publicLogin);
-        }
-
-        $base = rtrim(config('services.diagram_generator.url', '/diagram-generator/public/index.php'), '/');
-        $secret = (string) config('services.diagram_generator.sso_secret', '');
-        if ($secret === '') {
-            $target = "{$base}/login";
-        } else {
-            $timestamp = now()->timestamp;
-            $nonce = Str::random(16);
-            $payload = $timestamp . '|' . $nonce;
-            $signature = hash_hmac('sha256', $payload, $secret);
-            $target = "{$base}/sso/admin?timestamp={$timestamp}&nonce={$nonce}&signature={$signature}";
-        }
-
-        if (! filter_var($target, FILTER_VALIDATE_URL)) {
-            if (str_starts_with($target, '//')) {
-                $target = request()->getScheme() . ':' . $target;
-            } elseif (str_starts_with($target, '/')) {
-                $target = request()->getSchemeAndHttpHost() . $target;
-            } else {
-                $target = url($target);
-            }
-        }
-
-        return redirect()->away($target);
-    })->name('diagram.generator');
+    foreach (['monitoring-kepangkatan', 'data-kepangkatan', 'kepangkatan-dosen'] as $kepangkatanAlias) {
+        Route::get("/{$kepangkatanAlias}", [KepangkatanController::class, 'index']);
+    }
 });

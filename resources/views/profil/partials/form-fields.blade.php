@@ -78,25 +78,3 @@
         >
     </div>
 </div>
-
-<div class="grid gap-2">
-    <label for="foto" class="text-sm font-medium text-slate-600">Foto Profil</label>
-    <input
-        type="file"
-        id="foto"
-        name="foto"
-        accept="image/*"
-        class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100"
-    >
-    <p class="text-xs text-slate-500">
-        {{ $profil ? 'Unggah foto baru untuk mengganti foto yang tersimpan (maksimum 2 MB).' : 'Format JPG, PNG, atau WEBP dengan ukuran maksimum 2 MB.' }}
-    </p>
-    @if ($profil?->foto_url)
-        <div class="mt-2 flex items-center gap-3">
-            <div class="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200">
-                <img src="{{ $profil->foto_url }}" alt="Foto {{ $profil->nama_dosen }}" class="h-full w-full object-cover object-center">
-            </div>
-            <p class="text-xs text-slate-500">Foto saat ini.</p>
-        </div>
-    @endif
-</div>
