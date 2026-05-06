@@ -10,7 +10,7 @@ use ZipArchive;
 
 class SimpleXlsx
 {
-    public static function create(array $headers, array $rows = []): string
+    public static function create(array $headers, array $rows = [], array $options = []): string
     {
         $tempPath = tempnam(sys_get_temp_dir(), 'xlsx-template-');
 
@@ -31,7 +31,7 @@ class SimpleXlsx
         $zip->addFromString('xl/workbook.xml', self::workbookXml());
         $zip->addFromString('xl/_rels/workbook.xml.rels', self::workbookRelsXml());
         $zip->addFromString('xl/styles.xml', self::stylesXml());
-        $zip->addFromString('xl/worksheets/sheet1.xml', self::worksheetXml($headers, $rows));
+        $zip->addFromString('xl/worksheets/sheet1.xml', self::worksheetXml($headers, $rows, $options));
         $zip->close();
 
         $content = file_get_contents($tempPath);
@@ -144,10 +144,11 @@ class SimpleXlsx
         return $rows;
     }
 
-    private static function worksheetXml(array $headers, array $rows): string
+    private static function worksheetXml(array $headers, array $rows, array $options = []): string
     {
         $allRows = array_merge([$headers], $rows);
         $rowXml = [];
+        $textColumns = self::normalizeColumnIndexes($options['text_columns'] ?? [], count($headers));
 
         foreach ($allRows as $rowNumber => $row) {
             $cells = [];
@@ -155,7 +156,15 @@ class SimpleXlsx
             foreach (array_values($row) as $columnIndex => $value) {
                 $reference = self::columnLetter($columnIndex) . ($rowNumber + 1);
                 $escapedValue = htmlspecialchars((string) $value, ENT_XML1);
-                $style = $rowNumber === 0 ? ' s="1"' : '';
+                $styleId = null;
+
+                if ($rowNumber === 0) {
+                    $styleId = 1;
+                } elseif (in_array($columnIndex, $textColumns, true)) {
+                    $styleId = 2;
+                }
+
+                $style = $styleId === null ? '' : sprintf(' s="%d"', $styleId);
 
                 $cells[] = sprintf(
                     '<c r="%s" t="inlineStr"%s><is><t>%s</t></is></c>',
@@ -171,6 +180,7 @@ class SimpleXlsx
         $lastColumn = self::columnLetter(max(count($headers) - 1, 0));
         $lastRow = count($allRows);
         $dimension = sprintf('A1:%s%d', $lastColumn, $lastRow);
+        $columnsXml = self::columnsXml($textColumns);
 
         return sprintf(
             <<<'XML'
@@ -181,12 +191,14 @@ class SimpleXlsx
     <sheetView workbookViewId="0"/>
   </sheetViews>
   <sheetFormatPr defaultRowHeight="15"/>
+  %s
   <sheetData>
     %s
   </sheetData>
 </worksheet>
 XML,
             $dimension,
+            $columnsXml,
             implode('', $rowXml)
         );
     }
@@ -264,15 +276,46 @@ XML;
   <cellStyleXfs count="1">
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0"/>
   </cellStyleXfs>
-  <cellXfs count="2">
+  <cellXfs count="3">
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
     <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+    <xf numFmtId="49" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>
   </cellXfs>
   <cellStyles count="1">
     <cellStyle name="Normal" xfId="0" builtinId="0"/>
   </cellStyles>
 </styleSheet>
 XML;
+    }
+
+    private static function columnsXml(array $textColumns): string
+    {
+        if ($textColumns === []) {
+            return '';
+        }
+
+        $columns = array_map(function (int $columnIndex) {
+            $excelColumn = $columnIndex + 1;
+
+            return sprintf(
+                '<col min="%d" max="%d" width="15" style="2" customWidth="1"/>',
+                $excelColumn,
+                $excelColumn
+            );
+        }, $textColumns);
+
+        return sprintf('<cols>%s</cols>', implode('', $columns));
+    }
+
+    private static function normalizeColumnIndexes(array $columns, int $headerCount): array
+    {
+        return collect($columns)
+            ->filter(fn ($column) => is_int($column) || ctype_digit((string) $column))
+            ->map(fn ($column) => (int) $column)
+            ->filter(fn (int $column) => $column >= 0 && $column < $headerCount)
+            ->unique()
+            ->values()
+            ->all();
     }
 
     private static function columnIndexFromReference(string $reference): int

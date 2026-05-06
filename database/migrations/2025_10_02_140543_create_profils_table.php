@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('kode_dosen')->unique();
             $table->string('nama_dosen');
             $table->string('prodi');
-            $table->string('sub_kelompok_keahlian');
+            $table->string('kelompok_keahlian');
             $table->string('nip')->nullable()->unique();
             $table->string('nidn')->nullable()->unique();
             $table->timestamps();

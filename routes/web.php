@@ -44,6 +44,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/template/download', [ProfilController::class, 'downloadTemplate'])->name('template');
         Route::post('/import', [ProfilController::class, 'import'])->name('import');
         Route::get('/{profil}/edit', [ProfilController::class, 'edit'])->name('edit');
+        Route::get('/{profil}/ubah', function (Request $request, $profil) {
+            return redirect()->route('profils.edit', ['profil' => $profil] + $request->query());
+        });
         Route::put('/{profil}', [ProfilController::class, 'update'])->name('update');
         Route::delete('/{profil}', [ProfilController::class, 'destroy'])->name('destroy');
     });
@@ -66,8 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/profils/import', function () {
         abort(410);
     });
-    Route::get('/profils/{profil}/edit', function ($profil) {
-        return redirect()->route('profils.edit', ['profil' => $profil]);
+    Route::get('/profils/{profil}/edit', function (Request $request, $profil) {
+        return redirect()->route('profils.edit', ['profil' => $profil] + $request->query());
     });
     Route::put('/profils/{profil}', function () {
         abort(410);
@@ -79,6 +82,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('kepangkatan', KepangkatanController::class)
         ->names('kepangkatan')
         ->except(['show']);
+    Route::get('kepangkatan/{kepangkatan}', function () {
+        return redirect()->route('kepangkatan.index');
+    })->name('kepangkatan.show.redirect');
+    Route::get('kepangkatan/template/download', [KepangkatanController::class, 'downloadTemplate'])
+        ->name('kepangkatan.template');
+    Route::post('kepangkatan/import', [KepangkatanController::class, 'import'])
+        ->name('kepangkatan.import');
     Route::get('kepangkatan/export/pdf', [KepangkatanController::class, 'exportPdf'])
         ->name('kepangkatan.export');
 

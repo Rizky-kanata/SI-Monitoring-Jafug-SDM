@@ -12,8 +12,8 @@ class Profil extends Model
         'kode_dosen',
         'nama_dosen',
         'prodi',
-        'sub_kelompok_keahlian',
-        'lab',
+        'kelompok_keahlian',
+        'coe',
         'nip',
         'nidn',
     ];

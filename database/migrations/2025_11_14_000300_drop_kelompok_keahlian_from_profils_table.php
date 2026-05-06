@@ -11,11 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasColumn('profils', 'kelompok_keahlian')) {
-            Schema::table('profils', function (Blueprint $table) {
-                $table->dropColumn('kelompok_keahlian');
-            });
-        }
+        //
     }
 
     /**
@@ -23,10 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (! Schema::hasColumn('profils', 'kelompok_keahlian')) {
-            Schema::table('profils', function (Blueprint $table) {
-                $table->string('kelompok_keahlian')->default('RIIB');
-            });
-        }
+        //
     }
 };

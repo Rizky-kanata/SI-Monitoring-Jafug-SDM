@@ -16,8 +16,8 @@ class ProfilController extends Controller
         'kode_dosen',
         'nama_dosen',
         'prodi',
-        'sub_kelompok_keahlian',
-        'lab',
+        'kelompok_keahlian',
+        'coe',
         'nip',
         'nidn',
     ];
@@ -29,73 +29,68 @@ class ProfilController extends Controller
 
     public function create(Request $request)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
-        return view('profil.create', [
-            'sort' => $sort,
-            'direction' => $direction,
-        ]);
+        return view('profil.create');
     }
 
     public function store(Request $request)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
         $validated = $request->validate($this->profilRules());
 
         Profil::create($this->prepareProfilData($validated));
 
         return redirect()
-            ->route('profils.index', compact('sort', 'direction'))
+            ->route('profils.index')
             ->with('success', 'Data dosen berhasil ditambahkan.');
     }
 
     public function edit(Request $request, Profil $profil)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
         return view('profil.edit', [
             'profil' => $profil,
-            'sort' => $sort,
-            'direction' => $direction,
         ]);
     }
 
     public function update(Request $request, Profil $profil)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
         $validated = $request->validate($this->profilRules($profil));
 
         $profil->update($this->prepareProfilData($validated));
 
         return redirect()
-            ->route('profils.index', compact('sort', 'direction'))
+            ->route('profils.index')
             ->with('success', 'Data dosen berhasil diperbarui.');
     }
 
     public function destroy(Request $request, Profil $profil)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
         $profil->delete();
 
         return redirect()
-            ->route('profils.index', compact('sort', 'direction'))
+            ->route('profils.index')
             ->with('success', 'Data dosen berhasil dihapus.');
     }
 
     public function downloadTemplate()
     {
-        $content = SimpleXlsx::create(self::IMPORT_HEADERS, [[
-            'DSN-001',
+        $content = SimpleXlsx::create([
+            'Kode Dosen',
             'Nama Dosen',
             'Program Studi',
-            'Sub Kelompok Keahlian',
-            'Lab',
-            "'198765432109876543",
-            "'0123456789",
-        ]]);
+            'Kelompok Keahlian',
+            'CoE',
+            'NIP',
+            'NIDN',
+        ], [[
+            'NZR',
+            'Mochamad Nizar Palefi Maady',
+            'Sistem Informasi',
+            'IEBI',
+            'INTEREST',
+            '21910012',
+            '0708119103',
+        ]], [
+            'text_columns' => [5, 6],
+        ]);
 
         return response()->streamDownload(function () use ($content) {
             echo $content;
@@ -106,13 +101,11 @@ class ProfilController extends Controller
 
     public function import(Request $request)
     {
-        [$sort, $direction] = $this->resolveSort($request);
-
         $request->validate([
-            'excel_file' => ['required', 'file', 'mimes:xlsx,csv,txt'],
+            'excel_file' => ['required', 'file', 'mimes:xlsx'],
         ], [
             'excel_file.required' => 'File Excel wajib diunggah.',
-            'excel_file.mimes' => 'Format file harus .xlsx atau .csv.',
+            'excel_file.mimes' => 'Format file harus .xlsx.',
         ]);
 
         $rows = $this->readImportedRows($request->file('excel_file'));
@@ -156,8 +149,8 @@ class ProfilController extends Controller
                 'kode_dosen' => 'kode_dosen',
                 'nama_dosen' => 'nama_dosen',
                 'prodi' => 'prodi',
-                'sub_kelompok_keahlian' => 'sub_kelompok_keahlian',
-                'lab' => 'lab',
+                'kelompok_keahlian' => 'kelompok_keahlian',
+                'coe' => 'coe',
                 'nip' => 'nip',
                 'nidn' => 'nidn',
             ]);
@@ -212,7 +205,7 @@ class ProfilController extends Controller
         }
 
         return redirect()
-            ->route('profils.index', compact('sort', 'direction'))
+            ->route('profils.index')
             ->with('success', $message);
     }
 
@@ -240,7 +233,7 @@ class ProfilController extends Controller
 
     private function resolveSort(Request $request): array
     {
-        $allowedSorts = ['nama_dosen', 'prodi', 'sub_kelompok_keahlian', 'created_at'];
+        $allowedSorts = ['nama_dosen', 'prodi', 'kelompok_keahlian', 'created_at'];
         $sort = $request->input('sort', $request->query('sort'));
         if (!in_array($sort, $allowedSorts, true)) {
             $sort = 'nama_dosen';
@@ -302,8 +295,8 @@ class ProfilController extends Controller
             'kode_dosen' => ['required', 'string', Rule::unique('profils', 'kode_dosen')->ignore($profil?->id)],
             'nama_dosen' => ['required', 'string'],
             'prodi' => ['required', 'string'],
-            'sub_kelompok_keahlian' => ['required', 'string'],
-            'lab' => ['nullable', 'string'],
+            'kelompok_keahlian' => ['required', 'string'],
+            'coe' => ['nullable', 'string'],
             'nip' => ['nullable', 'string', Rule::unique('profils', 'nip')->ignore($profil?->id)],
             'nidn' => ['nullable', 'string', Rule::unique('profils', 'nidn')->ignore($profil?->id)],
         ];
@@ -311,7 +304,24 @@ class ProfilController extends Controller
 
     private function normalizeHeader(string $header): string
     {
-        return str_replace(' ', '_', strtolower(trim($header)));
+        $normalized = strtolower(trim($header));
+        $normalized = str_replace(['`', '.', '-'], ['', '', ' '], $normalized);
+        $normalized = preg_replace('/\s+/', '_', $normalized);
+
+        return match ($normalized) {
+            'kode' => 'kode_dosen',
+            'kode_dosen' => 'kode_dosen',
+            'nama' => 'nama_dosen',
+            'nama_dosen' => 'nama_dosen',
+            'program_studi' => 'prodi',
+            'prodi' => 'prodi',
+            'kelompok_keahlian' => 'kelompok_keahlian',
+            'coe' => 'coe',
+            'co_e' => 'coe',
+            'nip' => 'nip',
+            'nidn' => 'nidn',
+            default => $normalized,
+        };
     }
 
     private function mapImportedRow(array $row): array

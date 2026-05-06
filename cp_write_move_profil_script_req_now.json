@@ -1,7 +1,0 @@
-{
-    "method":  "writeFileContents",
-    "fileContent":  "\u003c?php\n$src = __DIR__ . \u0027/storage/profil-fotos\u0027;\n$dst = __DIR__ . \u0027/storage/app/public/profil-fotos\u0027;\nif (!is_dir($dst)) {\n    mkdir($dst, 0775, true);\n}\n$results = [];\nforeach (glob($src . \u0027/*\u0027) ?: [] as $file) {\n    if (!is_file($file)) {\n        continue;\n    }\n    $name = basename($file);\n    $to = $dst . \u0027/\u0027 . $name;\n    if (@rename($file, $to)) {\n        $results[$name] = \u0027moved\u0027;\n        continue;\n    }\n    if (@copy($file, $to)) {\n        @unlink($file);\n        $results[$name] = \u0027copied\u0027;\n        continue;\n    }\n    $results[$name] = \u0027failed\u0027;\n}\nheader(\u0027Content-Type: application/json\u0027);\necho json_encode([\n    \u0027status\u0027 =\u003e 1,\n    \u0027src\u0027 =\u003e $src,\n    \u0027dst\u0027 =\u003e $dst,\n    \u0027results\u0027 =\u003e $results,\n    \u0027src_remaining\u0027 =\u003e array_values(array_map(\u0027basename\u0027, glob($src . \u0027/*\u0027) ?: [])),\n    \u0027dst_files\u0027 =\u003e array_values(array_map(\u0027basename\u0027, glob($dst . \u0027/*\u0027) ?: [])),\n], JSON_PRETTY_PRINT);",
-    "fileName":  "/home/iebi.rg.telkomuniversity.ac.id/public_html/master_data/move_profil_fotos.php",
-    "domainRandomSeed":  "",
-    "domainName":  "iebi.rg.telkomuniversity.ac.id"
-}

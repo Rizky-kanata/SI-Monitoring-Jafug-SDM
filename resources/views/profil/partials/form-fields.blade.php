@@ -37,23 +37,23 @@
         >
     </div>
     <div class="grid gap-2">
-        <label for="sub_kelompok_keahlian" class="text-sm font-medium text-slate-600">Sub Kelompok Keahlian</label>
+        <label for="kelompok_keahlian" class="text-sm font-medium text-slate-600">Kelompok Keahlian</label>
         <input
             type="text"
-            id="sub_kelompok_keahlian"
-            name="sub_kelompok_keahlian"
-            value="{{ old('sub_kelompok_keahlian', $profil?->sub_kelompok_keahlian) }}"
+            id="kelompok_keahlian"
+            name="kelompok_keahlian"
+            value="{{ old('kelompok_keahlian', $profil?->kelompok_keahlian) }}"
             required
             class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100"
         >
     </div>
     <div class="grid gap-2">
-        <label for="lab" class="text-sm font-medium text-slate-600">Lab</label>
+        <label for="coe" class="text-sm font-medium text-slate-600">CoE</label>
         <input
             type="text"
-            id="lab"
-            name="lab"
-            value="{{ old('lab', $profil?->lab) }}"
+            id="coe"
+            name="coe"
+            value="{{ old('coe', $profil?->coe) }}"
             class="block w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100"
         >
     </div>
