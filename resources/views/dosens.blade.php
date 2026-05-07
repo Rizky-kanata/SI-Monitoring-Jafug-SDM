@@ -107,7 +107,6 @@
                         Upload Excel
                     </button>
                 </div>
-                <p class="mt-4 text-sm text-slate-500">Format yang didukung hanya <span class="font-semibold text-slate-700">.xlsx</span>. Urutan kolom template: <span class="font-semibold text-slate-700">{{ collect($importHeaders)->map(fn ($header) => $templateColumns[$header] ?? str_replace('_', ' ', $header))->join(', ') }}</span>. Kolom <span class="font-semibold text-slate-700">NIP</span> dan <span class="font-semibold text-slate-700">NIDN</span> sudah diset sebagai teks, jadi cukup isi angka biasa tanpa petik atas.</p>
             </form>
         </div>
 

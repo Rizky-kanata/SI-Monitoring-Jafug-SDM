@@ -25,7 +25,12 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/forgot-password', [PasswordResetController::class, 'showRequest'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetController::class, 'sendOtp'])->name('password.otp.send');
-    Route::get('/forgot-password/verify/{token}', [PasswordResetController::class, 'showVerify'])->name('password.verify');
+    Route::get('/forgot-password/verify', [PasswordResetController::class, 'showVerify'])->name('password.verify');
+    Route::get('/forgot-password/verify/{token}', function (Request $request, string $token) {
+        $request->session()->put('password_reset_token', $token);
+
+        return redirect()->route('password.verify');
+    });
     Route::post('/forgot-password/verify', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
 });
 

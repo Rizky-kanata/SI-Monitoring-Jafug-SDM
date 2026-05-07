@@ -121,7 +121,7 @@
 
         @if ($metaDataCount > 0)
             <div class="mt-6 rounded-2xl border border-blue-200 bg-blue-50/80 px-4 py-3 text-sm text-blue-700" role="status">
-                Meta Data Dosen siap dipakai. Saat ini ada {{ number_format($metaDataCount) }} data dosen terdaftar. Import kepangkatan wajib memakai <span class="font-semibold">nama_dosen</span> yang sudah ada, dan jika data kepangkatan untuk dosen yang sama diunggah lagi, sistem akan <span class="font-semibold">memperbarui data lama</span>, bukan membuat duplikat.
+                Meta Data Dosen siap: {{ number_format($metaDataCount) }} dosen terdaftar. Import kepangkatan pakai <span class="font-semibold">nama_dosen</span>; upload ulang untuk dosen yang sama akan <span class="font-semibold">memperbarui data lama</span>, bukan membuat duplikat.
             </div>
         @else
             <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-700" role="alert">
