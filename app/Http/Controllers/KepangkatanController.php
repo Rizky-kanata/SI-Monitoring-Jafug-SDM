@@ -4,16 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Kepangkatan;
 use App\Models\Profil;
+use App\Support\SimpleXlsx;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class KepangkatanController extends Controller
 {
+    private const TEMPLATE_HEADERS = [
+        'nama_dosen',
+        'jabatan_fungsional',
+        'pangkat',
+        'golongan',
+        'tanggal_sk',
+        'status_publikasi',
+    ];
+
     /**
      * Display a listing of the resource.
      */
@@ -32,6 +45,7 @@ class KepangkatanController extends Controller
             'tmtStatusOptions' => Kepangkatan::tmtStatusOptions(),
             'filters' => $filters,
             'perPageOptions' => $this->perPageOptions(),
+            'metaDataCount' => Profil::query()->count(),
         ]);
     }
 
@@ -55,6 +69,175 @@ class KepangkatanController extends Controller
             'filters' => $filters,
             'statusLabel' => $statusLabel,
         ])->download($filename);
+    }
+
+    public function downloadTemplate()
+    {
+        $content = SimpleXlsx::create(self::TEMPLATE_HEADERS, [[
+            'Nama Dosen',
+            'Lektor',
+            'Penata',
+            'III/c',
+            '2026-04-22',
+            'Belum',
+        ]]);
+
+        return response()->streamDownload(function () use ($content) {
+            echo $content;
+        }, 'template-monitoring-kepangkatan.xlsx', [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    }
+
+    public function import(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'excel_file' => ['required', 'file', 'mimes:xlsx'],
+        ], [
+            'excel_file.required' => 'File Excel wajib diunggah.',
+            'excel_file.mimes' => 'Format file harus .xlsx.',
+        ]);
+
+        $rows = SimpleXlsx::readRows($request->file('excel_file'));
+
+        if (count($rows) < 2) {
+            throw ValidationException::withMessages([
+                'excel_file' => 'File import belum berisi data kepangkatan. Download dulu template yang sudah disediakan.',
+            ]);
+        }
+
+        $headers = array_map([$this, 'normalizeHeader'], $rows[0]);
+
+        if ($headers !== self::TEMPLATE_HEADERS) {
+            throw ValidationException::withMessages([
+                'excel_file' => 'Header template tidak cocok. Download ulang template Excel kepangkatan lalu isi sesuai kolom yang ada.',
+            ]);
+        }
+
+        $validatedRows = [];
+        $errors = [];
+        $seenProfilIds = [];
+        $skipped = 0;
+
+        foreach (array_slice($rows, 1) as $index => $row) {
+            $rowNumber = $index + 2;
+            $payload = $this->mapImportedRow($row);
+
+            if ($this->rowIsEmpty($payload)) {
+                $skipped++;
+                continue;
+            }
+
+            $namaDosen = $this->normalizeImportedNamaDosen($payload['nama_dosen']);
+
+            if ($namaDosen === null) {
+                $errors[] = "Baris {$rowNumber}: kolom nama_dosen wajib diisi.";
+                continue;
+            }
+
+            $matchingProfils = Profil::query()
+                ->where('nama_dosen', $namaDosen)
+                ->get();
+
+            if ($matchingProfils->isEmpty()) {
+                $errors[] = "Baris {$rowNumber}: nama_dosen `{$namaDosen}` belum ada di Meta Data Dosen.";
+                continue;
+            }
+
+            if ($matchingProfils->count() > 1) {
+                $errors[] = "Baris {$rowNumber}: nama_dosen `{$namaDosen}` terdeteksi ganda di Meta Data Dosen. Rapikan dulu data dosennya atau pakai nama yang unik.";
+                continue;
+            }
+
+            $existingProfil = $matchingProfils->first();
+
+            $profilUniqKey = 'existing:' . $existingProfil->id;
+
+            if (isset($seenProfilIds[$profilUniqKey])) {
+                $errors[] = "Baris {$rowNumber}: nama_dosen `{$existingProfil->nama_dosen}` terduplikasi di file import.";
+                continue;
+            }
+
+            $seenProfilIds[$profilUniqKey] = true;
+
+            $normalizedPayload = [
+                'jabatan_fungsional' => $this->normalizeJabatan($payload['jabatan_fungsional']),
+                'pangkat' => $payload['pangkat'] !== '' ? $payload['pangkat'] : null,
+                'golongan' => $payload['golongan'] !== '' ? $payload['golongan'] : null,
+                'tanggal_sk' => $payload['tanggal_sk'] !== '' ? $payload['tanggal_sk'] : null,
+                'is_published' => $this->normalizePublished($payload['status_publikasi']),
+                'catatan' => null,
+            ];
+
+            $validator = Validator::make($normalizedPayload, [
+                'jabatan_fungsional' => ['required', Rule::in(array_keys(Kepangkatan::jabatanOptions()))],
+                'pangkat' => ['nullable', Rule::in(array_keys(Kepangkatan::pangkatOptions()))],
+                'golongan' => ['nullable', Rule::in(array_keys(Kepangkatan::golonganOptions()))],
+                'tanggal_sk' => ['nullable', 'date'],
+                'is_published' => ['required', 'boolean'],
+                'catatan' => ['nullable', 'string'],
+            ], [
+                'jabatan_fungsional.in' => 'jabatan_fungsional harus dipilih dari daftar yang tersedia.',
+                'pangkat.in' => 'pangkat harus sesuai daftar pangkat yang tersedia.',
+                'golongan.in' => 'golongan harus sesuai daftar golongan yang tersedia.',
+                'tanggal_sk.date' => 'tanggal_sk harus berupa tanggal yang valid (contoh: 2026-04-22).',
+                'is_published.required' => 'status_publikasi wajib diisi dengan `Sudah` atau `Belum`.',
+                'is_published.boolean' => 'status_publikasi wajib diisi dengan `Sudah` atau `Belum`.',
+            ]);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->all() as $message) {
+                    $errors[] = "Baris {$rowNumber}: {$message}";
+                }
+
+                continue;
+            }
+
+            $validatedRows[] = [
+                'existing_profil_id' => $existingProfil->id,
+                'kepangkatan_payload' => $validator->validated(),
+            ];
+        }
+
+        if ($errors !== []) {
+            throw ValidationException::withMessages([
+                'excel_file' => implode(' ', $errors),
+            ]);
+        }
+
+        $created = 0;
+        $updated = 0;
+
+        DB::transaction(function () use ($validatedRows, &$created, &$updated) {
+            foreach ($validatedRows as $payload) {
+                $profilId = $payload['existing_profil_id'];
+
+                $recordPayload = $payload['kepangkatan_payload'];
+                $recordPayload['profil_id'] = $profilId;
+                $recordPayload['tanggal_mulai'] = $recordPayload['tanggal_sk'];
+                $recordPayload['tanggal_tmt'] = $recordPayload['tanggal_sk'];
+
+                $existing = Kepangkatan::query()->where('profil_id', $profilId)->first();
+
+                if ($existing) {
+                    $existing->update($recordPayload);
+                    $updated++;
+                } else {
+                    Kepangkatan::create($recordPayload);
+                    $created++;
+                }
+            }
+        });
+
+        $message = "Import Excel kepangkatan selesai. {$created} data baru ditambahkan, {$updated} data diperbarui.";
+
+        if ($skipped > 0) {
+            $message .= " {$skipped} baris kosong dilewati.";
+        }
+
+        return redirect()
+            ->route('kepangkatan.index')
+            ->with('success', $message);
     }
 
     /**
@@ -188,6 +371,81 @@ class KepangkatanController extends Controller
         $data['tanggal_tmt'] = $data['tanggal_sk'] ?? null;
 
         return $data;
+    }
+
+    private function normalizeHeader(string $header): string
+    {
+        return Str::of($header)
+            ->trim()
+            ->lower()
+            ->replace([' ', '-'], '_')
+            ->replace('/', '_')
+            ->toString();
+    }
+
+    private function mapImportedRow(array $row): array
+    {
+        $values = array_values($row);
+
+        return [
+            'nama_dosen' => trim((string) ($values[0] ?? '')),
+            'jabatan_fungsional' => trim((string) ($values[1] ?? '')),
+            'pangkat' => trim((string) ($values[2] ?? '')),
+            'golongan' => trim((string) ($values[3] ?? '')),
+            'tanggal_sk' => trim((string) ($values[4] ?? '')),
+            'status_publikasi' => trim((string) ($values[5] ?? '')),
+        ];
+    }
+
+    private function rowIsEmpty(array $payload): bool
+    {
+        foreach ($payload as $value) {
+            if ($value !== '') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function normalizeImportedNamaDosen(string $value): ?string
+    {
+        $value = trim($value);
+
+        if ($value === '') {
+            return null;
+        }
+
+        return $value;
+    }
+
+    private function normalizeJabatan(string $value): string
+    {
+        $value = trim($value);
+        $upper = strtoupper($value);
+
+        if (isset(Kepangkatan::jabatanOptions()[$upper])) {
+            return $upper;
+        }
+
+        foreach (Kepangkatan::jabatanOptions() as $code => $label) {
+            if (strcasecmp($label, $value) === 0) {
+                return $code;
+            }
+        }
+
+        return $value;
+    }
+
+    private function normalizePublished(string $value): ?bool
+    {
+        $normalized = Str::lower(trim($value));
+
+        return match ($normalized) {
+            'sudah', 'ya', 'yes', 'true', '1' => true,
+            'belum', 'tidak', 'no', 'false', '0' => false,
+            default => null,
+        };
     }
 
     /**

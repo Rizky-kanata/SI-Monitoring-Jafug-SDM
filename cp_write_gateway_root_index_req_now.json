@@ -1,7 +1,0 @@
-{
-    "method":  "writeFileContents",
-    "fileContent":  "\u003c?php\nheader(\u0027Location: /diagram-workflow-penelitian-dosen/login\u0027, true, 302);\nexit;\n",
-    "fileName":  "/home/iebi.rg.telkomuniversity.ac.id/public_html/diagram-workflow-penelitian-dosen/index.php",
-    "domainRandomSeed":  "",
-    "domainName":  "iebi.rg.telkomuniversity.ac.id"
-}

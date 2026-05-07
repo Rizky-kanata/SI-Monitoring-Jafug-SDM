@@ -21,7 +21,7 @@
                         <th class="px-5 py-3">Kode Dosen</th>
                         <th class="px-5 py-3">Nama Dosen</th>
                         <th class="px-5 py-3">Program Studi</th>
-                        <th class="px-5 py-3">Sub Kelompok Keahlian</th>
+                        <th class="px-5 py-3">Kelompok Keahlian</th>
                         <th class="px-5 py-3">NIP</th>
                         <th class="px-5 py-3">NIDN</th>
                     </tr>
@@ -32,7 +32,7 @@
                             <td class="px-5 py-4 font-medium text-slate-700">{{ $profil->kode_dosen }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $profil->nama_dosen }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $profil->prodi }}</td>
-                            <td class="px-5 py-4 text-slate-600">{{ $profil->sub_kelompok_keahlian }}</td>
+                            <td class="px-5 py-4 text-slate-600">{{ $profil->kelompok_keahlian }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $profil->nip ?? '-' }}</td>
                             <td class="px-5 py-4 text-slate-600">{{ $profil->nidn ?? '-' }}</td>
                         </tr>

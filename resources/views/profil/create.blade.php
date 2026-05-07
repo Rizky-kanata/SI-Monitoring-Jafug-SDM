@@ -27,14 +27,12 @@
 
         <form action="{{ route('profils.store') }}" method="POST" class="mt-8 space-y-8">
             @csrf
-            <input type="hidden" name="sort" value="{{ old('sort', $sort) }}">
-            <input type="hidden" name="direction" value="{{ old('direction', $direction) }}">
 
             @include('profil.partials.form-fields', ['profil' => null])
 
             <div class="flex items-center justify-end gap-3">
                 <a
-                    href="{{ route('profils.index', ['sort' => $sort, 'direction' => $direction]) }}"
+                    href="{{ route('profils.index') }}"
                     class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100"
                 >
                     Batal

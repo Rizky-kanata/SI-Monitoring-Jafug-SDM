@@ -78,16 +78,28 @@ class PasswordResetController extends Controller
             $code
         );
 
+        $request->session()->put('password_reset_token', $token);
+
         return redirect()
-            ->route('password.verify', $token)
+            ->route('password.verify')
             ->with('status', 'Kode OTP telah dikirim ke email terdaftar.');
     }
 
-    public function showVerify(string $token): RedirectResponse|View
+    public function showVerify(Request $request): RedirectResponse|View
     {
+        $token = $request->session()->get('password_reset_token');
+
+        if (! is_string($token) || $token === '') {
+            return redirect()
+                ->route('password.request')
+                ->withErrors(['username' => 'Permintaan OTP tidak ditemukan. Silakan buat permintaan baru.']);
+        }
+
         $otp = PasswordOtp::where('token', $token)->first();
 
         if (! $otp) {
+            $request->session()->forget('password_reset_token');
+
             return redirect()
                 ->route('password.request')
                 ->withErrors(['username' => 'Permintaan OTP tidak ditemukan. Silakan buat permintaan baru.']);
@@ -95,6 +107,7 @@ class PasswordResetController extends Controller
 
         if ($otp->isExpired()) {
             $otp->delete();
+            $request->session()->forget('password_reset_token');
 
             return redirect()
                 ->route('password.request')
@@ -119,6 +132,8 @@ class PasswordResetController extends Controller
         $otp = PasswordOtp::where('token', $validated['token'])->first();
 
         if (! $otp) {
+            $request->session()->forget('password_reset_token');
+
             return redirect()
                 ->route('password.request')
                 ->withErrors(['username' => 'Permintaan OTP tidak ditemukan.']);
@@ -126,6 +141,7 @@ class PasswordResetController extends Controller
 
         if ($otp->isExpired()) {
             $otp->delete();
+            $request->session()->forget('password_reset_token');
 
             return redirect()
                 ->route('password.request')
@@ -134,6 +150,7 @@ class PasswordResetController extends Controller
 
         if (! $otp->hasAttemptsRemaining()) {
             $otp->delete();
+            $request->session()->forget('password_reset_token');
 
             return redirect()
                 ->route('password.request')
@@ -152,6 +169,7 @@ class PasswordResetController extends Controller
 
         if (! $user) {
             $otp->delete();
+            $request->session()->forget('password_reset_token');
 
             return redirect()
                 ->route('password.request')
@@ -163,6 +181,7 @@ class PasswordResetController extends Controller
         ])->save();
 
         $otp->delete();
+        $request->session()->forget('password_reset_token');
 
         return redirect()
             ->route('login')
