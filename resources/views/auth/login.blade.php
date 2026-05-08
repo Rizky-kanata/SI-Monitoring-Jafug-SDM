@@ -201,6 +201,24 @@
             color: #0f5132;
         }
 
+        .signup-hint {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .signup-hint a {
+            color: #2563eb;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .signup-hint a:hover,
+        .signup-hint a:focus {
+            text-decoration: underline;
+        }
+
         @media (max-width: 480px) {
             .card {
                 padding: 28px 24px;
@@ -301,6 +319,11 @@
 
             <button type="submit">Masuk</button>
         </form>
+
+        <p class="signup-hint">
+            Belum punya akun?
+            <a href="{{ route('register') }}">Daftar sekarang</a>
+        </p>
     </main>
 
     <script>

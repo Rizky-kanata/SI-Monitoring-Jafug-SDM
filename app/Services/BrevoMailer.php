@@ -7,6 +7,8 @@ use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\ApiException;
 use Brevo\Client\Configuration;
 use Brevo\Client\Model\SendSmtpEmail;
+use Brevo\Client\Model\SendSmtpEmailSender;
+use Brevo\Client\Model\SendSmtpEmailTo;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -34,15 +36,15 @@ class BrevoMailer
         $email = (new SendSmtpEmail())
             ->setSubject($subject)
             ->setHtmlContent($html)
-            ->setSender([
+            ->setSender(new SendSmtpEmailSender([
                 'email' => $senderEmail,
                 'name' => $senderName,
-            ])
+            ]))
             ->setTo([
-                [
+                new SendSmtpEmailTo([
                     'email' => $toEmail,
                     'name' => $toName ?: $toEmail,
-                ],
+                ]),
             ])
             ->setHeaders([
                 'X-Mailer' => 'Monitoring Kepangkatan SDM',
