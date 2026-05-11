@@ -89,7 +89,6 @@
                             Choose File
                         </span>
                         <span class="flex-1 truncate text-base text-slate-600" data-import-file-name>No file chosen</span>
-                        <span class="hidden text-sm font-medium text-blue-600 xl:inline" data-import-drop-hint>atau drag &amp; drop file di sini</span>
                     </label>
                     <input
                         type="file"
