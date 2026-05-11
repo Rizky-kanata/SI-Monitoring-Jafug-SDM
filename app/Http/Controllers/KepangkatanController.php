@@ -74,7 +74,7 @@ class KepangkatanController extends Controller
     public function downloadTemplate()
     {
         $content = SimpleXlsx::create(self::TEMPLATE_HEADERS, [[
-            'Nama Dosen',
+            'Mochamad Nizar Palefi Maady',
             'Lektor',
             'Penata',
             'III/c',
