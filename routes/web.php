@@ -20,8 +20,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'show'])->name('login');
     Route::post('/login', [AuthController::class, 'store'])->name('login.attempt');
 
-    Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    Route::get('/register', fn () => redirect()->route('register'));
+    Route::get('/registrasi-akun-sdm', [RegisterController::class, 'create'])->name('register');
+    Route::post('/registrasi-akun-sdm', [RegisterController::class, 'store'])->name('register.store');
 
     Route::get('/forgot-password', [PasswordResetController::class, 'showRequest'])->name('password.request');
     Route::post('/forgot-password', [PasswordResetController::class, 'sendOtp'])->name('password.otp.send');
