@@ -43,6 +43,7 @@ class KepangkatanController extends Controller
         return view('kepangkatan.index', [
             'kepangkatans' => $records,
             'tmtStatusOptions' => Kepangkatan::tmtStatusOptions(),
+            'indicatorOptions' => Kepangkatan::indicatorOptions(),
             'filters' => $filters,
             'perPageOptions' => $this->perPageOptions(),
             'metaDataCount' => Profil::query()->count(),
@@ -456,6 +457,7 @@ class KepangkatanController extends Controller
         return [
             'publication' => $request->string('publication')->toString(),
             'tmt_status' => $request->string('tmt_status')->toString(),
+            'indicator' => $request->string('indicator')->toString(),
             'search' => $request->string('search')->toString(),
             'per_page' => $request->string('per_page')->toString(),
         ];
@@ -465,6 +467,7 @@ class KepangkatanController extends Controller
     {
         $publicationFilter = $filters['publication'];
         $tmtStatusFilter = $filters['tmt_status'];
+        $indicatorFilter = $filters['indicator'];
         $search = $filters['search'];
 
         return Kepangkatan::query()
@@ -476,6 +479,10 @@ class KepangkatanController extends Controller
             ->when(
                 $tmtStatusFilter !== '' && array_key_exists($tmtStatusFilter, Kepangkatan::tmtStatusOptions()),
                 fn ($query) => $query->whereTmtStatus($tmtStatusFilter)
+            )
+            ->when(
+                $indicatorFilter !== '' && array_key_exists($indicatorFilter, Kepangkatan::indicatorOptions()),
+                fn ($query) => $query->whereIndicatorColor($indicatorFilter)
             )
             ->when($search !== '', function ($query) use ($search) {
                 $query->whereHas('profil', function ($relation) use ($search) {

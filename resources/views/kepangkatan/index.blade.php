@@ -53,15 +53,15 @@
                     </select>
                 </div>
                 <div class="md:col-span-1">
-                    <label for="tmt_status" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Status TMT</label>
+                    <label for="indicator" class="block text-xs font-semibold uppercase tracking-wide text-slate-600">Indikator</label>
                     <select
-                        id="tmt_status"
-                        name="tmt_status"
+                        id="indicator"
+                        name="indicator"
                         class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                     >
-                        <option value="">Semua Status TMT</option>
-                        @foreach ($tmtStatusOptions as $value => $label)
-                            <option value="{{ $value }}" @selected($filters['tmt_status'] === $value)>{{ $label }}</option>
+                        <option value="">Semua Indikator</option>
+                        @foreach ($indicatorOptions as $value => $label)
+                            <option value="{{ $value }}" @selected($filters['indicator'] === $value)>{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -87,7 +87,7 @@
                         + Tambah Data Kepangkatan
                     </a>
                 </div>
-                <div class="md:col-span-5 flex flex-wrap items-center gap-3">
+                <div class="md:col-span-5 flex flex-wrap items-end gap-3">
                     <button
                         type="submit"
                         class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700"
@@ -103,7 +103,7 @@
                     <span class="text-xs text-slate-500">Total {{ $kepangkatans->total() }} data</span>
                     <div class="ml-auto flex flex-wrap items-center gap-3">
                         <a
-                            href="{{ route('kepangkatan.export', ['tmt_status' => $filters['tmt_status']]) }}"
+                            href="{{ route('kepangkatan.export', collect($filters)->only(['publication', 'tmt_status', 'indicator', 'search'])->filter(fn ($value) => $value !== '')->all()) }}"
                             class="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-600 transition hover:bg-slate-100"
                         >
                             Download PDF

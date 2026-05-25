@@ -18,6 +18,12 @@ class Kepangkatan extends Model
         'terlewat' => 'Terlewat Masa TMT',
     ];
 
+    public const INDICATOR_OPTIONS = [
+        'red' => 'Merah',
+        'yellow' => 'Kuning',
+        'green' => 'Hijau',
+    ];
+
     public const JABATAN_LABELS = [
         'AA' => 'Asisten Ahli',
         'L' => 'Lektor',
@@ -94,6 +100,11 @@ class Kepangkatan extends Model
         return self::TMT_STATUS;
     }
 
+    public static function indicatorOptions(): array
+    {
+        return self::INDICATOR_OPTIONS;
+    }
+
     public static function pangkatOptions(): array
     {
         return array_combine(self::PANGKAT_OPTIONS, self::PANGKAT_OPTIONS);
@@ -137,6 +148,58 @@ class Kepangkatan extends Model
                 ->whereNull('tanggal_tmt')
                 ->orWhereDate('tanggal_tmt', '>', $now);
         });
+    }
+
+    public function scopeWhereIndicatorColor(Builder $query, string $color): void
+    {
+        $color = strtolower($color);
+        $unpublished = fn (Builder $builder) => $builder
+            ->where(function (Builder $query) {
+                $query->where('is_published', false)
+                    ->orWhereNull('is_published');
+            });
+
+        if ($color === 'red') {
+            $query
+                ->whereTmtStatus('terlewat')
+                ->where($unpublished);
+
+            return;
+        }
+
+        if ($color === 'green') {
+            $query->where(function (Builder $builder) {
+                $builder
+                    ->where(function (Builder $query) {
+                        $query->whereTmtStatus('berjalan')
+                            ->where('is_published', true);
+                    })
+                    ->orWhere(function (Builder $query) {
+                        $query->whereTmtStatus('belum')
+                            ->where('is_published', true);
+                    });
+            });
+
+            return;
+        }
+
+        if ($color === 'yellow') {
+            $query->where(function (Builder $builder) use ($unpublished) {
+                $builder
+                    ->where(function (Builder $query) {
+                        $query->whereTmtStatus('terlewat')
+                            ->where('is_published', true);
+                    })
+                    ->orWhere(function (Builder $query) use ($unpublished) {
+                        $query->whereTmtStatus('berjalan')
+                            ->where($unpublished);
+                    })
+                    ->orWhere(function (Builder $query) use ($unpublished) {
+                        $query->whereTmtStatus('belum')
+                            ->where($unpublished);
+                    });
+            });
+        }
     }
 
     public function getTanggalTmtDisplayAttribute(): string
